@@ -34,9 +34,6 @@ If you would like to contribute to the project, please follow these guidelines:
 2. Create a new branch for your changes.
 3. Submit a pull request with a detailed description of your changes.
 
-## License
-
-This project is released under the [MIT License](https://opensource.org/licenses/MIT).
 
 ## Contact
 
