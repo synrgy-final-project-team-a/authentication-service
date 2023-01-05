@@ -12,6 +12,7 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Date;
 import java.util.List;
+
 @Data
 @Entity
 @Table(name = "oauth_user")
@@ -22,12 +23,13 @@ public class User implements UserDetails, Serializable {
     private Long id;
 
 
-    @Column(length = 100, nullable = true)
+    @Column
+    @NotNull
     private String email;
 
     @JsonIgnore
+    @NotNull
     private String password;
-
 
 
     @JsonIgnore
@@ -36,9 +38,10 @@ public class User implements UserDetails, Serializable {
     @JsonIgnore
     private Date expiredVerifyToken;
 
-    @Column(length = 100, nullable = true)
+    @Column
     private String otp;
 
+    @JsonIgnore
     private Date otpExpiredDate;
 
 
@@ -54,10 +57,6 @@ public class User implements UserDetails, Serializable {
     private boolean accountNonLocked = true;
 
     @JsonIgnore
-    @Column(name = "status")
-    private String status;
-
-    @JsonIgnore
     @Column(name = "credential_not_expired")
     private boolean credentialsNonExpired = true;
 
@@ -71,104 +70,24 @@ public class User implements UserDetails, Serializable {
                     @JoinColumn(name = "role_id")
             }
     )
+
+    @JsonIgnore
     private List<Role> roles = new ArrayList<>();
 
 
-    public List<Role> getRoles() {
-        return roles;
-    }
-
-    public void setRoles(List<Role> roles) {
-        this.roles = roles;
-    }
-
+    @JsonIgnore
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
         return this.roles;
     }
 
-    @Override
-    public String getPassword() {
-        return password;
-    }
 
+    @JsonIgnore
     @Override
     public String getUsername() {
         return null;
     }
 
 
-    public void setPassword(String password) {
-        this.password = password;
-    }
-
-    @Override
-    public boolean isAccountNonExpired() {
-        return accountNonExpired;
-    }
-
-    public void setAccountNonExpired(boolean accountNonExpired) {
-        this.accountNonExpired = accountNonExpired;
-    }
-
-    @Override
-    public boolean isAccountNonLocked() {
-        return accountNonLocked;
-    }
-
-    public void setAccountNonLocked(boolean accountNonLocked) {
-        this.accountNonLocked = accountNonLocked;
-    }
-
-    @Override
-    public boolean isCredentialsNonExpired() {
-        return credentialsNonExpired;
-    }
-
-    public void setCredentialsNonExpired(boolean credentialsNonExpired) {
-        this.credentialsNonExpired = credentialsNonExpired;
-    }
-
-    public void setEnabled(boolean enabled) {
-        this.enabled = enabled;
-    }
-
-    @Override
-    public boolean isEnabled() {
-        return enabled;
-    }
-
-
-    public String getVerifyToken() {
-        return verifyToken;
-    }
-
-    public void setVerifyToken(String verifyToken) {
-        this.verifyToken = verifyToken;
-    }
-
-    public Date getExpiredVerifyToken() {
-        return expiredVerifyToken;
-    }
-
-    public void setExpiredVerifyToken(Date expiredVerifyToken) {
-        this.expiredVerifyToken = expiredVerifyToken;
-    }
-
-    public String getOtp() {
-        return otp;
-    }
-
-    public void setOtp(String otp) {
-        this.otp = otp;
-    }
-
-    public Date getOtpExpiredDate() {
-        return otpExpiredDate;
-    }
-
-    public void setOtpExpiredDate(Date otpExpiredDate) {
-        this.otpExpiredDate = otpExpiredDate;
-    }
 }
 

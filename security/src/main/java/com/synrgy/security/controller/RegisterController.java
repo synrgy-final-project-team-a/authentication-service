@@ -49,7 +49,6 @@ public class RegisterController {
             return new ResponseEntity<Map>(response.notFound("Email sudah ada"), HttpStatus.OK);
         }
         map = userAuthService.register(objModel);
-//        Map sendOTP = sendEmailegister(objModel);
         Map sendOTPUri = sendEmailegisterTymeleafUser(objModel);
 
         return new ResponseEntity<Map>(map, HttpStatus.OK);

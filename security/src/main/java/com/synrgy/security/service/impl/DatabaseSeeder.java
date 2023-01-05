@@ -42,9 +42,9 @@ public class DatabaseSeeder implements ApplicationRunner {
     private String defaultPassword = "password";
 
     private String[] users = new String[]{
-            "superadmin@mail.com:ROLE_SUPERUSER ROLE_USER ROLE_ADMIN",
-            "admin@mail.com:ROLE_ADMIN",
-            "user@mail.com:ROLE_USER"
+            "superadmin@mail.com:ROLE_SK ROLE_TN ROLE_SUPERADMIN",
+            "tenant@mail.com:ROLE_TN",
+            "seeker@mail.com:ROLE_SK"
     };
 
     private String[] clients = new String[]{
@@ -144,8 +144,6 @@ public class DatabaseSeeder implements ApplicationRunner {
                 oldUser.setPassword(password);
                 List<Role> r = roleRepository.findByNameIn(roleNames);
                 oldUser.setRoles(r);
-
-
             }
 
             userRepository.save(oldUser);

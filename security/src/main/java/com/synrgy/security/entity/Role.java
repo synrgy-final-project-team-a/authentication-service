@@ -2,11 +2,13 @@ package com.synrgy.security.entity;
 
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import lombok.Data;
 import org.springframework.security.core.GrantedAuthority;
 
 import javax.persistence.*;
 import java.util.List;
 
+@Data
 @Entity()
 @Table(
         name = "oauth_role",
@@ -34,29 +36,6 @@ public class Role implements GrantedAuthority {
     @ManyToMany(targetEntity = User.class, mappedBy = "roles",fetch = FetchType.LAZY)
     private List<User> users;
 
-    public Long getId() {
-        return id;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
-    }
-
-    public String getType() {
-        return type;
-    }
-
-    public void setType(String type) {
-        this.type = type;
-    }
 
     @Override
     @JsonIgnore
@@ -64,19 +43,4 @@ public class Role implements GrantedAuthority {
         return this.name;
     }
 
-    public List<RolePath> getRolePaths() {
-        return rolePaths;
-    }
-
-    public void setRolePaths(List<RolePath> rolePaths) {
-        this.rolePaths = rolePaths;
-    }
-
-    public List<User> getUsers() {
-        return users;
-    }
-
-    public void setUsers(List<User> users) {
-        this.users = users;
-    }
 }

@@ -12,7 +12,12 @@ public class RegisterModel {
     private String email;
     @NotEmpty(message = "Password is required.")
     private String password;
-    @NotEmpty(message = "Status is required.")
-    private String status;
+
+    @NotEmpty(message = "Phone number is required.")
+    private String phoneNumber;
+    @NotEmpty(message = "First name is required.")
+    private String firstName;
+    @NotEmpty(message = "Last name is required.")
+    private String lastName;
 
 }
