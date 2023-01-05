@@ -31,8 +31,8 @@ public class Oauth2ResourceServerConfiguration extends ResourceServerConfigurerA
                 .disable()
                 .antMatcher("/**")
                 .authorizeRequests()
-                    .antMatchers("/","/showFile/**","/v1/showFile/**","/v1/upload", "/register/**","/swagger-ui/**","/swagger-ui.html","/api/oauth/token**" ,"/v3/api-docs/**","/user-login/**",
-                            "/forget-password/**", "/oauth/authorize**", "/oauth/token**", "/login**", "/error**")
+                    .antMatchers("/","/showFile/**","/v1/showFile/**","/v1/upload", "/register/**","/swagger-ui/**","/swagger-ui.html","/api/oauth/token**" ,"/v3/api-docs/**",
+                            "/forget-password/**", "/oauth/authorize**", "/oauth/token**", "/login-user", "/logout-user", "/error**")
                     .permitAll()
                 .antMatchers("/v1/role-test-global/example").hasAnyAuthority("ROLE_READ")
                 .and()

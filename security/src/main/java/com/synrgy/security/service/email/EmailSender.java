@@ -1,6 +1,9 @@
 package com.synrgy.security.service.email;
 
 
+import com.synrgy.security.dto.RegisterModel;
+import com.synrgy.security.entity.User;
+import com.synrgy.security.repository.UserRepository;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,6 +23,9 @@ public class EmailSender {
     private final static Logger logger = LoggerFactory.getLogger(EmailSender.class);
 
     @Autowired
+    private UserRepository userRepository;
+
+    @Autowired
     private JavaMailSenderImpl mailSender;
 
     @Value("${spring.mail.sender.name:}")
@@ -37,6 +43,7 @@ public class EmailSender {
     }
 
     public boolean send(String from, String email, String subject, String message) {
+
         MimeMessage mime = mailSender.createMimeMessage();
         if (StringUtils.isEmpty(from)) {
             from = senderEmail;

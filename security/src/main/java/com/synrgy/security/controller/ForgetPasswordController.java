@@ -54,11 +54,11 @@ public class ForgetPasswordController {
     // Step 1 : Send OTP
     @PostMapping("/send")//send OTP
     public Map sendEmailPassword(@Valid @RequestBody ResetPasswordModel user) {
-        String message = "Thanks, please check your email";
 
         if (StringUtils.isEmpty(user.getEmail())) return response.templateEror("No email provided");
         User found = userRepository.findOneByEmail(user.getEmail());
         if (found == null) return response.notFound("Email not found"); //throw new BadRequest("Email not found");
+
 
         String template = emailTemplate.getResetPassword();
         if (StringUtils.isEmpty(found.getOtp())) {
@@ -76,38 +76,33 @@ public class ForgetPasswordController {
 
             found.setOtp(otp);
             found.setOtpExpiredDate(expirationDate);
-            template = template.replaceAll("\\{\\{USERNAME}}", (found.getEmail() == null ? "" +
-                    "@UserName"
-                    :
-                     found.getEmail()));
-            template = template.replaceAll("\\{\\{PASS_TOKEN}}", BASEURL + "/forget-password/index/"+ otp);
+            found.setEnabled(false); // matikan user
+            template = template.replaceAll("\\{\\{USERNAME}}", (found.getUsername() == null ? user.getEmail() : found.getUsername()));
+            template = template.replaceAll("\\{\\{PASS_TOKEN}}", BASEURL + "/forget-password/index/" + otp);
             userRepository.save(found);
         } else {
-            template = template.replaceAll("\\{\\{USERNAME}}", (found.getEmail() == null ? "" +
-                    "@UserName"
-                    :
-                    found.getEmail()));
-            template = template.replaceAll("\\{\\{PASS_TOKEN}}", BASEURL + "/forget-password/index/"+ found.getOtp());
+            template = template.replaceAll("\\{\\{USERNAME}}", (found.getUsername() == null ? user.getEmail() : found.getUsername()));
+            template = template.replaceAll("\\{\\{PASS_TOKEN}}", BASEURL + "/forget-password/index/" + found.getOtp());
         }
-        emailSender.sendAsync(found.getEmail(), "Binar - Forget Password", template);
+        emailSender.sendAsync(user.getEmail(), "Binar - Forget Password", template);
 
 
-        return response.templateSukses("success");
+        return response.templateSukses("Thanks, please check your email");
 
     }
 
     //Step 2 : Email token OTP
-    @GetMapping(value = { "/index/{tokenotp}"})
-    public String index(Model model, @PathVariable String  tokenotp) {
+    @GetMapping(value = {"/index/{tokenotp}"})
+    public String index(Model model, @PathVariable String tokenotp) {
         User user = userRepository.findOneByOTP(tokenotp);
         if (null == user) {
             System.out.println("user null: tidak ditemukan");
-            model.addAttribute("erordesc", "User not found for code "+tokenotp);
+            model.addAttribute("erordesc", "User not found for code " + tokenotp);
             model.addAttribute("title", "");
             return "register";
         }
 
-        if(user.isEnabled()){
+        if (user.isEnabled()) {
             model.addAttribute("erordesc", "Akun Anda ternyata sudah aktif, Silahkan melakukan login ");
             model.addAttribute("title", "");
             return "register";
@@ -115,14 +110,14 @@ public class ForgetPasswordController {
         String today = config.convertDateToString(new Date());
 
         String dateToken = config.convertDateToString(user.getOtpExpiredDate());
-        if(Long.parseLong(today) > Long.parseLong(dateToken)){
+        if (Long.parseLong(today) > Long.parseLong(dateToken)) {
             model.addAttribute("erordesc", "Your token is expired. Please Get token again.");
             model.addAttribute("title", "");
             return "register";
         }
         user.setEnabled(true);
         userRepository.save(user);
-        model.addAttribute("title", "Congratulations, "+user.getEmail()+", you have successfully registered.");
+        model.addAttribute("title", "Congratulations, " + user.getUsername() + ", you have successfully registered.");
         model.addAttribute("erordesc", "");
         return "Success OTP";
     }

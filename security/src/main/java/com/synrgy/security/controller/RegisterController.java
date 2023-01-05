@@ -2,7 +2,9 @@ package com.synrgy.security.controller;
 
 import com.synrgy.security.configuration.Config;
 import com.synrgy.security.dto.RegisterModel;
+import com.synrgy.security.entity.Profile;
 import com.synrgy.security.entity.User;
+import com.synrgy.security.repository.ProfileRepository;
 import com.synrgy.security.repository.UserRepository;
 import com.synrgy.security.service.UserAuthService;
 import com.synrgy.security.service.email.EmailSender;
@@ -40,7 +42,7 @@ public class RegisterController {
     public EmailSender emailSender;
 
 
-    @PostMapping("/register")
+    @PostMapping("/user")
     public ResponseEntity<Map> saveRegisterManual(@Valid @RequestBody RegisterModel objModel) throws RuntimeException {
         Map map = new HashMap();
 
@@ -90,6 +92,8 @@ public class RegisterController {
 
     @Value("${BASEURL:}")//FILE_SHOW_RUL
     private String BASEURL;
+    @Autowired
+    private ProfileRepository profileRepository;
 
 
     @PostMapping("/send-otp")//send OTP : berupa URL
@@ -116,14 +120,14 @@ public class RegisterController {
 
             found.setOtp(otp);
             found.setOtpExpiredDate(expirationDate);
-            template = template.replaceAll("\\{\\{USERNAME}}", (found.getUsername() == null ? found.getEmail() : found.getUsername()));
+            template = template.replaceAll("\\{\\{USERNAME}}", (found.getUsername() == null ? user.getEmail() : found.getUsername()));
             template = template.replaceAll("\\{\\{VERIFY_TOKEN}}", BASEURL + "/register/index/"+ otp);
             userRepository.save(found);
         } else {
-            template = template.replaceAll("\\{\\{USERNAME}}", (found.getUsername() == null ? found.getEmail() : found.getUsername()));
+            template = template.replaceAll("\\{\\{USERNAME}}", (found.getUsername() == null ? user.getEmail() : found.getUsername()));
             template = template.replaceAll("\\{\\{VERIFY_TOKEN}}", BASEURL + "/register/index/"+  found.getOtp());
         }
-        emailSender.sendAsync(found.getEmail(), "Register", template);
+        emailSender.sendAsync(user.getEmail(), "Register", template);
         return response.templateSukses(message);
     }
 

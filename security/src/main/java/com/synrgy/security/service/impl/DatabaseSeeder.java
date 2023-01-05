@@ -54,8 +54,8 @@ public class DatabaseSeeder implements ApplicationRunner {
 
     private String[] roles = new String[]{
             "ROLE_SUPERUSER:user_role:^/.*:GET|PUT|POST|PATCH|DELETE|OPTIONS",
-            "ROLE_ADMIN:user_role:^/.*:GET|PUT|POST|PATCH|DELETE|OPTIONS",
-            "ROLE_USER:user_role:^/.*:GET|PUT|POST|PATCH|DELETE|OPTIONS",
+            "ROLE_SK:user_role:^/.*:GET|PUT|POST|PATCH|DELETE|OPTIONS",
+            "ROLE_TN:user_role:^/.*:GET|PUT|POST|PATCH|DELETE|OPTIONS",
             "ROLE_READ:oauth_role:^/.*:GET|PUT|POST|PATCH|DELETE|OPTIONS",
             "ROLE_WRITE:oauth_role:^/.*:GET|PUT|POST|PATCH|DELETE|OPTIONS"
     };
@@ -140,7 +140,7 @@ public class DatabaseSeeder implements ApplicationRunner {
             User oldUser = userRepository.findOneByEmail(email);
             if (null == oldUser) {
                 oldUser = new User();
-                oldUser.setEmail(email);
+                oldUser.setUsername(email);
                 oldUser.setPassword(password);
                 List<Role> r = roleRepository.findByNameIn(roleNames);
                 oldUser.setRoles(r);

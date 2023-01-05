@@ -22,10 +22,8 @@ public class User implements UserDetails, Serializable {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-
-    @Column
-    @NotNull
-    private String email;
+    @Column(name = "email", unique=true)
+    private String username;
 
     @JsonIgnore
     @NotNull
@@ -87,6 +85,11 @@ public class User implements UserDetails, Serializable {
     public String getUsername() {
         return null;
     }
+
+    public void setUsername(String username) {
+        this.username = username;
+    }
+
 
 
 }
