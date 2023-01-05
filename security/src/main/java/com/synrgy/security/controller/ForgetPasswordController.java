@@ -11,6 +11,8 @@ import com.synrgy.security.util.Response;
 import com.synrgy.security.util.SimpleStringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.ui.Model;
 import org.springframework.util.StringUtils;
@@ -53,11 +55,11 @@ public class ForgetPasswordController {
 
     // Step 1 : Send OTP
     @PostMapping("/send")//send OTP
-    public Map sendEmailPassword(@Valid @RequestBody ResetPasswordModel user) {
+    public ResponseEntity<Map> sendEmailPassword(@Valid @RequestBody ResetPasswordModel user) {
 
-        if (StringUtils.isEmpty(user.getEmail())) return response.templateEror("No email provided");
+        if (StringUtils.isEmpty(user.getEmail())) return new ResponseEntity<Map>(response.templateError("No email provided"), HttpStatus.BAD_REQUEST);
         User found = userRepository.findOneByEmail(user.getEmail());
-        if (found == null) return response.notFound("Email not found"); //throw new BadRequest("Email not found");
+        if (found == null) return new ResponseEntity<Map>(response.templateError("Email not found"), HttpStatus.BAD_REQUEST);; //throw new BadRequest("Email not found");
 
 
         String template = emailTemplate.getResetPassword();
@@ -87,49 +89,49 @@ public class ForgetPasswordController {
         emailSender.sendAsync(user.getEmail(), "Binar - Forget Password", template);
 
 
-        return response.templateSukses("Thanks, please check your email");
+        return new ResponseEntity<Map>(response.templateSuksesPost("Thanks, please check your email"), HttpStatus.CREATED);
 
     }
 
     //Step 2 : Email token OTP
     @GetMapping(value = {"/index/{tokenotp}"})
-    public String index(Model model, @PathVariable String tokenotp) {
+    public ResponseEntity<Map> index(Model model, @PathVariable String tokenotp) {
         User user = userRepository.findOneByOTP(tokenotp);
         if (null == user) {
-            System.out.println("user null: tidak ditemukan");
+            System.out.println("User null: tidak ditemukan");
             model.addAttribute("erordesc", "User not found for code " + tokenotp);
             model.addAttribute("title", "");
-            return "register";
+            return new ResponseEntity<Map>(response.templateError("User not found"), HttpStatus.NOT_FOUND);
         }
 
         if (user.isEnabled()) {
-            model.addAttribute("erordesc", "Akun Anda ternyata sudah aktif, Silahkan melakukan login ");
+            model.addAttribute("erordesc", "Your account is already active, please do login");
             model.addAttribute("title", "");
-            return "register";
+            return new ResponseEntity<Map>(response.templateError("Your account is already active, please do login"), HttpStatus.NOT_FOUND);
         }
         String today = config.convertDateToString(new Date());
 
         String dateToken = config.convertDateToString(user.getOtpExpiredDate());
         if (Long.parseLong(today) > Long.parseLong(dateToken)) {
-            model.addAttribute("erordesc", "Your token is expired. Please Get token again.");
+            model.addAttribute("erordesc", "Your token is expired. Please get token again.");
             model.addAttribute("title", "");
-            return "register";
+            return new ResponseEntity<Map>(response.templateError("Your token is expired. Please get token again. "), HttpStatus.OK);
         }
         user.setEnabled(true);
         userRepository.save(user);
-        model.addAttribute("title", "Congratulations, " + user.getUsername() + ", you have successfully registered.");
+        model.addAttribute("title", "Congratulations, " + user.getUsername() + ", you have successfully registered!");
         model.addAttribute("erordesc", "");
-        return "Success OTP";
+        return new ResponseEntity<Map>(response.templateSuksesGet("Congratulations, you will be redirected to change password!"), HttpStatus.OK);
     }
 
     // Step 3 : lakukan reset password baru
     @PostMapping("/change-password")
-    public Map<String, String> resetPassword(@RequestBody ResetPasswordModel model) {
-        if (model.getOtp() == null) return response.notFound("Token is required");
-        if (model.getNewPassword() == null) return response.notFound("New Password  is required");
+    public ResponseEntity<Map> resetPassword(@RequestBody ResetPasswordModel model) {
+        if (model.getOtp() == null) return new ResponseEntity<Map>(response.templateError("Token is required"), HttpStatus.BAD_REQUEST);
+        if (model.getNewPassword() == null) return new ResponseEntity<Map>(response.templateError("New Password is required"), HttpStatus.BAD_REQUEST);
         User user = userRepository.findOneByOTP(model.getOtp());
         String success;
-        if (user == null) return response.notFound("Token not valid");
+        if (user == null) return new ResponseEntity<Map>(response.templateError("Token not valid"), HttpStatus.BAD_REQUEST);
 
         user.setPassword(passwordEncoder.encode(model.getNewPassword().replaceAll("\\s+", "")));
         user.setOtpExpiredDate(null);
@@ -137,12 +139,10 @@ public class ForgetPasswordController {
 
         try {
             userRepository.save(user);
-            success = "success";
+            success = "Password changed successfully!";
         } catch (Exception e) {
-            return response.templateEror("Gagal simpan user");
+            return new ResponseEntity<Map>(response.templateError("Failed save user, please try again."), HttpStatus.BAD_REQUEST);
         }
-        return response.templateSukses(success);
+        return new ResponseEntity<Map>(response.templateSuksesPost(success), HttpStatus.CREATED);
     }
-
-
 }

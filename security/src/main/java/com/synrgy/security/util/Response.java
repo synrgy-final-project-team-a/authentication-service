@@ -31,7 +31,7 @@ public class Response {
         return false;
     }
 
-    public Map templateSukses(Object objek){
+    public Map templateSuksesGet(Object objek){
         Map map = new HashMap();
         map.put("data", objek);
         map.put("message", "sukses");
@@ -39,13 +39,21 @@ public class Response {
         return map;
     }
 
-    public Map templateEror(Object objek){
+    public Map templateSuksesPost(Object objek){
         Map map = new HashMap();
-        map.put("message", objek);
-        map.put("status", "404");
+        map.put("data", objek);
+        map.put("message", "sukses");
+        map.put("status", "201");
         return map;
     }
-    public Map notFound(Object objek){
+
+    public Map templateError(Object objek){
+        Map map = new HashMap();
+        map.put("message", objek);
+        map.put("status", "400");
+        return map;
+    }
+    public Map urlNotFound(Object objek){
         Map map = new HashMap();
         map.put("message", objek);
         map.put("status", "404");

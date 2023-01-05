@@ -34,6 +34,17 @@ public class Profile implements Serializable {
     @Column(name = "avatar")
     private String avatar;
 
+    @Column(name = "province")
+    private String province;
+
+    @Column(name = "city")
+    private String city;
+
+    @Column(name = "address")
+    private String address;
+
+    @Column(name = "gmaps")
+    private String gmaps;
 
     public void setAvatar(String avatar) {
         this.avatar = "https://static.wikia.nocookie.net/cartoonica/images/8/8a/Profile_-_Otis.jpg/revision/latest?cb=20190507000059";

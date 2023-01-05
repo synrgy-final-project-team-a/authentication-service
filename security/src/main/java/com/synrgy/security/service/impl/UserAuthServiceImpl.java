@@ -84,17 +84,18 @@ public class UserAuthServiceImpl implements UserAuthService {
 //                List<Role> r = roleRepository.findByNameIn(roleNames);
 //                user.setRoles(r);
 //            } else if (user.getStatus().equals("User")) {
-            String[] roleNames = {"ROLE_SK", "ROLE_READ", "ROLE_WRITE"}; // user
+            String role = registerModel.getRole();
+            String[] roleNames = {role, "ROLE_READ", "ROLE_WRITE"}; // user
             List<Role> r = roleRepository.findByNameIn(roleNames);
             user.setRoles(r);
             Profile obj1 = profileRepository.save(profile);
             User obj = userRepository.save(user);
 
-            return templateResponse.templateSukses(obj);
+            return templateResponse.templateSuksesPost(obj);
 
         } catch (Exception e) {
             logger.error("Error registerManual=", e);
-            return templateResponse.templateEror("error:" + e);
+            return templateResponse.templateError("error:" + e);
         }
     }
 
@@ -103,20 +104,6 @@ public class UserAuthServiceImpl implements UserAuthService {
         try {
             Map<String, Object> map = new HashMap<>();
 
-            User checkUser = userRepository.findOneByEmail(loginModel.getEmail());
-
-            if ((checkUser != null) && (encoder.matches(loginModel.getPassword(), checkUser.getPassword()))) {
-                if (!checkUser.isEnabled()) {
-                    map.put("is_enabled", checkUser.isEnabled());
-                    return templateResponse.templateEror(map);
-                }
-            }
-            if (checkUser == null) {
-                return templateResponse.notFound("user not found");
-            }
-            if (!(encoder.matches(loginModel.getPassword(), checkUser.getPassword()))) {
-                return templateResponse.templateEror("wrong password");
-            }
             String url = baseUrl + "/oauth/token?username=" + loginModel.getEmail() +
                     "&password=" + loginModel.getPassword() +
                     "&grant_type=password" +
@@ -142,18 +129,18 @@ public class UserAuthServiceImpl implements UserAuthService {
 
                 return map;
             } else {
-                return templateResponse.notFound("user not found");
+                return templateResponse.templateError("user not found");
             }
         } catch (HttpStatusCodeException e) {
             e.printStackTrace();
             if (e.getStatusCode() == HttpStatus.BAD_REQUEST) {
-                return templateResponse.templateEror("invalid login");
+                return templateResponse.templateError("Invalid login");
             }
-            return templateResponse.templateEror(e);
+            return templateResponse.templateError(e);
         } catch (Exception e) {
             e.printStackTrace();
 
-            return templateResponse.templateEror(e);
+            return templateResponse.templateError(e);
         }
     }
 

@@ -19,5 +19,7 @@ public class RegisterModel {
     private String firstName;
     @NotEmpty(message = "Last name is required.")
     private String lastName;
+    @NotEmpty(message = "Role is required.")
+    private String role;
 
 }

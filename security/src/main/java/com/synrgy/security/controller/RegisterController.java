@@ -48,12 +48,12 @@ public class RegisterController {
 
         User user = userRepository.checkExistingEmail(objModel.getEmail());
         if (null != user) {
-            return new ResponseEntity<Map>(response.notFound("Email sudah ada"), HttpStatus.OK);
+            return new ResponseEntity<Map>(response.templateError("Email sudah ada"), HttpStatus.BAD_REQUEST);
         }
         map = userAuthService.register(objModel);
-        Map sendOTPUri = sendEmailegisterTymeleafUser(objModel);
+        ResponseEntity<Map> sendOTPUri = sendEmailegisterTymeleafUser(objModel);
 
-        return new ResponseEntity<Map>(map, HttpStatus.OK);
+        return new ResponseEntity<Map>(map, HttpStatus.CREATED);
     }
 
     @Autowired
@@ -69,17 +69,17 @@ public class RegisterController {
 
         User user = userRepository.findOneByOTP(tokenOtp);
         if (null == user) {
-            return new ResponseEntity<Map>(response.templateEror("OTP tidak ditemukan"), HttpStatus.OK);
+            return new ResponseEntity<Map>(response.templateError("OTP tidak ditemukan"), HttpStatus.BAD_REQUEST);
         }
 
         if(user.isEnabled()){
-            return new ResponseEntity<Map>(response.templateSukses("Akun Anda sudah aktif, Silahkan melakukan login"), HttpStatus.OK);
+            return new ResponseEntity<Map>(response.templateError("Akun Anda sudah aktif, Silahkan melakukan login"), HttpStatus.BAD_REQUEST);
         }
         String today = config.convertDateToString(new Date());
 
         String dateToken = config.convertDateToString(user.getOtpExpiredDate());
         if(Long.parseLong(today) > Long.parseLong(dateToken)){
-            return new ResponseEntity<Map>(response.templateEror("Your token is expired. Please Get token again."), HttpStatus.OK);
+            return new ResponseEntity<Map>(response.templateError("Your token is expired. Please Get token again."), HttpStatus.BAD_REQUEST);
         }
         //update user
         user.setEnabled(true);
@@ -87,7 +87,7 @@ public class RegisterController {
         user.setOtp(null);
         userRepository.save(user);
 
-        return new ResponseEntity<Map>(response.templateSukses("Sukses, silahkan melakukan login"), HttpStatus.OK);
+        return new ResponseEntity<Map>(response.templateSuksesGet("Success, please continue to login"), HttpStatus.OK);
     }
 
     @Value("${BASEURL:}")//FILE_SHOW_RUL
@@ -97,12 +97,12 @@ public class RegisterController {
 
 
     @PostMapping("/send-otp")//send OTP : berupa URL
-    public Map sendEmailegisterTymeleafUser(@RequestBody RegisterModel user) {
+    public ResponseEntity<Map> sendEmailegisterTymeleafUser(@RequestBody RegisterModel user) {
         String message = "Thanks, please check your email for activation.";
 
-        if (user.getEmail() == null) return response.templateEror("No email provided");
+        if (user.getEmail() == null) return new ResponseEntity<Map>(response.templateError("No email provided"), HttpStatus.BAD_REQUEST);
         User found = userRepository.findOneByEmail(user.getEmail());
-        if (found == null) return response.notFound("Email not found"); //throw new BadRequest("Email not found");
+        if (found == null) return new ResponseEntity<Map>(response.templateError("Email not found"), HttpStatus.BAD_REQUEST); //throw new BadRequest("Email not found");
 
         String template = emailTemplate.getRegisterTemplate();
         if (StringUtils.isEmpty(found.getOtp())) {
@@ -128,7 +128,7 @@ public class RegisterController {
             template = template.replaceAll("\\{\\{VERIFY_TOKEN}}", BASEURL + "/register/index/"+  found.getOtp());
         }
         emailSender.sendAsync(user.getEmail(), "Register", template);
-        return response.templateSukses(message);
+        return new ResponseEntity<Map>(response.templateSuksesPost(message), HttpStatus.CREATED);
     }
 
 
