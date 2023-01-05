@@ -26,6 +26,13 @@ This project is a backend developed using the Java programming language and Spri
 - Spring Boot 2.7.5 version 
 - Intellij IDEA
 
+## API Documentation
+
+There is two option for access API documentation. First is read documentation below, but it's very limited for the success response only. If you want to access more about our API Documentation, you can run this application (depends on what service do you want) and access this endpoint : /api/swagger-ui/index.html#/ (for security application you need to add http://localhost:9091 first).
+
+Here is the documentation :
+https://docs.google.com/spreadsheets/d/1UuEARGL2e2b2BwiwqeNo-zMYGrOwsm2GKeC-dB52TKs/edit?usp=sharing
+
 ## Contribution Guidelines
 
 If you would like to contribute to the project, please follow these guidelines:
