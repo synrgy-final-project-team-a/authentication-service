@@ -8,7 +8,8 @@ import javax.servlet.http.HttpServletResponse;
 import java.util.Map;
 
 public interface UserAuthService {
-    Map register(RegisterModel objModel);
+    Map registerSeeker(RegisterModel objModel);
+    Map registerTennant(RegisterModel objModel);
     Map login(LoginModel loginModel);
 
     public void logout(HttpServletRequest request, HttpServletResponse response);

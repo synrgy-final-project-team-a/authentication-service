@@ -5,6 +5,7 @@ import com.synrgy.security.dto.RegisterModel;
 import com.synrgy.security.entity.Profile;
 import com.synrgy.security.entity.Role;
 import com.synrgy.security.entity.User;
+import com.synrgy.security.entity.enumeration.EnumRole;
 import com.synrgy.security.repository.ProfileRepository;
 import com.synrgy.security.repository.RoleRepository;
 import com.synrgy.security.repository.UserRepository;
@@ -53,6 +54,7 @@ public class UserAuthServiceImpl implements UserAuthService {
     private RoleRepository roleRepository;
     @Autowired
     private PasswordEncoder encoder;
+
     @Autowired
     public Response templateResponse;
     @Autowired
@@ -63,7 +65,7 @@ public class UserAuthServiceImpl implements UserAuthService {
     Response response;
 
     @Override
-    public Map register(RegisterModel registerModel) {
+    public Map registerSeeker(RegisterModel registerModel) {
         Map map = new HashMap();
         try {
             User user = new User();
@@ -71,21 +73,45 @@ public class UserAuthServiceImpl implements UserAuthService {
             profile.setFirstName(registerModel.getFirstName());
             profile.setLastName(registerModel.getLastName());
             profile.setPhoneNumber(registerModel.getPhoneNumber());
-            profile.setAvatar("https://static.wikia.nocookie.net/cartoonica/images/8/8a/Profile_-_Otis.jpg/revision/latest?cb=20190507000059");
+            profile.setAvatar("https://upload.wikimedia.org/wikipedia/commons/e/e8/KIM_Luhut_B._Pandjaitan.jpg");
             user.setUsername(registerModel.getEmail().toLowerCase());
             //step 1 :
             user.setEnabled(false); // matikan user
 
             String password = encoder.encode(registerModel.getPassword().replaceAll("\\s+", ""));
             user.setPassword(password);
-//            user.setStatus(objModel.getStatus());
-//            if (user.getStatus().equals("Admin")) {
-//                String[] roleNames = {"ROLE_TN", "ROLE_READ", "ROLE_WRITE"}; // admin
-//                List<Role> r = roleRepository.findByNameIn(roleNames);
-//                user.setRoles(r);
-//            } else if (user.getStatus().equals("User")) {
-            String role = registerModel.getRole();
-            String[] roleNames = {role, "ROLE_READ", "ROLE_WRITE"}; // user
+
+            String[] roleNames = {EnumRole.ROLE_SK.name(), EnumRole.ROLE_WRITE.name(), EnumRole.ROLE_READ.name()}; // user
+            List<Role> r = roleRepository.findByNameIn(roleNames);
+            user.setRoles(r);
+            Profile obj1 = profileRepository.save(profile);
+            User obj = userRepository.save(user);
+
+            return templateResponse.templateSuksesPost(obj);
+
+        } catch (Exception e) {
+            logger.error("Error registerManual=", e);
+            return templateResponse.templateError("error:" + e);
+        }
+    }
+
+    @Override
+    public Map registerTennant(RegisterModel registerModel) {
+        Map map = new HashMap();
+        try {
+            User user = new User();
+            Profile profile = new Profile();
+            profile.setFirstName(registerModel.getFirstName());
+            profile.setLastName(registerModel.getLastName());
+            profile.setPhoneNumber(registerModel.getPhoneNumber());
+            profile.setAvatar("https://upload.wikimedia.org/wikipedia/commons/thumb/8/89/Xi_Jinping_2019_%2849060546152%29_2.jpg/800px-Xi_Jinping_2019_%2849060546152%29_2.jpg");
+            user.setUsername(registerModel.getEmail().toLowerCase());
+            //step 1 :
+            user.setEnabled(false); // matikan user
+
+            String password = encoder.encode(registerModel.getPassword().replaceAll("\\s+", ""));
+            user.setPassword(password);
+            String[] roleNames = {EnumRole.ROLE_TN.name(), EnumRole.ROLE_WRITE.name(), EnumRole.ROLE_READ.name()}; // user
             List<Role> r = roleRepository.findByNameIn(roleNames);
             user.setRoles(r);
             Profile obj1 = profileRepository.save(profile);
@@ -129,7 +155,7 @@ public class UserAuthServiceImpl implements UserAuthService {
 
                 return map;
             } else {
-                return templateResponse.templateError("user not found");
+                return templateResponse.templateError("User not found");
             }
         } catch (HttpStatusCodeException e) {
             e.printStackTrace();

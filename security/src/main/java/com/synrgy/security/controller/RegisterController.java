@@ -1,8 +1,10 @@
 package com.synrgy.security.controller;
 
 import com.synrgy.security.configuration.Config;
+import com.synrgy.security.dto.LoginModel;
 import com.synrgy.security.dto.RegisterModel;
 import com.synrgy.security.entity.Profile;
+import com.synrgy.security.entity.Role;
 import com.synrgy.security.entity.User;
 import com.synrgy.security.repository.ProfileRepository;
 import com.synrgy.security.repository.UserRepository;
@@ -16,13 +18,11 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
-import java.util.Calendar;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.Map;
+import java.util.*;
 
 @RestController
 @RequestMapping("/register/")
@@ -41,16 +41,33 @@ public class RegisterController {
     @Autowired
     public EmailSender emailSender;
 
+    @Autowired
+    private PasswordEncoder passwordEncoder;
 
-    @PostMapping("/user")
-    public ResponseEntity<Map> saveRegisterManual(@Valid @RequestBody RegisterModel objModel) throws RuntimeException {
+
+    @PostMapping("/seeker")
+    public ResponseEntity<Map> saveRegisterSeeker(@Valid @RequestBody RegisterModel objModel) throws RuntimeException {
         Map map = new HashMap();
 
         User user = userRepository.checkExistingEmail(objModel.getEmail());
         if (null != user) {
             return new ResponseEntity<Map>(response.templateError("Email sudah ada"), HttpStatus.BAD_REQUEST);
         }
-        map = userAuthService.register(objModel);
+        map = userAuthService.registerSeeker(objModel);
+        ResponseEntity<Map> sendOTPUri = sendEmailegisterTymeleafUser(objModel);
+
+        return new ResponseEntity<Map>(map, HttpStatus.CREATED);
+    }
+
+    @PostMapping("/tennant")
+    public ResponseEntity<Map> saveRegisterTennant(@Valid @RequestBody RegisterModel objModel) throws RuntimeException {
+        Map map = new HashMap();
+
+        User user = userRepository.checkExistingEmail(objModel.getEmail());
+        if (null != user) {
+            return new ResponseEntity<Map>(response.templateError("Email sudah ada"), HttpStatus.BAD_REQUEST);
+        }
+        map = userAuthService.registerTennant(objModel);
         ResponseEntity<Map> sendOTPUri = sendEmailegisterTymeleafUser(objModel);
 
         return new ResponseEntity<Map>(map, HttpStatus.CREATED);
@@ -65,21 +82,19 @@ public class RegisterController {
     @GetMapping("/index/{token}")
     public ResponseEntity<Map> saveRegisterManual(@PathVariable(value = "token") String tokenOtp) throws RuntimeException {
 
-
-
         User user = userRepository.findOneByOTP(tokenOtp);
         if (null == user) {
-            return new ResponseEntity<Map>(response.templateError("OTP tidak ditemukan"), HttpStatus.BAD_REQUEST);
+            return new ResponseEntity<Map>(response.templateError("OTP not found!"), HttpStatus.BAD_REQUEST);
         }
 
         if(user.isEnabled()){
-            return new ResponseEntity<Map>(response.templateError("Akun Anda sudah aktif, Silahkan melakukan login"), HttpStatus.BAD_REQUEST);
+            return new ResponseEntity<Map>(response.templateError("Your account is already active!"), HttpStatus.BAD_REQUEST);
         }
         String today = config.convertDateToString(new Date());
 
         String dateToken = config.convertDateToString(user.getOtpExpiredDate());
         if(Long.parseLong(today) > Long.parseLong(dateToken)){
-            return new ResponseEntity<Map>(response.templateError("Your token is expired. Please Get token again."), HttpStatus.BAD_REQUEST);
+            return new ResponseEntity<Map>(response.templateError("Your token is expired. Please get token again."), HttpStatus.BAD_REQUEST);
         }
         //update user
         user.setEnabled(true);
@@ -87,7 +102,7 @@ public class RegisterController {
         user.setOtp(null);
         userRepository.save(user);
 
-        return new ResponseEntity<Map>(response.templateSuksesGet("Success, please continue to login"), HttpStatus.OK);
+        return new ResponseEntity<Map>(response.templateSuksesGet("Your email is verified! Now you will be redirected into login menu. "), HttpStatus.OK);
     }
 
     @Value("${BASEURL:}")//FILE_SHOW_RUL
