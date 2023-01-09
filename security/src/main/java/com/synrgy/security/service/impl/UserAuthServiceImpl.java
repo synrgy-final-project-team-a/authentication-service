@@ -129,7 +129,7 @@ public class UserAuthServiceImpl implements UserAuthService {
     public Map login(LoginModel loginModel) {
         try {
             Map<String, Object> map = new HashMap<>();
-
+            User user = userRepository.findOneByUsername(loginModel.getEmail());
             String url = baseUrl + "/oauth/token?username=" + loginModel.getEmail() +
                     "&password=" + loginModel.getPassword() +
                     "&grant_type=password" +
@@ -140,7 +140,6 @@ public class UserAuthServiceImpl implements UserAuthService {
                     });
 
             if (response.getStatusCode() == HttpStatus.OK) {
-                User user = userRepository.findOneByEmail(loginModel.getEmail());
                 List<String> roles = new ArrayList<>();
 
                 for (Role role : user.getRoles()) {

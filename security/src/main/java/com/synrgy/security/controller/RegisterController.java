@@ -22,6 +22,8 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
+import java.time.LocalDateTime;
+import java.time.ZoneId;
 import java.util.*;
 
 @RestController
@@ -49,7 +51,7 @@ public class RegisterController {
     public ResponseEntity<Map> saveRegisterSeeker(@Valid @RequestBody RegisterModel objModel) throws RuntimeException {
         Map map = new HashMap();
 
-        User user = userRepository.checkExistingEmail(objModel.getEmail());
+        User user = userRepository.findOneByUsername(objModel.getEmail());
         if (null != user) {
             return new ResponseEntity<Map>(response.templateError("Email sudah ada"), HttpStatus.BAD_REQUEST);
         }
@@ -63,7 +65,7 @@ public class RegisterController {
     public ResponseEntity<Map> saveRegisterTennant(@Valid @RequestBody RegisterModel objModel) throws RuntimeException {
         Map map = new HashMap();
 
-        User user = userRepository.checkExistingEmail(objModel.getEmail());
+        User user = userRepository.findOneByUsername(objModel.getEmail());
         if (null != user) {
             return new ResponseEntity<Map>(response.templateError("Email sudah ada"), HttpStatus.BAD_REQUEST);
         }
@@ -76,7 +78,7 @@ public class RegisterController {
     @Autowired
     public EmailTemplate emailTemplate;
 
-    @Value("${expired.token.password.minute}")
+    @Value("${expired.token.password.hour}")
     int expiredToken;
 
     @GetMapping("/index/{token}")
@@ -116,7 +118,7 @@ public class RegisterController {
         String message = "Thanks, please check your email for activation.";
 
         if (user.getEmail() == null) return new ResponseEntity<Map>(response.templateError("No email provided"), HttpStatus.BAD_REQUEST);
-        User found = userRepository.findOneByEmail(user.getEmail());
+        User found = userRepository.checkExistingEmail(user.getEmail());
         if (found == null) return new ResponseEntity<Map>(response.templateError("Email not found"), HttpStatus.BAD_REQUEST); //throw new BadRequest("Email not found");
 
         String template = emailTemplate.getRegisterTemplate();
@@ -130,7 +132,7 @@ public class RegisterController {
             Date dateNow = new Date();
             Calendar calendar = Calendar.getInstance();
             calendar.setTime(dateNow);
-            calendar.add(Calendar.MINUTE, expiredToken);
+            calendar.add(Calendar.HOUR, expiredToken);
             Date expirationDate = calendar.getTime();
 
             found.setOtp(otp);
@@ -138,9 +140,22 @@ public class RegisterController {
             template = template.replaceAll("\\{\\{USERNAME}}", (found.getUsername() == null ? user.getEmail() : found.getUsername()));
             template = template.replaceAll("\\{\\{VERIFY_TOKEN}}", BASEURL + "/register/index/"+ otp);
             userRepository.save(found);
-        } else {
+        } else if (found.getOtp() != null) {
+            found.setOtpExpiredDate(null);
+            Date in = new Date();
+            LocalDateTime ldt = LocalDateTime.ofInstant(in.toInstant(), ZoneId.systemDefault());
+            Date out = Date.from(ldt.atZone(ZoneId.systemDefault()).toInstant());
+            Calendar calendar = Calendar.getInstance();
+            calendar.setTime(out);
+            calendar.add(Calendar.HOUR, expiredToken);
+            Date expirationDate = calendar.getTime();
+            found.setOtpExpiredDate(expirationDate);
             template = template.replaceAll("\\{\\{USERNAME}}", (found.getUsername() == null ? user.getEmail() : found.getUsername()));
             template = template.replaceAll("\\{\\{VERIFY_TOKEN}}", BASEURL + "/register/index/"+  found.getOtp());
+            userRepository.save(found);
+        } else {
+            return new ResponseEntity<Map>(response.templateError("Unable to send OTP to your email, please try again."), HttpStatus.BAD_REQUEST);
+
         }
         emailSender.sendAsync(user.getEmail(), "Register", template);
         return new ResponseEntity<Map>(response.templateSuksesPost(message), HttpStatus.CREATED);

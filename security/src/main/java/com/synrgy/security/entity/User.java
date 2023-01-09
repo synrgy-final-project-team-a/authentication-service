@@ -80,17 +80,15 @@ public class User implements UserDetails, Serializable {
     }
 
 
-    @JsonIgnore
-    @Override
-    public String getUsername() {
-        return null;
-    }
 
     public void setUsername(String username) {
         this.username = username;
     }
 
-
+    @Override
+    public String getUsername() {
+        return username;
+    }
 
 }
 

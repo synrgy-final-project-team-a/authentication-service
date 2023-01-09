@@ -42,7 +42,7 @@ public class DatabaseSeeder implements ApplicationRunner {
     private String defaultPassword = "password";
 
     private String[] users = new String[]{
-            "superadmin@mail.com:ROLE_SK ROLE_TN ROLE_SUPERADMIN",
+            "superadmin@mail.com:ROLE_SK ROLE_TN ROLE_SUPERUSER",
             "tenant@mail.com:ROLE_TN",
             "seeker@mail.com:ROLE_SK"
     };
@@ -137,7 +137,7 @@ public class DatabaseSeeder implements ApplicationRunner {
             String[] str = userNames.split(":");
             String email = str[0];
             String[] roleNames = str[1].split("\\s");
-            User oldUser = userRepository.findOneByEmail(email);
+            User oldUser = userRepository.findOneByUsername(email);
             if (null == oldUser) {
                 oldUser = new User();
                 oldUser.setUsername(email);

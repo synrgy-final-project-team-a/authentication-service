@@ -35,7 +35,7 @@ public class ForgetPasswordController {
     @Autowired
     public UserAuthService userAuthService;
 
-    @Value("${expired.token.password.minute:}")//FILE_SHOW_RUL
+    @Value("${expired.token.password.hour:}")//FILE_SHOW_RUL
     private int expiredToken;
 
     @Autowired
@@ -58,7 +58,7 @@ public class ForgetPasswordController {
     public ResponseEntity<Map> sendEmailPassword(@Valid @RequestBody ResetPasswordModel user) {
 
         if (StringUtils.isEmpty(user.getEmail())) return new ResponseEntity<Map>(response.templateError("No email provided"), HttpStatus.BAD_REQUEST);
-        User found = userRepository.findOneByEmail(user.getEmail());
+        User found = userRepository.checkExistingEmail(user.getEmail());
         if (found == null) return new ResponseEntity<Map>(response.templateError("Email not found"), HttpStatus.BAD_REQUEST);; //throw new BadRequest("Email not found");
 
 

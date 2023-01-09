@@ -41,7 +41,11 @@ public class LoginLogoutController {
     public ResponseEntity<Map> login(@Valid @RequestBody LoginModel loginModel) {
         Map map = new HashMap();
 
-        User checkUser = userRepository.findOneByEmail(loginModel.getEmail());
+        User checkUser = userRepository.findOneByUsername(loginModel.getEmail());
+
+        if((checkUser.getOtp() == null)){
+            checkUser.setEnabled(true);
+        }
 
         if ((checkUser != null) && (encoder.matches(loginModel.getPassword(), checkUser.getPassword()))) {
             if (!checkUser.isEnabled()) {
@@ -59,8 +63,8 @@ public class LoginLogoutController {
         return new ResponseEntity<Map>(map, HttpStatus.CREATED);
     }
 
-    @PostMapping("/logout-user")
-    public void logout(HttpServletRequest request, HttpServletResponse response) {
-        userAuthService.logout(request, response);
-    }
+//    @PostMapping("/logout-user")
+//    public void logout(HttpServletRequest request, HttpServletResponse response) {
+//        userAuthService.logout(request, response);
+//    }
 }
