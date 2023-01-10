@@ -10,8 +10,8 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Setup project before build
-      - uses: actions/checkout@v2    
+     - name: Setup project before build
+     - uses: actions/checkout@v2    
   
   build:
     runs-on: ubuntu-latest
@@ -19,24 +19,24 @@ jobs:
 
 
     steps:  
-    - uses: actions/setup-java@v3
-    - name: Set up JDK 8
-      with:
+     - uses: actions/setup-java@v3
+     - name: Set up JDK 8
+       with:
         java-version: '8'
         distribution: 'adopt'
-    - name: Build with Maven
-      run: mvn --batch-mode --update-snapshots package
+     - name: Build with Maven
+       run: mvn --batch-mode --update-snapshots package
       
   deploy:
     runs-on: ubuntu-latest
     needs: build
     
     steps:  
-    - uses: actions/setup-java@v3
-    - name: Install Railway
-      run: npm i -g @railway/cli
+     - uses: actions/setup-java@v3
+     - name: Install Railway
+       run: npm i -g @railway/cli
 
-    - name: Deployment
-      run: railway up
-      env:
-          RAILWAY_TOKEN: 611645f2-8ffd-4f1c-b0fc-0693c49d6ff0
+     - name: Deployment
+       run: railway up
+       env:
+        RAILWAY_TOKEN: 611645f2-8ffd-4f1c-b0fc-0693c49d6ff0
