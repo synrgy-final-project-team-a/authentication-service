@@ -129,7 +129,7 @@ public class UserAuthServiceImpl implements UserAuthService {
     public Map login(LoginModel loginModel) {
         try {
             Map<String, Object> map = new HashMap<>();
-            User user = userRepository.findOneByUsername(loginModel.getEmail());
+            User user = userRepository.checkExistingEmail(loginModel.getEmail());
             String url = baseUrl + "/oauth/token?username=" + loginModel.getEmail() +
                     "&password=" + loginModel.getPassword() +
                     "&grant_type=password" +
@@ -154,7 +154,7 @@ public class UserAuthServiceImpl implements UserAuthService {
 
                 return map;
             } else {
-                return templateResponse.templateError("User not found");
+                return templateResponse.templateError("Error while login");
             }
         } catch (HttpStatusCodeException e) {
             e.printStackTrace();

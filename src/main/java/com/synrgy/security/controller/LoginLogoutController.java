@@ -41,11 +41,11 @@ public class LoginLogoutController {
     public ResponseEntity<Map> login(@Valid @RequestBody LoginModel loginModel) {
         Map map = new HashMap();
 
-        User checkUser = userRepository.findOneByUsername(loginModel.getEmail());
+        User checkUser = userRepository.checkExistingEmail(loginModel.getEmail());
 
-        if((checkUser.getOtp() == null)){
-            checkUser.setEnabled(true);
-        }
+//        if((checkUser.getOtp() == null)){
+//            checkUser.setEnabled(true);
+//        }
 
         if ((checkUser != null) && (encoder.matches(loginModel.getPassword(), checkUser.getPassword()))) {
             if (!checkUser.isEnabled()) {
