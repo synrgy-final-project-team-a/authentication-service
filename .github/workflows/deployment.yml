@@ -2,7 +2,7 @@ name: BEJ CI Deploy Production
 
 on:
   push:
-    branches: [ "production" ]
+    branches: [production]
 
 jobs:
   setup:
@@ -19,25 +19,24 @@ jobs:
     needs: setup
 
 
-    steps:
-    - uses: actions/checkout@v3
-    - name: Install package
-      run: npm install --silent
-    - name: Building the project first
-      run: npm run build --if-present
-  
+    steps:  
     - uses: actions/setup-java@v3
       with:
         java-version: '8'
         distribution: 'adopt'
     - name: Build with Maven
       run: mvn --batch-mode --update-snapshots package
+      
   deploy:
     runs-on: ubuntu-latest
     needs: build
+    
+    steps:  
+    - uses: actions/setup-java@v3
+    - name: Install Railway
+      run: npm i -g @railway/cli
 
-    steps:
-    - uses: actions/checkout@v3
-       run: railway up
-       env:
+    - name: Deployment
+      run: railway up
+      env:
           RAILWAY_TOKEN: 611645f2-8ffd-4f1c-b0fc-0693c49d6ff0
