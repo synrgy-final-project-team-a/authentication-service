@@ -1,6 +1,5 @@
 package com.synrgy.security.configuration;
 
-import com.synrgy.security.repository.UserRepository;
 import com.synrgy.security.service.impl.Oauth2UserDetailsService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.GrantedAuthority;
@@ -15,8 +14,6 @@ import java.util.Map;
 @Component
 @SuppressWarnings("unchecked")
 public class Oauth2AccessTokenConverter extends DefaultAccessTokenConverter {
-    @Autowired
-    private UserRepository userRepository;
 
     @Autowired
     private Oauth2UserDetailsService userDetailsService;
