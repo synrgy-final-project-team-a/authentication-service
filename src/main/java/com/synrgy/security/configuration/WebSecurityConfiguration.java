@@ -91,26 +91,26 @@ public class WebSecurityConfiguration extends WebSecurityConfigurerAdapter {
         return services;
     }
 
-    @Override
-    protected void configure(HttpSecurity http) throws Exception{
-        http
-                .cors()
-                .and()
-                .csrf(c -> c.csrfTokenRepository(CookieCsrfTokenRepository.withHttpOnlyFalse()))
-                .exceptionHandling()
-                .and()
-                .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)
-                .and()
-                .authorizeRequests(uri -> uri.antMatchers("/", "/api/auth/**", "/error",
-                        "/webjars/**", "/user", "/login-oauth2-google", "/api/oauth2/authorization/google").permitAll())
-                .logout(l -> l.logoutSuccessUrl("/"))
-                .oauth2Login()
-                .successHandler(new AuthenticationSuccessHandler() {
-                    @Override
-                    public void onAuthenticationSuccess(HttpServletRequest request, HttpServletResponse response, Authentication authentication) throws IOException, ServletException {
-                        SecurityContextHolder.getContext().setAuthentication(authentication);
-                    }
-                });
-
-    }
+//    @Override
+//    protected void configure(HttpSecurity http) throws Exception{
+//        http
+//                .cors()
+//                .and()
+//                .csrf(c -> c.csrfTokenRepository(CookieCsrfTokenRepository.withHttpOnlyFalse()))
+//                .exceptionHandling()
+//                .and()
+//                .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)
+//                .and()
+//                .authorizeRequests(uri -> uri.antMatchers("/", "/api/auth/**", "/error",
+//                        "/webjars/**", "/user", "/login-oauth2-google", "/api/oauth2/authorization/google").permitAll())
+//                .logout(l -> l.logoutSuccessUrl("/"))
+//                .oauth2Login()
+//                .successHandler(new AuthenticationSuccessHandler() {
+//                    @Override
+//                    public void onAuthenticationSuccess(HttpServletRequest request, HttpServletResponse response, Authentication authentication) throws IOException, ServletException {
+//                        SecurityContextHolder.getContext().setAuthentication(authentication);
+//                    }
+//                });
+//
+//    }
 }
