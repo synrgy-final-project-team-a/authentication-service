@@ -31,7 +31,6 @@ public class User implements UserDetails, Serializable {
 
     @JsonIgnore
     @NotNull
-    @Size(min = 8)
     private String password;
 
 
