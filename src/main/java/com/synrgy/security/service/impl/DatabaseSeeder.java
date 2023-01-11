@@ -37,13 +37,16 @@ public class DatabaseSeeder implements ApplicationRunner {
     private UserRepository userRepository;
 
     @Autowired
+    private ProfileRepository profileRepository;
+
+    @Autowired
     private RolePathRepository rolePathRepository;
 
     private String defaultPassword = "password";
 
     private String[] users = new String[]{
             "superadmin@mail.com:ROLE_SK ROLE_TN ROLE_SUPERUSER",
-            "tenant@mail.com:ROLE_TN",
+            "tennant@mail.com:ROLE_TN",
             "seeker@mail.com:ROLE_SK"
     };
 

@@ -51,7 +51,6 @@ public class Profile implements Serializable {
 
     @OneToOne(mappedBy = "profile")
     @JsonManagedReference
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private User user;
 
 }
