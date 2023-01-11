@@ -21,6 +21,7 @@ import org.springframework.web.bind.annotation.*;
 import javax.validation.Valid;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.Map;
 
 @RestController
@@ -82,6 +83,7 @@ public class ForgetPasswordController {
             template = template.replaceAll("\\{\\{USERNAME}}", (found.getUsername() == null ? user.getEmail() : found.getUsername()));
             template = template.replaceAll("\\{\\{PASS_TOKEN}}", BASEURL + "/forget-password/index/" + otp);
             userRepository.save(found);
+
         } else {
             template = template.replaceAll("\\{\\{USERNAME}}", (found.getUsername() == null ? user.getEmail() : found.getUsername()));
             template = template.replaceAll("\\{\\{PASS_TOKEN}}", BASEURL + "/forget-password/index/" + found.getOtp());
@@ -89,7 +91,7 @@ public class ForgetPasswordController {
         emailSender.sendAsync(user.getEmail(), "Binar - Forget Password", template);
 
 
-        return new ResponseEntity<Map>(response.templateSuksesPost("Thanks, please check your email"), HttpStatus.CREATED);
+        return new ResponseEntity<Map>(response.templateSuksesPost(found), HttpStatus.CREATED);
 
     }
 

@@ -1,12 +1,15 @@
 package com.synrgy.security.entity;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Data;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
 import javax.persistence.*;
+import javax.validation.constraints.Min;
 import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Size;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Collection;
@@ -20,6 +23,7 @@ public class User implements UserDetails, Serializable {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "id")
     private Long id;
 
     @Column(name = "email", unique=true)
@@ -27,6 +31,7 @@ public class User implements UserDetails, Serializable {
 
     @JsonIgnore
     @NotNull
+    @Size(min = 8)
     private String password;
 
 
@@ -90,5 +95,9 @@ public class User implements UserDetails, Serializable {
         return username;
     }
 
+    @OneToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name = "profile_id", referencedColumnName = "id")
+    @JsonBackReference
+    private Profile profile;
 }
 

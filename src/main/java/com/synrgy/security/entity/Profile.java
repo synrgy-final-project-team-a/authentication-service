@@ -2,12 +2,14 @@ package com.synrgy.security.entity;
 
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import lombok.Builder;
 import lombok.Data;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 import java.io.Serializable;
+import java.util.List;
 
 @Data
 @Entity
@@ -17,9 +19,6 @@ public class Profile implements Serializable {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id")
     private Long id;
-
-    @OneToOne(targetEntity = User.class, cascade = CascadeType.ALL)
-    private Long user;
 
     @NotNull
     @Column(name = "first_name")
@@ -50,5 +49,9 @@ public class Profile implements Serializable {
     @Column(name = "gmaps")
     private String gmaps;
 
+    @OneToOne(mappedBy = "profile")
+    @JsonManagedReference
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private User user;
 
 }

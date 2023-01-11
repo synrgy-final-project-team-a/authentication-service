@@ -68,12 +68,17 @@ public class UserAuthServiceImpl implements UserAuthService {
     public Map registerSeeker(RegisterModel registerModel) {
         Map map = new HashMap();
         try {
-            User user = new User();
+
             Profile profile = new Profile();
             profile.setFirstName(registerModel.getFirstName());
             profile.setLastName(registerModel.getLastName());
             profile.setPhoneNumber(registerModel.getPhoneNumber());
             profile.setAvatar("https://upload.wikimedia.org/wikipedia/commons/e/e8/KIM_Luhut_B._Pandjaitan.jpg");
+
+            Profile obj1 = profileRepository.save(profile);
+
+            User user = new User();
+
             user.setUsername(registerModel.getEmail().toLowerCase());
             //step 1 :
             user.setEnabled(false); // matikan user
@@ -84,9 +89,9 @@ public class UserAuthServiceImpl implements UserAuthService {
             String[] roleNames = {EnumRole.ROLE_SK.name(), EnumRole.ROLE_WRITE.name(), EnumRole.ROLE_READ.name()}; // user
             List<Role> r = roleRepository.findByNameIn(roleNames);
             user.setRoles(r);
-            Profile obj1 = profileRepository.save(profile);
-            User obj = userRepository.save(user);
 
+            user.setProfile(obj1);
+            User obj = userRepository.save(user);
             return templateResponse.templateSuksesPost(obj);
 
         } catch (Exception e) {
@@ -99,12 +104,15 @@ public class UserAuthServiceImpl implements UserAuthService {
     public Map registerTennant(RegisterModel registerModel) {
         Map map = new HashMap();
         try {
-            User user = new User();
             Profile profile = new Profile();
             profile.setFirstName(registerModel.getFirstName());
             profile.setLastName(registerModel.getLastName());
             profile.setPhoneNumber(registerModel.getPhoneNumber());
             profile.setAvatar("https://upload.wikimedia.org/wikipedia/commons/thumb/8/89/Xi_Jinping_2019_%2849060546152%29_2.jpg/800px-Xi_Jinping_2019_%2849060546152%29_2.jpg");
+            Profile obj1 = profileRepository.save(profile);
+
+            User user = new User();
+
             user.setUsername(registerModel.getEmail().toLowerCase());
             //step 1 :
             user.setEnabled(false); // matikan user
@@ -114,9 +122,9 @@ public class UserAuthServiceImpl implements UserAuthService {
             String[] roleNames = {EnumRole.ROLE_TN.name(), EnumRole.ROLE_WRITE.name(), EnumRole.ROLE_READ.name()}; // user
             List<Role> r = roleRepository.findByNameIn(roleNames);
             user.setRoles(r);
-            Profile obj1 = profileRepository.save(profile);
-            User obj = userRepository.save(user);
 
+            user.setProfile(obj1);
+            User obj = userRepository.save(user);
             return templateResponse.templateSuksesPost(obj);
 
         } catch (Exception e) {

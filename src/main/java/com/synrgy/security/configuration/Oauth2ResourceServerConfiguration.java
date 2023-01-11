@@ -47,8 +47,8 @@ public class Oauth2ResourceServerConfiguration extends ResourceServerConfigurerA
                 .antMatcher("/**")
                 .authorizeRequests()
                     .antMatchers("/","" +
-                                    "/showFile/**","/v1/showFile/**","/v1/upload", "/register-opt/**", "/register/**","/swagger-ui/**","/api/swagger-ui.html","/api/oauth/token**" ,"/v3/api-docs/**",
-                            "/forget-password/**", "/oauth2/**", "/oauth/token**", "/login-user", "/logout**", "/error**", "/auth/**","/error","/api/webjars/*", "/api/user","/api/login-oauth2-google", "/api/index.html")
+                                    "/showFile/**","/v1/showFile/**","/v1/upload", "/register-opt/**", "/register/**","/swagger-ui/**","/api/swagger-ui.html","/api/oauth/token**" , "/api/oauth/token" ,"/v3/api-docs/**",
+                            "/forget-password/**", "/oauth2/**", "/oauth/token", "/oauth/token**", "/login-user", "/logout**", "/error**", "/auth/**","/error","/api/webjars/*", "/api/user","/api/login-oauth2-google", "/api/index.html")
                     .permitAll()
                 .and()
                 .logout(logout -> logout
