@@ -87,6 +87,14 @@ public class RegisterController {
             return new ResponseEntity<Map>(response.urlNotFound("OTP not found in url, please input your OTP"), HttpStatus.NOT_FOUND);
         }
 
+
+        if (null == tokenOtp) {
+            return new ResponseEntity<Map>(response.urlNotFound("OTP not found in url!"), HttpStatus.NOT_FOUND);
+        }
+
+        if (tokenOtp.length()!=6) {
+            return new ResponseEntity<Map>(response.urlNotFound("Wrong format OTP!"), HttpStatus.NOT_FOUND);
+        }
         User user = userRepository.findOneByOTP(tokenOtp);
         if (null == user) {
             return new ResponseEntity<Map>(response.urlNotFound("OTP not found!"), HttpStatus.NOT_FOUND);
@@ -99,7 +107,7 @@ public class RegisterController {
 
         String dateToken = config.convertDateToString(user.getOtpExpiredDate());
         if(Long.parseLong(today) > Long.parseLong(dateToken)){
-            return new ResponseEntity<Map>(response.templateError("Your token is expired. Please get token again."), HttpStatus.BAD_REQUEST);
+            return new ResponseEntity<Map>(response.templateError("Your token is expired. Please get token again."), HttpStatus.NOT_FOUND);
         }
         //update user
         user.setEnabled(true);

@@ -103,13 +103,13 @@ public class ForgetPasswordController {
             System.out.println("User null: tidak ditemukan");
             model.addAttribute("erordesc", "User not found for code " + tokenotp);
             model.addAttribute("title", "");
-            return new ResponseEntity<Map>(response.templateError("User not found"), HttpStatus.NOT_FOUND);
+            return new ResponseEntity<Map>(response.urlNotFound("User not found"), HttpStatus.NOT_FOUND);
         }
 
         if (user.isEnabled()) {
             model.addAttribute("erordesc", "Your account is already active, please do login");
             model.addAttribute("title", "");
-            return new ResponseEntity<Map>(response.templateError("Your account is already active, please do login"), HttpStatus.NOT_FOUND);
+            return new ResponseEntity<Map>(response.urlNotFound("Your account is already active, please do login"), HttpStatus.NOT_FOUND);
         }
         String today = config.convertDateToString(new Date());
 
@@ -117,13 +117,13 @@ public class ForgetPasswordController {
         if (Long.parseLong(today) > Long.parseLong(dateToken)) {
             model.addAttribute("erordesc", "Your token is expired. Please get token again.");
             model.addAttribute("title", "");
-            return new ResponseEntity<Map>(response.templateError("Your token is expired. Please get token again. "), HttpStatus.OK);
+            return new ResponseEntity<Map>(response.urlNotFound("Your token is expired. Please get token again. "), HttpStatus.NOT_FOUND);
         }
         user.setEnabled(true);
         userRepository.save(user);
         model.addAttribute("title", "Congratulations, " + user.getUsername() + ", you have successfully registered!");
         model.addAttribute("erordesc", "");
-        return new ResponseEntity<Map>(response.templateSuksesGet("Congratulations, you will be redirected to change password!"), HttpStatus.OK);
+        return new ResponseEntity<Map>(response.templateSuksesGet(user), HttpStatus.OK);
     }
 
     // Step 3 : lakukan reset password baru
