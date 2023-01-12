@@ -1,5 +1,7 @@
 package com.synrgy.security.configuration;
 
+import com.synrgy.security.service.impl.FacebookConncetionSignup;
+import com.synrgy.security.service.impl.FacebookSignInAdapter;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.*;
@@ -24,6 +26,13 @@ import org.springframework.security.web.authentication.AuthenticationSuccessHand
 import org.springframework.security.web.csrf.CookieCsrfTokenRepository;
 import org.springframework.web.servlet.config.annotation.EnableWebMvc;
 
+import org.springframework.social.connect.ConnectionFactoryLocator;
+import org.springframework.social.connect.UsersConnectionRepository;
+import org.springframework.social.connect.mem.InMemoryUsersConnectionRepository;
+import org.springframework.social.connect.support.ConnectionFactoryRegistry;
+import org.springframework.social.connect.web.ProviderSignInController;
+import org.springframework.social.facebook.connect.FacebookConnectionFactory;
+
 import javax.annotation.Priority;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
@@ -45,6 +54,17 @@ public class WebSecurityConfiguration extends WebSecurityConfigurerAdapter {
 
     @Value("${security.jwt.secret_key:s3cr3t}")
     private String jwtSecretKey;
+
+
+    @Value("${spring.social.facebook.appSecret}")
+    String appSecret;
+
+    @Value("${spring.social.facebook.appId}")
+    String appId;
+
+    @Autowired
+    private FacebookConncetionSignup facebookConncetionSignup;
+
 
     @Autowired
     private Oauth2AccessTokenConverter accessTokenConverter;
@@ -68,6 +88,17 @@ public class WebSecurityConfiguration extends WebSecurityConfigurerAdapter {
         return new InMemoryTokenStore();
     }
 
+    private ConnectionFactoryLocator connectionFactoryLocator() {
+        ConnectionFactoryRegistry registry = new ConnectionFactoryRegistry();
+        registry.addConnectionFactory(new FacebookConnectionFactory(appId, appSecret));
+        return registry;
+    }
+
+    private UsersConnectionRepository getUsersConnectionRepository(ConnectionFactoryLocator connectionFactoryLocator) {
+        return new InMemoryUsersConnectionRepository(connectionFactoryLocator);
+    }
+
+
     @Bean
     public AccessTokenConverter accessTokenConverter() {
         if (jwtEnabled) {
@@ -79,6 +110,15 @@ public class WebSecurityConfiguration extends WebSecurityConfigurerAdapter {
         }
 
         return new DefaultAccessTokenConverter();
+    }
+
+
+    @Bean
+    public ProviderSignInController providerSignInController() {
+        ConnectionFactoryLocator connectionFactoryLocator = connectionFactoryLocator();
+        UsersConnectionRepository usersConnectionRepository = getUsersConnectionRepository(connectionFactoryLocator);
+        ((InMemoryUsersConnectionRepository) usersConnectionRepository).setConnectionSignUp(facebookConncetionSignup);
+        return new ProviderSignInController(connectionFactoryLocator, usersConnectionRepository, new FacebookSignInAdapter());
     }
 
     @Bean
