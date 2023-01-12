@@ -84,19 +84,27 @@ public class RegisterController {
     @GetMapping("/index/{token}")
     public ResponseEntity<Map> saveRegisterManual(@PathVariable(value = "token") String tokenOtp) throws RuntimeException {
 
+
+        if (null == tokenOtp) {
+            return new ResponseEntity<Map>(response.urlNotFound("OTP not found in url!"), HttpStatus.NOT_FOUND);
+        }
+
+        if (tokenOtp.length()!=6) {
+            return new ResponseEntity<Map>(response.urlNotFound("Wrong format OTP!"), HttpStatus.NOT_FOUND);
+        }
         User user = userRepository.findOneByOTP(tokenOtp);
         if (null == user) {
-            return new ResponseEntity<Map>(response.templateError("OTP not found!"), HttpStatus.BAD_REQUEST);
+            return new ResponseEntity<Map>(response.urlNotFound("OTP not found!"), HttpStatus.NOT_FOUND);
         }
 
         if(user.isEnabled()){
-            return new ResponseEntity<Map>(response.templateError("Your account is already active!"), HttpStatus.BAD_REQUEST);
+            return new ResponseEntity<Map>(response.urlNotFound("Your account is already active!"), HttpStatus.NOT_FOUND);
         }
         String today = config.convertDateToString(new Date());
 
         String dateToken = config.convertDateToString(user.getOtpExpiredDate());
         if(Long.parseLong(today) > Long.parseLong(dateToken)){
-            return new ResponseEntity<Map>(response.templateError("Your token is expired. Please get token again."), HttpStatus.BAD_REQUEST);
+            return new ResponseEntity<Map>(response.templateError("Your token is expired. Please get token again."), HttpStatus.NOT_FOUND);
         }
         //update user
         user.setEnabled(true);
@@ -158,7 +166,7 @@ public class RegisterController {
 
         }
         emailSender.sendAsync(user.getEmail(), "Register", template);
-        return new ResponseEntity<Map>(response.templateSuksesPost(message), HttpStatus.CREATED);
+        return new ResponseEntity<Map>(response.templateSuksesPost(found), HttpStatus.CREATED);
     }
 
 
