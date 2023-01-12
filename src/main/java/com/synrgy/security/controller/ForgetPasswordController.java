@@ -108,9 +108,13 @@ public class ForgetPasswordController {
             return new ResponseEntity<Map>(response.urlNotFound("OTP not found in url!"), HttpStatus.NOT_FOUND);
         }
 
+        if (tokenotp.length()!=6) {
+            return new ResponseEntity<Map>(response.urlNotFound("Wrong format OTP!"), HttpStatus.NOT_FOUND);
+        }
+
         User user = userRepository.findOneByOTP(tokenotp);
         if (null == user) {
-            System.out.println("User null: tidak ditemukan");
+            System.out.println("User null: not found");
             model.addAttribute("erordesc", "User not found for code " + tokenotp);
             model.addAttribute("title", "");
             return new ResponseEntity<Map>(response.urlNotFound("User not found"), HttpStatus.NOT_FOUND);
