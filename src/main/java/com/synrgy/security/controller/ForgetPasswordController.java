@@ -59,7 +59,7 @@ public class ForgetPasswordController {
     public ResponseEntity<Map> sendEmailPassword(@Valid @RequestBody ResetPasswordModel user) {
 
 
-        if (!(user.getEmail().matches("^(.+)@(\\S+) $")))  {
+        if (!(user.getEmail().matches("^[A-Za-z0-9+_.-]+@(.+)$")))  {
             return new ResponseEntity<Map>(response.templateError("Wrong email format!"), HttpStatus.BAD_REQUEST);
 
         }
