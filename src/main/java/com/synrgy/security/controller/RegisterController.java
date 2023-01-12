@@ -115,7 +115,7 @@ public class RegisterController {
 
     @PostMapping("/send-otp")//send OTP : berupa URL
     public ResponseEntity<Map> sendEmailegisterTymeleafUser(@RequestBody RegisterModel user) {
-        String message = "Thanks, please check your email for activation.";
+//        String message = "Thanks, please check your email for activation.";
 
         if (user.getEmail() == null) return new ResponseEntity<Map>(response.templateError("No email provided"), HttpStatus.BAD_REQUEST);
         User found = userRepository.checkExistingEmail(user.getEmail());
@@ -158,7 +158,7 @@ public class RegisterController {
 
         }
         emailSender.sendAsync(user.getEmail(), "Register", template);
-        return new ResponseEntity<Map>(response.templateSuksesPost(message), HttpStatus.CREATED);
+        return new ResponseEntity<Map>(response.templateSuksesPost(found), HttpStatus.CREATED);
     }
 
 
