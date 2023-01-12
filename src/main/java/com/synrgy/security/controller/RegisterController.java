@@ -95,7 +95,7 @@ public class RegisterController {
     @GetMapping("/index/{token}")
     public ResponseEntity<Map> saveRegisterManual(@PathVariable(value = "token") String tokenOtp) throws RuntimeException {
 
-        if (null == tokenOtp) {
+        if (tokenOtp.isEmpty()) {
             return new ResponseEntity<Map>(response.urlNotFound("OTP not found in url!"), HttpStatus.NOT_FOUND);
         }
 

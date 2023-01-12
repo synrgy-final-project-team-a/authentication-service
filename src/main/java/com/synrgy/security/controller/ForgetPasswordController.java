@@ -103,6 +103,11 @@ public class ForgetPasswordController {
     //Step 2 : Email token OTP
     @GetMapping(value = {"/index/{tokenotp}"})
     public ResponseEntity<Map> index(Model model, @PathVariable String tokenotp) {
+
+        if (tokenotp.isEmpty()) {
+            return new ResponseEntity<Map>(response.urlNotFound("OTP not found in url!"), HttpStatus.NOT_FOUND);
+        }
+
         User user = userRepository.findOneByOTP(tokenotp);
         if (null == user) {
             System.out.println("User null: tidak ditemukan");
