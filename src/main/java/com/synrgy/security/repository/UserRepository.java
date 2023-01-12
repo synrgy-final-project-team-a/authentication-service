@@ -12,13 +12,13 @@ public interface UserRepository extends PagingAndSortingRepository<User, Long> {
     //    @Query(value = "FROM User u WHERE LOWER(u.username) = LOWER(:username)")
 //    User checkExistingEmail(String username);
     @Query("FROM User u WHERE LOWER(u.username) = LOWER(?1)")
-    User findOneByUsername(String username);
+    User findOneByUsername(@Param("username") String username);
 
     @Query("FROM User u WHERE u.otp = ?1")
-    User findOneByOTP(String otp);
+    User findOneByOTP(@Param("otp") String otp);
 
     @Query("FROM User u WHERE LOWER(u.username) = LOWER(:username)")
-    User checkExistingEmail(String username);
+    User checkExistingEmail(@Param("username") String username);
     
 //    @Query("FROM User u WHERE u.is_admin = ?1")
 //    User findOneByIsAdmin(Boolean isAdmin);

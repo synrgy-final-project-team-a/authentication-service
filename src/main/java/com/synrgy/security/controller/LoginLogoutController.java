@@ -39,23 +39,30 @@ public class LoginLogoutController {
     public Response response;
 
     @PostMapping("/login-user")
-    public ResponseEntity<Map> login(@Valid @RequestBody @Email(message = "Email is not valid.") LoginModel loginModel) {
+    public ResponseEntity<Map> login(@Valid @RequestBody LoginModel loginModel) {
         Map map = new HashMap();
 
+        if (!(loginModel.getEmail().matches("^[A-Za-z0-9+_.-]+@(.+)$")))  {
+            return new ResponseEntity<Map>(response.templateError("Wrong email format!"), HttpStatus.BAD_REQUEST);
+
+        }
         User checkUser = userRepository.checkExistingEmail(loginModel.getEmail());
 
 //        if((checkUser.getOtp() == null)){
 //            checkUser.setEnabled(true);
 //        }
-
         if ((checkUser != null) && (encoder.matches(loginModel.getPassword(), checkUser.getPassword()))) {
             if (!checkUser.isEnabled()) {
                 map.put("is_enabled", checkUser.isEnabled());
                 return new ResponseEntity<Map>(response.templateError(map), HttpStatus.BAD_REQUEST);
             }
         }
+
         if (checkUser == null) {
             return new ResponseEntity<Map>(response.templateError("User not found"), HttpStatus.BAD_REQUEST);
+        }
+        if (loginModel.getPassword().length()<8) {
+            return new ResponseEntity<Map>(response.templateError("Password must be greater or equals 8 character, please try again"), HttpStatus.BAD_REQUEST);
         }
         if (!(encoder.matches(loginModel.getPassword(), checkUser.getPassword()))) {
             return new ResponseEntity<Map>(response.templateError("Wrong password"), HttpStatus.BAD_REQUEST);

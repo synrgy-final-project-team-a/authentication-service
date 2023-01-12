@@ -7,7 +7,6 @@ import javax.validation.constraints.NotEmpty;
 
 @Data
 public class RegisterModel {
-    @Email(message = "Email is not valid.")
     @NotEmpty(message = "Email is required.")
     private String email;
     @NotEmpty(message = "Password is required.")

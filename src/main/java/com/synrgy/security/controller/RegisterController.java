@@ -50,6 +50,10 @@ public class RegisterController {
     @PostMapping("/seeker")
     public ResponseEntity<Map> saveRegisterSeeker(@Valid @RequestBody RegisterModel objModel) throws RuntimeException {
         Map map = new HashMap();
+        if (!(objModel.getEmail().matches("^[A-Za-z0-9+_.-]+@(.+)$"))) {
+            return new ResponseEntity<Map>(response.templateError("Wrong email format!"), HttpStatus.BAD_REQUEST);
+        }
+
 
         User user = userRepository.findOneByUsername(objModel.getEmail());
         if (null != user) {
@@ -64,6 +68,13 @@ public class RegisterController {
     @PostMapping("/tennant")
     public ResponseEntity<Map> saveRegisterTennant(@Valid @RequestBody RegisterModel objModel) throws RuntimeException {
         Map map = new HashMap();
+        if (!(objModel.getEmail().matches("^[A-Za-z0-9+_.-]+@(.+)$")))  {
+            return new ResponseEntity<Map>(response.templateError("Wrong email format!"), HttpStatus.BAD_REQUEST);
+        }
+
+        if (objModel.getPassword().length()<8) {
+            return new ResponseEntity<Map>(response.templateError("Password must be greater or equals 8 character, please try again"), HttpStatus.BAD_REQUEST);
+        }
 
         User user = userRepository.findOneByUsername(objModel.getEmail());
         if (null != user) {
@@ -83,10 +94,6 @@ public class RegisterController {
 
     @GetMapping("/index/{token}")
     public ResponseEntity<Map> saveRegisterManual(@PathVariable(value = "token") String tokenOtp) throws RuntimeException {
-        if (null == tokenOtp) {
-            return new ResponseEntity<Map>(response.urlNotFound("OTP not found in url, please input your OTP"), HttpStatus.NOT_FOUND);
-        }
-
 
         if (null == tokenOtp) {
             return new ResponseEntity<Map>(response.urlNotFound("OTP not found in url!"), HttpStatus.NOT_FOUND);

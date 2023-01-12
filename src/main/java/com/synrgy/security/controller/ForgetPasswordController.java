@@ -58,6 +58,11 @@ public class ForgetPasswordController {
     @PostMapping("/send")//send OTP
     public ResponseEntity<Map> sendEmailPassword(@Valid @RequestBody ResetPasswordModel user) {
 
+
+        if (!(user.getEmail().matches("^(.+)@(\\S+) $")))  {
+            return new ResponseEntity<Map>(response.templateError("Wrong email format!"), HttpStatus.BAD_REQUEST);
+
+        }
         if (StringUtils.isEmpty(user.getEmail())) return new ResponseEntity<Map>(response.templateError("No email provided"), HttpStatus.BAD_REQUEST);
         User found = userRepository.checkExistingEmail(user.getEmail());
         if (found == null) return new ResponseEntity<Map>(response.templateError("Email not found"), HttpStatus.BAD_REQUEST);; //throw new BadRequest("Email not found");

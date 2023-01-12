@@ -5,12 +5,13 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="a68da48f-733e-4c74-a794-2085c7b86a72" name="Changes" comment="">
-      <change beforePath="$PROJECT_DIR$/.idea/compiler.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/compiler.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/encodings.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/encodings.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/com/synrgy/security/controller/ForgetPasswordController.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/synrgy/security/controller/ForgetPasswordController.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/synrgy/security/controller/LoginLogoutController.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/synrgy/security/controller/LoginLogoutController.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/com/synrgy/security/controller/RegisterController.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/synrgy/security/controller/RegisterController.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/synrgy/security/service/impl/FacebookConncetionSignup.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/synrgy/security/service/impl/FacebookConncetionSignup.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/synrgy/security/dto/LoginModel.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/synrgy/security/dto/LoginModel.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/synrgy/security/dto/RegisterModel.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/synrgy/security/dto/RegisterModel.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/synrgy/security/repository/UserRepository.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/synrgy/security/repository/UserRepository.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
