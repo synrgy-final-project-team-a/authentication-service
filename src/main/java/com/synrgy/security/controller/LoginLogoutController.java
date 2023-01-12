@@ -18,6 +18,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
+import javax.validation.constraints.Email;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -38,7 +39,7 @@ public class LoginLogoutController {
     public Response response;
 
     @PostMapping("/login-user")
-    public ResponseEntity<Map> login(@Valid @RequestBody LoginModel loginModel) {
+    public ResponseEntity<Map> login(@Valid @RequestBody @Email(message = "Email is not valid.") LoginModel loginModel) {
         Map map = new HashMap();
 
         User checkUser = userRepository.checkExistingEmail(loginModel.getEmail());
