@@ -38,36 +38,81 @@ public class LoginLogoutController {
     @Autowired
     public Response response;
 
-    @PostMapping("/login-user")
-    public ResponseEntity<Map> login(@Valid @RequestBody LoginModel loginModel) {
+    @PostMapping("/login-seeker")
+    public ResponseEntity<Map> loginSeeker(@Valid @RequestBody LoginModel loginModel) {
         Map map = new HashMap();
-
-        if (!(loginModel.getEmail().matches("^[A-Za-z0-9+_.-]+@(.+)$")))  {
+        if (!(loginModel.getEmail().matches("^[A-Za-z0-9+_.-]+@(.+)$"))) {
             return new ResponseEntity<Map>(response.templateError("Wrong email format!"), HttpStatus.BAD_REQUEST);
-
         }
         User checkUser = userRepository.checkExistingEmail(loginModel.getEmail());
-
-//        if((checkUser.getOtp() == null)){
-//            checkUser.setEnabled(true);
-//        }
         if ((checkUser != null) && (encoder.matches(loginModel.getPassword(), checkUser.getPassword()))) {
             if (!checkUser.isEnabled()) {
                 map.put("is_enabled", checkUser.isEnabled());
                 return new ResponseEntity<Map>(response.templateError(map), HttpStatus.BAD_REQUEST);
             }
         }
-
         if (checkUser == null) {
             return new ResponseEntity<Map>(response.templateError("User not found"), HttpStatus.BAD_REQUEST);
         }
-        if (loginModel.getPassword().length()<8) {
+        if (loginModel.getPassword().length() < 8) {
             return new ResponseEntity<Map>(response.templateError("Password must be greater or equals 8 character, please try again"), HttpStatus.BAD_REQUEST);
         }
         if (!(encoder.matches(loginModel.getPassword(), checkUser.getPassword()))) {
             return new ResponseEntity<Map>(response.templateError("Wrong password"), HttpStatus.BAD_REQUEST);
         }
-        map = userAuthService.login(loginModel);
+        map = userAuthService.loginSeeker(loginModel);
+        return new ResponseEntity<Map>(map, HttpStatus.CREATED);
+    }
+
+    @PostMapping("/login-tennant")
+    public ResponseEntity<Map> loginTennant(@Valid @RequestBody LoginModel loginModel) {
+        Map map = new HashMap();
+        if (!(loginModel.getEmail().matches("^[A-Za-z0-9+_.-]+@(.+)$"))) {
+            return new ResponseEntity<Map>(response.templateError("Wrong email format!"), HttpStatus.BAD_REQUEST);
+        }
+        User checkUser = userRepository.checkExistingEmail(loginModel.getEmail());
+        if ((checkUser != null) && (encoder.matches(loginModel.getPassword(), checkUser.getPassword()))) {
+            if (!checkUser.isEnabled()) {
+                map.put("is_enabled", checkUser.isEnabled());
+                return new ResponseEntity<Map>(response.templateError(map), HttpStatus.BAD_REQUEST);
+            }
+        }
+        if (checkUser == null) {
+            return new ResponseEntity<Map>(response.templateError("User not found"), HttpStatus.BAD_REQUEST);
+        }
+        if (loginModel.getPassword().length() < 8) {
+            return new ResponseEntity<Map>(response.templateError("Password must be greater or equals 8 character, please try again"), HttpStatus.BAD_REQUEST);
+        }
+        if (!(encoder.matches(loginModel.getPassword(), checkUser.getPassword()))) {
+            return new ResponseEntity<Map>(response.templateError("Wrong password"), HttpStatus.BAD_REQUEST);
+        }
+        map = userAuthService.loginTennant(loginModel);
+        return new ResponseEntity<Map>(map, HttpStatus.CREATED);
+    }
+
+    @PostMapping("/login-superadmin")
+    public ResponseEntity<Map> loginSuperAdmin(@Valid @RequestBody LoginModel loginModel) {
+        Map map = new HashMap();
+        if (!(loginModel.getEmail().matches("^[A-Za-z0-9+_.-]+@(.+)$"))) {
+            return new ResponseEntity<Map>(response.templateError("Wrong email format!"), HttpStatus.BAD_REQUEST);
+        }
+        User checkUser = userRepository.checkExistingEmail(loginModel.getEmail());
+        if ((checkUser != null) && (encoder.matches(loginModel.getPassword(), checkUser.getPassword()))) {
+            if (!checkUser.isEnabled()) {
+                map.put("is_enabled", checkUser.isEnabled());
+                return new ResponseEntity<Map>(response.templateError(map), HttpStatus.BAD_REQUEST);
+            }
+        }
+        if (checkUser == null) {
+            return new ResponseEntity<Map>(response.templateError("User not found"), HttpStatus.BAD_REQUEST);
+        }
+        if (loginModel.getPassword().length() < 8) {
+            return new ResponseEntity<Map>(response.templateError("Password must be greater or equals 8 character, please try again"), HttpStatus.BAD_REQUEST);
+        }
+        if (!(encoder.matches(loginModel.getPassword(), checkUser.getPassword()))) {
+            return new ResponseEntity<Map>(response.templateError("Wrong password"), HttpStatus.BAD_REQUEST);
+        }
+        map = userAuthService.loginSuperAdmin(loginModel);
         return new ResponseEntity<Map>(map, HttpStatus.CREATED);
     }
 

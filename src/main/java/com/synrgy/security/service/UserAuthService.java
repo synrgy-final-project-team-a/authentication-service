@@ -10,7 +10,12 @@ import java.util.Map;
 public interface UserAuthService {
     Map registerSeeker(RegisterModel objModel);
     Map registerTennant(RegisterModel objModel);
-    Map login(LoginModel loginModel);
+    Map loginSeeker(LoginModel loginModel);
+
+    Map loginTennant(LoginModel loginModel);
+
+    Map loginSuperAdmin(LoginModel loginModel);
+
 
     public void logout(HttpServletRequest request, HttpServletResponse response);
 

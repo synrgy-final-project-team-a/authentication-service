@@ -26,7 +26,7 @@ public class User implements UserDetails, Serializable {
     @Column(name = "id")
     private Long id;
 
-    @Column(name = "email", unique=true)
+    @Column(name = "email")
     private String username;
 
     @JsonIgnore

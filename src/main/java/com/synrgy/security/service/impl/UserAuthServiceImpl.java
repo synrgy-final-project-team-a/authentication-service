@@ -134,7 +134,7 @@ public class UserAuthServiceImpl implements UserAuthService {
     }
 
     @Override
-    public Map login(LoginModel loginModel) {
+    public Map loginSeeker(LoginModel loginModel) {
         try {
             Map<String, Object> map = new HashMap<>();
             User user = userRepository.checkExistingEmail(loginModel.getEmail());
@@ -153,14 +153,22 @@ public class UserAuthServiceImpl implements UserAuthService {
                 for (Role role : user.getRoles()) {
                     roles.add(role.getName());
                 }
-                map.put("access_token", response.getBody().get("access_token"));
-                map.put("token_type", response.getBody().get("token_type"));
-                map.put("refresh_token", response.getBody().get("refresh_token"));
-                map.put("expires_in", response.getBody().get("expires_in"));
-                map.put("scope", response.getBody().get("scope"));
-                map.put("jti", response.getBody().get("jti"));
+//                make validation each role
 
-                return map;
+                if (roles.contains(EnumRole.ROLE_SK.name())) {
+                    map.put("role", roles);
+                    map.put("access_token", response.getBody().get("access_token"));
+                    map.put("token_type", response.getBody().get("token_type"));
+                    map.put("refresh_token", response.getBody().get("refresh_token"));
+                    map.put("expires_in", response.getBody().get("expires_in"));
+                    map.put("scope", response.getBody().get("scope"));
+                    map.put("jti", response.getBody().get("jti"));
+
+                    return map;
+                    } else {
+                        return templateResponse.templateError("Wrong role!");
+                    }
+
             } else {
                 return templateResponse.templateError("Error while login");
             }
@@ -176,6 +184,108 @@ public class UserAuthServiceImpl implements UserAuthService {
             return templateResponse.templateError(e);
         }
     }
+
+    @Override
+    public Map loginTennant(LoginModel loginModel) {
+        try {
+            Map<String, Object> map = new HashMap<>();
+            User user = userRepository.checkExistingEmail(loginModel.getEmail());
+            String url = baseUrl + "/oauth/token?username=" + loginModel.getEmail() +
+                    "&password=" + loginModel.getPassword() +
+                    "&grant_type=password" +
+                    "&client_id=my-client-web" +
+                    "&client_secret=password";
+            ResponseEntity<Map> response = restTemplateBuilder.build().exchange(url, HttpMethod.POST, null, new
+                    ParameterizedTypeReference<Map>() {
+                    });
+
+            if (response.getStatusCode() == HttpStatus.OK) {
+                List<String> roles = new ArrayList<>();
+
+                for (Role role : user.getRoles()) {
+                    roles.add(role.getName());
+                }
+//                make validation each role
+
+                if (roles.contains(EnumRole.ROLE_TN.name())) {
+                    map.put("role", roles);
+                    map.put("access_token", response.getBody().get("access_token"));
+                    map.put("token_type", response.getBody().get("token_type"));
+                    map.put("refresh_token", response.getBody().get("refresh_token"));
+                    map.put("expires_in", response.getBody().get("expires_in"));
+                    map.put("scope", response.getBody().get("scope"));
+                    map.put("jti", response.getBody().get("jti"));
+
+                    return map;
+                } else {
+                    return templateResponse.templateError("Wrong role!");
+                }
+
+            } else {
+                return templateResponse.templateError("Error while login");
+            }
+        } catch (HttpStatusCodeException e) {
+            e.printStackTrace();
+            if (e.getStatusCode() == HttpStatus.BAD_REQUEST) {
+                return templateResponse.templateError("Invalid login");
+            }
+            return templateResponse.templateError(e);
+        } catch (Exception e) {
+            e.printStackTrace();
+
+            return templateResponse.templateError(e);
+        }    }
+
+    @Override
+    public Map loginSuperAdmin(LoginModel loginModel) {
+        try {
+            Map<String, Object> map = new HashMap<>();
+            User user = userRepository.checkExistingEmail(loginModel.getEmail());
+            String url = baseUrl + "/oauth/token?username=" + loginModel.getEmail() +
+                    "&password=" + loginModel.getPassword() +
+                    "&grant_type=password" +
+                    "&client_id=my-client-web" +
+                    "&client_secret=password";
+            ResponseEntity<Map> response = restTemplateBuilder.build().exchange(url, HttpMethod.POST, null, new
+                    ParameterizedTypeReference<Map>() {
+                    });
+
+            if (response.getStatusCode() == HttpStatus.OK) {
+                List<String> roles = new ArrayList<>();
+
+                for (Role role : user.getRoles()) {
+                    roles.add(role.getName());
+                }
+//                make validation each role
+
+                if (roles.contains(EnumRole.ROLE_SUPERUSER.name())) {
+                    map.put("role", roles);
+                    map.put("access_token", response.getBody().get("access_token"));
+                    map.put("token_type", response.getBody().get("token_type"));
+                    map.put("refresh_token", response.getBody().get("refresh_token"));
+                    map.put("expires_in", response.getBody().get("expires_in"));
+                    map.put("scope", response.getBody().get("scope"));
+                    map.put("jti", response.getBody().get("jti"));
+
+                    return map;
+                } else {
+                    return templateResponse.templateError("Wrong role!");
+                }
+
+            } else {
+                return templateResponse.templateError("Error while login");
+            }
+        } catch (HttpStatusCodeException e) {
+            e.printStackTrace();
+            if (e.getStatusCode() == HttpStatus.BAD_REQUEST) {
+                return templateResponse.templateError("Invalid login");
+            }
+            return templateResponse.templateError(e);
+        } catch (Exception e) {
+            e.printStackTrace();
+
+            return templateResponse.templateError(e);
+        }    }
 
     @Override
     public void logout(HttpServletRequest request, HttpServletResponse response) {
