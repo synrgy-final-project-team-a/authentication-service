@@ -53,6 +53,9 @@ public class RegisterController {
         if (!(objModel.getEmail().matches("^[A-Za-z0-9+_.-]+@(.+)$"))) {
             return new ResponseEntity<Map>(response.templateError("Wrong email format!"), HttpStatus.BAD_REQUEST);
         }
+        if (objModel.getPassword().length()<8) {
+            return new ResponseEntity<Map>(response.templateError("Password must be greater or equals 8 character, please try again"), HttpStatus.BAD_REQUEST);
+        }
 
 
         User user = userRepository.findOneByUsername(objModel.getEmail());
@@ -133,7 +136,6 @@ public class RegisterController {
 
     @PostMapping("/send-otp")//send OTP : berupa URL
     public ResponseEntity<Map> sendEmailegisterTymeleafUser(@RequestBody RegisterModel user) {
-//        String message = "Thanks, please check your email for activation.";
 
         if (user.getEmail() == null) return new ResponseEntity<Map>(response.templateError("No email provided"), HttpStatus.BAD_REQUEST);
         User found = userRepository.checkExistingEmail(user.getEmail());

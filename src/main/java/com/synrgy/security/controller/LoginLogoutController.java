@@ -71,8 +71,4 @@ public class LoginLogoutController {
         return new ResponseEntity<Map>(map, HttpStatus.CREATED);
     }
 
-//    @PostMapping("/logout-user")
-//    public void logout(HttpServletRequest request, HttpServletResponse response) {
-//        userAuthService.logout(request, response);
-//    }
 }
