@@ -16,12 +16,14 @@ import com.synrgy.security.util.SimpleStringUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
+import java.net.URI;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.util.*;
@@ -125,7 +127,12 @@ public class RegisterController {
         user.setOtp(null);
         userRepository.save(user);
 
-        return new ResponseEntity<Map>(response.templateSuksesGet("Your email is verified! Now you will be redirected into login menu. "), HttpStatus.OK);
+        String url = "https://frontend-fsw-testing.vercel.app/register/verification-success";
+
+//        make it redirect to url
+        HttpHeaders headers = new HttpHeaders();
+        headers.setLocation(URI.create(url));
+        return new ResponseEntity<>(headers, HttpStatus.SEE_OTHER);
     }
 
     @Value("${BASEURL:}")//FILE_SHOW_RUL

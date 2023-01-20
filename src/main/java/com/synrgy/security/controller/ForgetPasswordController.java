@@ -11,6 +11,9 @@ import com.synrgy.security.util.Response;
 import com.synrgy.security.util.SimpleStringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.boot.web.client.RestTemplateBuilder;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpMethod;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -19,6 +22,7 @@ import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
+import java.net.URI;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.HashMap;
@@ -27,6 +31,9 @@ import java.util.Map;
 @RestController
 @RequestMapping("/forget-password/")
 public class ForgetPasswordController {
+
+    @Autowired
+    private RestTemplateBuilder restTemplateBuilder;
 
     @Autowired
     private UserRepository userRepository;
@@ -137,17 +144,37 @@ public class ForgetPasswordController {
         userRepository.save(user);
         model.addAttribute("title", "Congratulations, " + user.getUsername() + ", you have successfully registered!");
         model.addAttribute("erordesc", "");
-        return new ResponseEntity<Map>(response.templateSuksesGet(user), HttpStatus.OK);
+
+        String otp = tokenotp;
+        String url = "https://frontend-fsw-testing.vercel.app/login/forgot-password-success/" + otp;
+
+//        make it redirect to url
+        HttpHeaders headers = new HttpHeaders();
+        headers.setLocation(URI.create(url));
+        return new ResponseEntity<>(headers, HttpStatus.SEE_OTHER);
+
     }
+
+//        ResponseEntity<Void> responses = restTemplateBuilder.build().exchange(url, HttpMethod.GET, null, Void.class);
+//        if (responses.getStatusCode() == HttpStatus.OK) {
+//            return new ResponseEntity<Map>(response.templateSuksesGet(user), HttpStatus.OK);
+//        } else {
+//            return new ResponseEntity<Map>(response.templateError("Failed redirect to frontend"), HttpStatus.BAD_REQUEST);
+//        }
+//    }
+
 
     // Step 3 : lakukan reset password baru
     @PostMapping("/change-password")
     public ResponseEntity<Map> resetPassword(@RequestBody ResetPasswordModel model) {
-        if (model.getOtp() == null) return new ResponseEntity<Map>(response.templateError("Token is required"), HttpStatus.BAD_REQUEST);
-        if (model.getNewPassword() == null) return new ResponseEntity<Map>(response.templateError("New Password is required"), HttpStatus.BAD_REQUEST);
+        if (model.getOtp() == null)
+            return new ResponseEntity<Map>(response.templateError("Token is required"), HttpStatus.BAD_REQUEST);
+        if (model.getNewPassword() == null)
+            return new ResponseEntity<Map>(response.templateError("New Password is required"), HttpStatus.BAD_REQUEST);
         User user = userRepository.findOneByOTP(model.getOtp());
         String success;
-        if (user == null) return new ResponseEntity<Map>(response.templateError("Token not valid"), HttpStatus.BAD_REQUEST);
+        if (user == null)
+            return new ResponseEntity<Map>(response.templateError("Token not valid"), HttpStatus.BAD_REQUEST);
 
         user.setPassword(passwordEncoder.encode(model.getNewPassword().replaceAll("\\s+", "")));
         user.setOtpExpiredDate(null);
@@ -159,6 +186,6 @@ public class ForgetPasswordController {
         } catch (Exception e) {
             return new ResponseEntity<Map>(response.templateError("Failed save user, please try again."), HttpStatus.BAD_REQUEST);
         }
-        return new ResponseEntity<Map>(response.templateSuksesPost(success), HttpStatus.CREATED);
+        return new ResponseEntity<Map>(response.templateSuksesPost(success), HttpStatus.OK);
     }
 }
