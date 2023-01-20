@@ -61,7 +61,6 @@ public class LoginLogoutController {
             return new ResponseEntity<Map>(response.templateError("Wrong password"), HttpStatus.BAD_REQUEST);
         }
         map = userAuthService.loginSeeker(loginModel);
-        map = userAuthService.loginTennant(loginModel);
         if (map.get("role") != null) {
             return new ResponseEntity<Map>(map, HttpStatus.CREATED);
         } else {
