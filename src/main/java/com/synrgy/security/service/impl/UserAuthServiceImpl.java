@@ -11,6 +11,7 @@ import com.synrgy.security.repository.RoleRepository;
 import com.synrgy.security.repository.UserRepository;
 import com.synrgy.security.service.UserAuthService;
 import com.synrgy.security.util.Response;
+import org.apache.http.protocol.HTTP;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;

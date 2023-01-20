@@ -61,8 +61,12 @@ public class LoginLogoutController {
             return new ResponseEntity<Map>(response.templateError("Wrong password"), HttpStatus.BAD_REQUEST);
         }
         map = userAuthService.loginSeeker(loginModel);
-        return new ResponseEntity<Map>(map, HttpStatus.CREATED);
-    }
+        map = userAuthService.loginTennant(loginModel);
+        if (map.get("role") != null) {
+            return new ResponseEntity<Map>(map, HttpStatus.CREATED);
+        } else {
+            return new ResponseEntity<Map>(response.templateError("You are not seeker"), HttpStatus.BAD_REQUEST);
+        }    }
 
     @PostMapping("/login-tennant")
     public ResponseEntity<Map> loginTennant(@Valid @RequestBody LoginModel loginModel) {
@@ -87,7 +91,11 @@ public class LoginLogoutController {
             return new ResponseEntity<Map>(response.templateError("Wrong password"), HttpStatus.BAD_REQUEST);
         }
         map = userAuthService.loginTennant(loginModel);
-        return new ResponseEntity<Map>(map, HttpStatus.CREATED);
+        if (map.get("role") != null) {
+            return new ResponseEntity<Map>(map, HttpStatus.CREATED);
+        } else {
+            return new ResponseEntity<Map>(response.templateError("You are not tennant"), HttpStatus.BAD_REQUEST);
+        }
     }
 
     @PostMapping("/login-superadmin")
@@ -113,7 +121,10 @@ public class LoginLogoutController {
             return new ResponseEntity<Map>(response.templateError("Wrong password"), HttpStatus.BAD_REQUEST);
         }
         map = userAuthService.loginSuperAdmin(loginModel);
-        return new ResponseEntity<Map>(map, HttpStatus.CREATED);
+        if (map.get("role") != null) {
+            return new ResponseEntity<Map>(map, HttpStatus.CREATED);
+        } else {
+            return new ResponseEntity<Map>(response.templateError("You are not superadmin"), HttpStatus.BAD_REQUEST);
+        }
     }
-
 }

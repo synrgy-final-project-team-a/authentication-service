@@ -6,8 +6,8 @@
   <component name="ChangeListManager">
     <list default="true" id="a68da48f-733e-4c74-a794-2085c7b86a72" name="Changes" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/synrgy/security/controller/ForgetPasswordController.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/synrgy/security/controller/ForgetPasswordController.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/synrgy/security/controller/RegisterController.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/synrgy/security/controller/RegisterController.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/synrgy/security/controller/LoginLogoutController.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/synrgy/security/controller/LoginLogoutController.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/synrgy/security/service/impl/UserAuthServiceImpl.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/synrgy/security/service/impl/UserAuthServiceImpl.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
