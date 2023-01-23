@@ -54,28 +54,20 @@ public class Oauth2ResourceServerConfiguration extends ResourceServerConfigurerA
                 .and()
                 .oauth2Login()
                 .and()
+//                implement logout
                 .logout()
                 .logoutUrl("/logout")
-                .logoutSuccessUrl("/")
                 .logoutSuccessHandler(new HttpStatusReturningLogoutSuccessHandler(HttpStatus.OK))
                 .invalidateHttpSession(true)
                 .deleteCookies("JSESSIONID")
+                .clearAuthentication(true)
                 .and()
                 .authorizeRequests()
-                .antMatchers("/api/**")
-                .authenticated();
-//                .logout(logout -> logout
-//                        .logoutUrl("/logout")
-//                        .invalidateHttpSession(true)
-//                        .deleteCookies("JSESSIONID")
-//                        .logoutSuccessHandler(new HttpStatusReturningLogoutSuccessHandler(HttpStatus.OK))
-//                )
-//                .successHandler(new AuthenticationSuccessHandler() {
-//                    @Override
-//                    public void onAuthenticationSuccess(HttpServletRequest request, HttpServletResponse response, Authentication authentication) throws IOException, ServletException {
-//                        SecurityContextHolder.getContext().setAuthentication(authentication);
-//                    }
-//                });
-//    }
+                .antMatchers("/api/seeker").hasAnyAuthority(com.synrgy.security.entity.enumeration.EnumRole.ROLE_SK.toString())
+                .antMatchers("/api/tennant").hasAnyAuthority(com.synrgy.security.entity.enumeration.EnumRole.ROLE_TN.toString())
+                .antMatchers("/api/superadmin").hasAnyAuthority(com.synrgy.security.entity.enumeration.EnumRole.ROLE_SUPERUSER.toString())
+                .anyRequest().authenticated();
     }
 }
+
+
