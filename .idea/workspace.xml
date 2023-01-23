@@ -6,7 +6,7 @@
   <component name="ChangeListManager">
     <list default="true" id="a68da48f-733e-4c74-a794-2085c7b86a72" name="Changes" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/synrgy/security/controller/LoginLogoutController.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/synrgy/security/controller/LoginLogoutController.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/synrgy/security/configuration/Oauth2ResourceServerConfiguration.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/synrgy/security/configuration/Oauth2ResourceServerConfiguration.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -76,6 +76,10 @@
       <workItem from="1674014277318" duration="2857000" />
       <workItem from="1674121926326" duration="108000" />
       <workItem from="1674122069619" duration="13481000" />
+      <workItem from="1674236373789" duration="3632000" />
+      <workItem from="1674323030220" duration="2720000" />
+      <workItem from="1674463619384" duration="330000" />
+      <workItem from="1674477437728" duration="2876000" />
     </task>
     <servers />
   </component>
