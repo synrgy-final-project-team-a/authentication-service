@@ -66,7 +66,7 @@ public class Oauth2ResourceServerConfiguration extends ResourceServerConfigurerA
                 .antMatchers("/api/seeker").hasAnyAuthority(com.synrgy.security.entity.enumeration.EnumRole.ROLE_SK.toString())
                 .antMatchers("/api/tennant").hasAnyAuthority(com.synrgy.security.entity.enumeration.EnumRole.ROLE_TN.toString())
                 .antMatchers("/api/superadmin").hasAnyAuthority(com.synrgy.security.entity.enumeration.EnumRole.ROLE_SUPERUSER.toString())
-                .anyRequest().authenticated();
+                .anyRequest().permitAll();
     }
 }
 
