@@ -157,6 +157,8 @@ public class UserAuthServiceImpl implements UserAuthService {
 //                make validation each role
 
                 if (roles.contains(EnumRole.ROLE_SK.name())) {
+                    map.put("profile_id", user.getProfile().getId());
+                    map.put("user_id", user.getId());
                     map.put("role", roles);
                     map.put("access_token", response.getBody().get("access_token"));
                     map.put("token_type", response.getBody().get("token_type"));
@@ -201,6 +203,8 @@ public class UserAuthServiceImpl implements UserAuthService {
                     });
 
             if (response.getStatusCode() == HttpStatus.OK) {
+
+
                 List<String> roles = new ArrayList<>();
 
                 for (Role role : user.getRoles()) {
@@ -209,6 +213,8 @@ public class UserAuthServiceImpl implements UserAuthService {
 //                make validation each role
 
                 if (roles.contains(EnumRole.ROLE_TN.name())) {
+                    map.put("profile_id", user.getProfile().getId());
+                    map.put("user_id", user.getId());
                     map.put("role", roles);
                     map.put("access_token", response.getBody().get("access_token"));
                     map.put("token_type", response.getBody().get("token_type"));
@@ -260,6 +266,8 @@ public class UserAuthServiceImpl implements UserAuthService {
 //                make validation each role
 
                 if (roles.contains(EnumRole.ROLE_SUPERUSER.name())) {
+                    map.put("profile_id", user.getProfile().getId());
+                    map.put("user_id", user.getId());
                     map.put("role", roles);
                     map.put("access_token", response.getBody().get("access_token"));
                     map.put("token_type", response.getBody().get("token_type"));
