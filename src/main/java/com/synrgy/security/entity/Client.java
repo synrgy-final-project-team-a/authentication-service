@@ -1,18 +1,31 @@
 package com.synrgy.security.entity;
 
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
+import lombok.Data;
+import org.hibernate.annotations.CreationTimestamp;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.oauth2.provider.ClientDetails;
 import org.springframework.util.StringUtils;
 
 import javax.persistence.*;
 import java.io.Serializable;
+import java.time.LocalDateTime;
 import java.util.*;
 
 @Entity
+@Data
 @Table(name = "oauth_client")
 public class Client implements ClientDetails, Serializable {
+
+
+    @Column(name = "created_at", nullable = false, updatable = false)
+    @CreationTimestamp
+    private LocalDateTime createdAt;
+    @Column(name = "updated_at", nullable = false)
+    @CreationTimestamp
+    private LocalDateTime updatedAt;
+    @Column(name = "deleted_at")
+    private LocalDateTime deletedAt;
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

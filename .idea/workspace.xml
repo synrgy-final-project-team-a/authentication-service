@@ -6,10 +6,14 @@
   <component name="ChangeListManager">
     <list default="true" id="a68da48f-733e-4c74-a794-2085c7b86a72" name="Changes" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/synrgy/security/entity/Client.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/synrgy/security/entity/Client.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/synrgy/security/entity/Profile.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/synrgy/security/entity/Profile.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/synrgy/security/entity/Role.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/synrgy/security/entity/Role.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/synrgy/security/entity/RolePath.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/synrgy/security/entity/RolePath.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/synrgy/security/entity/User.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/synrgy/security/entity/User.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/synrgy/security/repository/ProfileRepository.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/synrgy/security/repository/ProfileRepository.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/com/synrgy/security/repository/UserRepository.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/synrgy/security/repository/UserRepository.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/com/synrgy/security/service/impl/DatabaseSeeder.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/synrgy/security/service/impl/DatabaseSeeder.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/resources/application-dev.properties" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/application-dev.properties" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/resources/application-prod.properties" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/application-prod.properties" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -86,7 +90,9 @@
       <workItem from="1674635565403" duration="643000" />
       <workItem from="1674655601272" duration="60000" />
       <workItem from="1674655724466" duration="176000" />
-      <workItem from="1675147138293" duration="1035000" />
+      <workItem from="1675147138293" duration="1793000" />
+      <workItem from="1675152552825" duration="632000" />
+      <workItem from="1675160565940" duration="3413000" />
     </task>
     <servers />
   </component>
