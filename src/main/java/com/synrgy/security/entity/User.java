@@ -106,9 +106,13 @@ public class User implements UserDetails, Serializable {
         return username;
     }
 
-    @OneToOne(cascade = CascadeType.ALL)
-    @JoinColumn(name = "profile_id", referencedColumnName = "id")
-    @JsonBackReference
+//    @OneToOne(cascade = CascadeType.ALL)
+//    @JoinColumn(name = "profile_id", referencedColumnName = "id")
+//    @JsonBackReference
+//    private Profile profile;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "profile_id", referencedColumnName = "id", nullable = true)
     private Profile profile;
 }
 

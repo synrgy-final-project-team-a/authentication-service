@@ -94,8 +94,7 @@ public class LoginLogoutController {
             return new ResponseEntity<Map>(map, HttpStatus.CREATED);
         } else {
             return new ResponseEntity<Map>(response.templateError("You are not tennant"), HttpStatus.BAD_REQUEST);
-        }
-    }
+        }    }
 
     @PostMapping("/login-superadmin")
     public ResponseEntity<Map> loginSuperAdmin(@Valid @RequestBody LoginModel loginModel) {

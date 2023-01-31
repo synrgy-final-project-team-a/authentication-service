@@ -144,6 +144,7 @@ public class UserAuthServiceImpl implements UserAuthService {
                     "&grant_type=password" +
                     "&client_id=my-client-web" +
                     "&client_secret=password";
+            System.out.println("url = " + url);
             ResponseEntity<Map> response = restTemplateBuilder.build().exchange(url, HttpMethod.POST, null, new
                     ParameterizedTypeReference<Map>() {
                     });
@@ -198,13 +199,13 @@ public class UserAuthServiceImpl implements UserAuthService {
                     "&grant_type=password" +
                     "&client_id=my-client-web" +
                     "&client_secret=password";
-            ResponseEntity<Map> response = restTemplateBuilder.build().exchange(url, HttpMethod.POST, null, new
+            System.out.println("url = " + url);
+
+            ResponseEntity<Map> response1 = restTemplateBuilder.build().exchange(url, HttpMethod.POST, null, new
                     ParameterizedTypeReference<Map>() {
                     });
 
-            if (response.getStatusCode() == HttpStatus.OK) {
-
-
+            if (response1.getStatusCode() == HttpStatus.OK) {
                 List<String> roles = new ArrayList<>();
 
                 for (Role role : user.getRoles()) {
@@ -216,12 +217,12 @@ public class UserAuthServiceImpl implements UserAuthService {
                     map.put("profile_id", user.getProfile().getId());
                     map.put("user_id", user.getId());
                     map.put("role", roles);
-                    map.put("access_token", response.getBody().get("access_token"));
-                    map.put("token_type", response.getBody().get("token_type"));
-                    map.put("refresh_token", response.getBody().get("refresh_token"));
-                    map.put("expires_in", response.getBody().get("expires_in"));
-                    map.put("scope", response.getBody().get("scope"));
-                    map.put("jti", response.getBody().get("jti"));
+                    map.put("access_token", response1.getBody().get("access_token"));
+                    map.put("token_type", response1.getBody().get("token_type"));
+                    map.put("refresh_token", response1.getBody().get("refresh_token"));
+                    map.put("expires_in", response1.getBody().get("expires_in"));
+                    map.put("scope", response1.getBody().get("scope"));
+                    map.put("jti", response1.getBody().get("jti"));
 
                     return map;
                 } else {
@@ -241,7 +242,9 @@ public class UserAuthServiceImpl implements UserAuthService {
             e.printStackTrace();
 
             return templateResponse.templateError(e);
-        }    }
+        }
+    }
+
 
     @Override
     public Map loginSuperAdmin(LoginModel loginModel) {

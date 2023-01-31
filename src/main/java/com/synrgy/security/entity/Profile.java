@@ -64,8 +64,5 @@ public class Profile implements Serializable {
     @Column(name = "gmaps")
     private String gmaps;
 
-    @OneToOne(mappedBy = "profile")
-    @JsonManagedReference
-    private User user;
 
 }
