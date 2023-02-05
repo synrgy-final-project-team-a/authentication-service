@@ -184,7 +184,7 @@ public class RegisterController {
             return new ResponseEntity<Map>(response.templateError("Unable to send OTP to your email, please try again."), HttpStatus.BAD_REQUEST);
 
         }
-        emailSender.sendAsync(user.getEmail(), "Register", template);
+        emailSender.sendAsync(user.getEmail(), "Kosanku - Verifikasi Emailmu, Yuk!", template);
         return new ResponseEntity<Map>(response.templateSuksesPost(found), HttpStatus.CREATED);
     }
 
