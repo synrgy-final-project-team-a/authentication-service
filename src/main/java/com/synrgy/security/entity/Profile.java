@@ -5,16 +5,28 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import lombok.Builder;
 import lombok.Data;
+import org.hibernate.annotations.CreationTimestamp;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 import java.io.Serializable;
+import java.time.LocalDateTime;
 import java.util.List;
 
 @Data
 @Entity
 @Table(name = "profile")
 public class Profile implements Serializable {
+
+    @Column(name = "created_at", nullable = false, updatable = false)
+    @CreationTimestamp
+    private LocalDateTime createdAt;
+    @Column(name = "updated_at", nullable = false)
+    @CreationTimestamp
+    private LocalDateTime updatedAt;
+    @Column(name = "deleted_at")
+    private LocalDateTime deletedAt;
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id")
@@ -40,6 +52,9 @@ public class Profile implements Serializable {
     @Column(name = "province")
     private String province;
 
+    @Column(name = "gender")
+    private String gender;
+
     @Column(name = "city")
     private String city;
 
@@ -49,8 +64,5 @@ public class Profile implements Serializable {
     @Column(name = "gmaps")
     private String gmaps;
 
-    @OneToOne(mappedBy = "profile")
-    @JsonManagedReference
-    private User user;
 
 }

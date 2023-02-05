@@ -11,6 +11,7 @@ import com.synrgy.security.repository.RoleRepository;
 import com.synrgy.security.repository.UserRepository;
 import com.synrgy.security.service.UserAuthService;
 import com.synrgy.security.util.Response;
+import org.apache.http.protocol.HTTP;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -143,6 +144,7 @@ public class UserAuthServiceImpl implements UserAuthService {
                     "&grant_type=password" +
                     "&client_id=my-client-web" +
                     "&client_secret=password";
+            System.out.println("url = " + url);
             ResponseEntity<Map> response = restTemplateBuilder.build().exchange(url, HttpMethod.POST, null, new
                     ParameterizedTypeReference<Map>() {
                     });
@@ -156,6 +158,8 @@ public class UserAuthServiceImpl implements UserAuthService {
 //                make validation each role
 
                 if (roles.contains(EnumRole.ROLE_SK.name())) {
+                    map.put("profile_id", user.getProfile().getId());
+                    map.put("user_id", user.getId());
                     map.put("role", roles);
                     map.put("access_token", response.getBody().get("access_token"));
                     map.put("token_type", response.getBody().get("token_type"));
@@ -195,11 +199,13 @@ public class UserAuthServiceImpl implements UserAuthService {
                     "&grant_type=password" +
                     "&client_id=my-client-web" +
                     "&client_secret=password";
-            ResponseEntity<Map> response = restTemplateBuilder.build().exchange(url, HttpMethod.POST, null, new
+            System.out.println("url = " + url);
+
+            ResponseEntity<Map> response1 = restTemplateBuilder.build().exchange(url, HttpMethod.POST, null, new
                     ParameterizedTypeReference<Map>() {
                     });
 
-            if (response.getStatusCode() == HttpStatus.OK) {
+            if (response1.getStatusCode() == HttpStatus.OK) {
                 List<String> roles = new ArrayList<>();
 
                 for (Role role : user.getRoles()) {
@@ -208,13 +214,15 @@ public class UserAuthServiceImpl implements UserAuthService {
 //                make validation each role
 
                 if (roles.contains(EnumRole.ROLE_TN.name())) {
+                    map.put("profile_id", user.getProfile().getId());
+                    map.put("user_id", user.getId());
                     map.put("role", roles);
-                    map.put("access_token", response.getBody().get("access_token"));
-                    map.put("token_type", response.getBody().get("token_type"));
-                    map.put("refresh_token", response.getBody().get("refresh_token"));
-                    map.put("expires_in", response.getBody().get("expires_in"));
-                    map.put("scope", response.getBody().get("scope"));
-                    map.put("jti", response.getBody().get("jti"));
+                    map.put("access_token", response1.getBody().get("access_token"));
+                    map.put("token_type", response1.getBody().get("token_type"));
+                    map.put("refresh_token", response1.getBody().get("refresh_token"));
+                    map.put("expires_in", response1.getBody().get("expires_in"));
+                    map.put("scope", response1.getBody().get("scope"));
+                    map.put("jti", response1.getBody().get("jti"));
 
                     return map;
                 } else {
@@ -234,7 +242,9 @@ public class UserAuthServiceImpl implements UserAuthService {
             e.printStackTrace();
 
             return templateResponse.templateError(e);
-        }    }
+        }
+    }
+
 
     @Override
     public Map loginSuperAdmin(LoginModel loginModel) {
@@ -259,6 +269,8 @@ public class UserAuthServiceImpl implements UserAuthService {
 //                make validation each role
 
                 if (roles.contains(EnumRole.ROLE_SUPERUSER.name())) {
+                    map.put("profile_id", user.getProfile().getId());
+                    map.put("user_id", user.getId());
                     map.put("role", roles);
                     map.put("access_token", response.getBody().get("access_token"));
                     map.put("token_type", response.getBody().get("token_type"));

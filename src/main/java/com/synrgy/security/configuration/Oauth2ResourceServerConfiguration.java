@@ -33,6 +33,7 @@ public class Oauth2ResourceServerConfiguration extends ResourceServerConfigurerA
         super.configure(resources);
     }
 //    private static final String SECURED_PATTERN = "/api/**";
+
     /**
      * Manage endpoints.
      */
@@ -46,23 +47,27 @@ public class Oauth2ResourceServerConfiguration extends ResourceServerConfigurerA
                 .and()
                 .antMatcher("/**")
                 .authorizeRequests()
-                    .antMatchers("/","" +
-                                    "/showFile/**","/v1/showFile/**","/v1/upload", "/register-opt/**", "/register/**","/swagger-ui/**","/api/swagger-ui.html","/api/oauth/token**" , "/api/oauth/token" ,"/v3/api-docs/**",
-                            "/forget-password/**", "/oauth2/**", "/oauth/token", "/oauth/token**", "/login-user", "/logout**", "/error**", "/auth/**","/error","/api/webjars/*", "/api/user","/api/login-oauth2-google", "/api/index.html")
-                    .permitAll()
+                .antMatchers("/", "" +
+                                "/showFile/**", "/v1/showFile/**", "/v1/upload", "/register-opt/**", "/register/**", "/swagger-ui/**", "/api/swagger-ui.html", "/api/oauth/token**", "/api/oauth/token", "/v3/api-docs/**",
+                        "/forget-password/**", "/oauth2/**", "/oauth/token", "/oauth/token**", "/login-user", "/logout**", "/error**", "/auth/**", "/error", "/api/webjars/*", "/api/user", "/api/login-oauth2-google", "/api/index.html")
+                .permitAll()
                 .and()
-                .logout(logout -> logout
-                        .logoutUrl("/")
-                        .invalidateHttpSession(true)
-                        .deleteCookies("JSESSIONID")
-                        .logoutSuccessHandler(new HttpStatusReturningLogoutSuccessHandler(HttpStatus.OK))
-                )
                 .oauth2Login()
-                .successHandler(new AuthenticationSuccessHandler() {
-                    @Override
-                    public void onAuthenticationSuccess(HttpServletRequest request, HttpServletResponse response, Authentication authentication) throws IOException, ServletException {
-                        SecurityContextHolder.getContext().setAuthentication(authentication);
-                    }
-                });
+                .and()
+//                implement logout
+                .logout()
+                .logoutUrl("/logout")
+                .logoutSuccessHandler(new HttpStatusReturningLogoutSuccessHandler(HttpStatus.OK))
+                .invalidateHttpSession(true)
+                .deleteCookies("JSESSIONID")
+                .clearAuthentication(true)
+                .and()
+                .authorizeRequests()
+                .antMatchers("/api/seeker").hasAnyAuthority(com.synrgy.security.entity.enumeration.EnumRole.ROLE_SK.toString())
+                .antMatchers("/api/tennant").hasAnyAuthority(com.synrgy.security.entity.enumeration.EnumRole.ROLE_TN.toString())
+                .antMatchers("/api/superadmin").hasAnyAuthority(com.synrgy.security.entity.enumeration.EnumRole.ROLE_SUPERUSER.toString())
+                .anyRequest().permitAll();
     }
 }
+
+

@@ -3,6 +3,7 @@ package com.synrgy.security.entity;
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Data;
+import org.hibernate.annotations.CreationTimestamp;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
@@ -11,6 +12,7 @@ import javax.validation.constraints.Min;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 import java.io.Serializable;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Date;
@@ -20,6 +22,16 @@ import java.util.List;
 @Entity
 @Table(name = "oauth_user")
 public class User implements UserDetails, Serializable {
+
+
+    @Column(name = "created_at", nullable = false, updatable = false)
+    @CreationTimestamp
+    private LocalDateTime createdAt;
+    @Column(name = "updated_at", nullable = false)
+    @CreationTimestamp
+    private LocalDateTime updatedAt;
+    @Column(name = "deleted_at")
+    private LocalDateTime deletedAt;
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -94,9 +106,13 @@ public class User implements UserDetails, Serializable {
         return username;
     }
 
-    @OneToOne(cascade = CascadeType.ALL)
-    @JoinColumn(name = "profile_id", referencedColumnName = "id")
-    @JsonBackReference
+//    @OneToOne(cascade = CascadeType.ALL)
+//    @JoinColumn(name = "profile_id", referencedColumnName = "id")
+//    @JsonBackReference
+//    private Profile profile;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "profile_id", referencedColumnName = "id", nullable = true)
     private Profile profile;
 }
 
