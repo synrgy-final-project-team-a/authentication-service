@@ -100,7 +100,7 @@ public class ForgetPasswordController {
             template = template.replaceAll("\\{\\{USERNAME}}", (found.getUsername() == null ? user.getEmail() : found.getUsername()));
             template = template.replaceAll("\\{\\{PASS_TOKEN}}", BASEURL + "/forget-password/index/" + found.getOtp());
         }
-        emailSender.sendAsync(user.getEmail(), "Binar - Forget Password", template);
+        emailSender.sendAsync(user.getEmail(), "Kosanku - Lupa Passwordmu?", template);
 
 
         return new ResponseEntity<Map>(response.templateSuksesPost(found), HttpStatus.CREATED);

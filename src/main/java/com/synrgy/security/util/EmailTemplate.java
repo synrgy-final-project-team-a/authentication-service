@@ -52,13 +52,13 @@ public class EmailTemplate {
                 "</head>\n" +
                 "<body>\n" +
                 "\t<div class=\"email-container\">\n" +
-                "\t\t<p>If you Requested a password for {{USERNAME}}, use the confirmation code below to complete the process. If you didn't make this request, ignore the email.</p>\n" +
+                "\t\t<p>Jika kamu melakukan request untuk mengganti password dengan username {{USERNAME}}, silahkan klik link di bawah ini untuk proses lebih lanjut. Jika Anda sudah menerima pesan ini lebih dari satu kali atau sudah mengklik link, silahkan abaikan pesan ini.</p>\n" +
                 "\t\t\n" +
-                "\t\tCode: <b>{{PASS_TOKEN}}</b>\n" +
+                "\t\tLink: <b>{{PASS_TOKEN}}</b>\n" +
                 "\t\t\n" +
                 "\t\t\n" +
-                "\t\t<p>Regards</p>\n" +
-                "\t\t<p>PT ABC</p>\n" +
+                "\t\t<p>Best regards,</p>\n" +
+                "\t\t<p>Kosanku</p>\n" +
                 "\t\t<p class=\"mt--15\".....</p>\n" +
                 "\n" +
                 "\t\t\n" +
@@ -115,16 +115,16 @@ public class EmailTemplate {
                 "</head>\n" +
                 "<body>\n" +
                 "\t<div class=\"email-container\">\n" +
-                "\t\t<p>Halo <span class=\"user-name\">{{USERNAME}}</span> Selamat bergabung</p>\n" +
-                "\t\t<p>Harap konfirmasikan email kamu dengan memasukan kode dibawah ini</p>\n" +
+                "\t\t<p>Halo <span class=\"user-name\">{{USERNAME}}</span> Selamat bergabung di Kosanku!</p>\n" +
+                "\t\t<p>Harap konfirmasikan email kamu dengan mengklik link dibawah ini</p>\n" +
                 "\t\t\n" +
-                "\t\tkode: <b>{{VERIFY_TOKEN}}</b>\n" +
+                "\t\tLink: <b>{{VERIFY_TOKEN}}</b>\n" +
                 "\t\t\n" +
-                "\t\t<p class=\"mt--15\">Jika kamu butuh bantuan atau pertanyaan, hubungi customer care kami di .... atau kirim email ke ....</p>\n" +
+                "\t\t<p class=\"mt--15\">Jika kamu butuh bantuan atau pertanyaan, silahkan hubungi customer service kami di 085155050220 atau kirim email ke admin@kosanku.com</p>\n" +
                 "\t\t\n" +
-                "\t\t<p>Semoga harimu menyenangkan!</p>\n" +
+                "\t\t<p>Semoga harimu menyenangkan seperti admin Kosanku (^-^)</p>\n" +
                 "\t\t\n" +
-                "\t\t<p>PT ABC,</p>\n" +
+                "\t\t<p>Kosanku</p>\n" +
                 "\t\t<p class=\"mt--15\".....</p>\n" +
                 "\n" +
                 "\t\t\n" +
