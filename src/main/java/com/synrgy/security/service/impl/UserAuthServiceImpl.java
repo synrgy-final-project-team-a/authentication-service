@@ -73,7 +73,7 @@ public class UserAuthServiceImpl implements UserAuthService {
             profile.setFirstName(registerModel.getFirstName());
             profile.setLastName(registerModel.getLastName());
             profile.setPhoneNumber(registerModel.getPhoneNumber());
-            profile.setAvatar("https://upload.wikimedia.org/wikipedia/commons/e/e8/KIM_Luhut_B._Pandjaitan.jpg");
+            profile.setAvatar("https://res.cloudinary.com/dqzsqzrkx/image/upload/v1675607582/samples/v3_0410370_0792279_0445814_a7a2hw.jpg");
 
             Profile obj1 = profileRepository.save(profile);
 
@@ -108,7 +108,7 @@ public class UserAuthServiceImpl implements UserAuthService {
             profile.setFirstName(registerModel.getFirstName());
             profile.setLastName(registerModel.getLastName());
             profile.setPhoneNumber(registerModel.getPhoneNumber());
-            profile.setAvatar("https://upload.wikimedia.org/wikipedia/commons/thumb/8/89/Xi_Jinping_2019_%2849060546152%29_2.jpg/800px-Xi_Jinping_2019_%2849060546152%29_2.jpg");
+            profile.setAvatar("https://res.cloudinary.com/dqzsqzrkx/image/upload/v1675607582/samples/v3_0026176_ya0ogc.jpg");
             Profile obj1 = profileRepository.save(profile);
 
             User user = new User();
