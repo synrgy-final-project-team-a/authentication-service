@@ -41,7 +41,7 @@ public class Oauth2ResourceServerConfiguration extends ResourceServerConfigurerA
     public void configure(HttpSecurity http) throws Exception {
         http.cors()
                 .and()
-                .csrf()
+                .csrf().csrfTokenRepository(CookieCsrfTokenRepository.withHttpOnlyFalse())
                 .disable()
                 .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)
                 .and()
