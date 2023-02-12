@@ -1,0 +1,160 @@
+
+
+
+<!DOCTYPE html>
+<html id="htmlId">
+<head>
+  <title>Coverage Report > AuthController</title>
+  <style type="text/css">
+    @import "../../css/coverage.css";
+    @import "../../css/idea.min.css";
+  </style>
+  <script type="text/javascript" src="../../js/highlight.min.js"></script>
+  <script type="text/javascript" src="../../js/highlightjs-line-numbers.min.js"></script>
+</head>
+
+<body>
+<div class="content">
+<div class="breadCrumbs">
+Current scope:     <a href="../../index.html">all classes</a>
+    <span class="separator">|</span>
+    <a href="../index.html">com.synrgy.security.controller</a>
+</div>
+
+<h1>Coverage Summary for Class: AuthController (com.synrgy.security.controller)</h1>
+
+<table class="coverageStats">
+<tr>
+  <th class="name">Class</th>
+<th class="coverageStat 
+">
+  Class, %
+</th>
+<th class="coverageStat 
+">
+  Method, %
+</th>
+<th class="coverageStat 
+">
+  Line, %
+</th>
+</tr>
+<tr>
+  <td class="name">AuthController</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/1)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/3)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/18)
+  </span>
+</td>
+</tr>
+
+</table>
+
+<br/>
+<br/>
+
+
+<pre>
+<code class="sourceCode" id="sourceCode">&nbsp;package com.synrgy.security.controller;
+&nbsp;
+&nbsp;import org.springframework.beans.factory.annotation.Autowired;
+&nbsp;import org.springframework.http.HttpStatus;
+&nbsp;import org.springframework.http.ResponseEntity;
+&nbsp;
+&nbsp;import org.springframework.security.oauth2.client.OAuth2AuthorizedClient;
+&nbsp;import org.springframework.security.oauth2.client.OAuth2AuthorizedClientService;
+&nbsp;import org.springframework.security.oauth2.client.authentication.OAuth2AuthenticationToken;
+&nbsp;import org.springframework.util.StringUtils;
+&nbsp;import org.springframework.web.bind.annotation.GetMapping;
+&nbsp;import org.springframework.web.bind.annotation.RequestMapping;
+&nbsp;import org.springframework.web.bind.annotation.RestController;
+&nbsp;
+&nbsp;import java.util.HashMap;
+&nbsp;import java.util.Map;
+&nbsp;
+&nbsp;
+&nbsp;@RestController
+&nbsp;public class AuthController {
+&nbsp;
+&nbsp;    @Autowired
+&nbsp;    OAuth2AuthorizedClientService authorizedClientService;
+&nbsp;
+<b class="nc">&nbsp;    public AuthController(){</b>
+&nbsp;
+&nbsp;    }
+&nbsp;
+&nbsp;    @GetMapping(&quot;login-oauth2-google&quot;)
+&nbsp;    public ResponseEntity getLoginInfoOA2(OAuth2AuthenticationToken token){
+<b class="nc">&nbsp;        OAuth2AuthorizedClient client = authorizedClientService</b>
+<b class="nc">&nbsp;                .loadAuthorizedClient(</b>
+<b class="nc">&nbsp;                        token.getAuthorizedClientRegistrationId(),</b>
+<b class="nc">&nbsp;                        token.getName()</b>
+&nbsp;                );
+&nbsp;
+<b class="nc">&nbsp;        String userInfoEndpointUri = client.getClientRegistration()</b>
+<b class="nc">&nbsp;                .getProviderDetails()</b>
+<b class="nc">&nbsp;                .getUserInfoEndpoint()</b>
+<b class="nc">&nbsp;                .getUri();</b>
+<b class="nc">&nbsp;        Map&lt;String, Object&gt; response = new HashMap&lt;&gt;();</b>
+<b class="nc">&nbsp;        if(!StringUtils.isEmpty(userInfoEndpointUri)){</b>
+<b class="nc">&nbsp;            response.put(&quot;name&quot;, token.getName());</b>
+<b class="nc">&nbsp;            response.put(&quot;token&quot;, &quot;Bearer&quot; + client.getAccessToken());</b>
+<b class="nc">&nbsp;            return new ResponseEntity&lt;&gt;(response, HttpStatus.OK);</b>
+&nbsp;
+&nbsp;        }
+<b class="nc">&nbsp;        response.put(&quot;status&quot;, &quot;ERROR&quot;);</b>
+<b class="nc">&nbsp;        response.put(&quot;message&quot;, &quot;OAuth2 token is empty&quot;);</b>
+<b class="nc">&nbsp;        return new ResponseEntity&lt;&gt;(response, HttpStatus.FORBIDDEN);</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    @RequestMapping(&quot;/&quot;)
+&nbsp;    public String getHomepage() {
+<b class="nc">&nbsp;        return &quot;index&quot;;</b>
+&nbsp;    }
+&nbsp;}
+</code>
+</pre>
+</div>
+
+<script type="text/javascript">
+(function() {
+    var msie = false, msie9 = false;
+    /*@cc_on
+      msie = true;
+      @if (@_jscript_version >= 9)
+        msie9 = true;
+      @end
+    @*/
+
+    if (!msie || msie && msie9) {
+      hljs.highlightAll()
+      hljs.initLineNumbersOnLoad();
+    }
+})();
+</script>
+
+<div class="footer">
+    
+    <div style="float:right;">generated on 2023-02-12 16:23</div>
+</div>
+</body>
+</html>

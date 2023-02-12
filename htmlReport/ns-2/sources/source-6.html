@@ -1,0 +1,259 @@
+
+
+
+<!DOCTYPE html>
+<html id="htmlId">
+<head>
+  <title>Coverage Report > WebSecurityConfiguration</title>
+  <style type="text/css">
+    @import "../../css/coverage.css";
+    @import "../../css/idea.min.css";
+  </style>
+  <script type="text/javascript" src="../../js/highlight.min.js"></script>
+  <script type="text/javascript" src="../../js/highlightjs-line-numbers.min.js"></script>
+</head>
+
+<body>
+<div class="content">
+<div class="breadCrumbs">
+Current scope:     <a href="../../index.html">all classes</a>
+    <span class="separator">|</span>
+    <a href="../index.html">com.synrgy.security.configuration</a>
+</div>
+
+<h1>Coverage Summary for Class: WebSecurityConfiguration (com.synrgy.security.configuration)</h1>
+
+<table class="coverageStats">
+<tr>
+  <th class="name">Class</th>
+<th class="coverageStat 
+">
+  Class, %
+</th>
+<th class="coverageStat 
+">
+  Method, %
+</th>
+<th class="coverageStat 
+">
+  Line, %
+</th>
+</tr>
+<tr>
+  <td class="name">WebSecurityConfiguration</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/1)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/9)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/24)
+  </span>
+</td>
+</tr>
+
+</table>
+
+<br/>
+<br/>
+
+
+<pre>
+<code class="sourceCode" id="sourceCode">&nbsp;package com.synrgy.security.configuration;
+&nbsp;
+&nbsp;import com.synrgy.security.service.impl.FacebookConncetionSignup;
+&nbsp;import com.synrgy.security.service.impl.FacebookSignInAdapter;
+&nbsp;import org.springframework.beans.factory.annotation.Autowired;
+&nbsp;import org.springframework.beans.factory.annotation.Value;
+&nbsp;import org.springframework.context.annotation.*;
+&nbsp;import org.springframework.security.authentication.AuthenticationManager;
+&nbsp;import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
+&nbsp;import org.springframework.security.config.annotation.web.builders.HttpSecurity;
+&nbsp;import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
+&nbsp;import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
+&nbsp;import org.springframework.security.config.http.SessionCreationPolicy;
+&nbsp;import org.springframework.security.core.Authentication;
+&nbsp;import org.springframework.security.core.context.SecurityContextHolder;
+&nbsp;import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+&nbsp;import org.springframework.security.crypto.password.PasswordEncoder;
+&nbsp;import org.springframework.security.oauth2.provider.token.AccessTokenConverter;
+&nbsp;import org.springframework.security.oauth2.provider.token.DefaultAccessTokenConverter;
+&nbsp;import org.springframework.security.oauth2.provider.token.DefaultTokenServices;
+&nbsp;import org.springframework.security.oauth2.provider.token.TokenStore;
+&nbsp;import org.springframework.security.oauth2.provider.token.store.InMemoryTokenStore;
+&nbsp;import org.springframework.security.oauth2.provider.token.store.JwtAccessTokenConverter;
+&nbsp;import org.springframework.security.oauth2.provider.token.store.JwtTokenStore;
+&nbsp;import org.springframework.security.web.authentication.AuthenticationSuccessHandler;
+&nbsp;import org.springframework.security.web.csrf.CookieCsrfTokenRepository;
+&nbsp;import org.springframework.web.servlet.config.annotation.EnableWebMvc;
+&nbsp;
+&nbsp;import org.springframework.social.connect.ConnectionFactoryLocator;
+&nbsp;import org.springframework.social.connect.UsersConnectionRepository;
+&nbsp;import org.springframework.social.connect.mem.InMemoryUsersConnectionRepository;
+&nbsp;import org.springframework.social.connect.support.ConnectionFactoryRegistry;
+&nbsp;import org.springframework.social.connect.web.ProviderSignInController;
+&nbsp;import org.springframework.social.facebook.connect.FacebookConnectionFactory;
+&nbsp;
+&nbsp;import javax.annotation.Priority;
+&nbsp;import javax.servlet.ServletException;
+&nbsp;import javax.servlet.http.HttpServletRequest;
+&nbsp;import javax.servlet.http.HttpServletResponse;
+&nbsp;import java.io.IOException;
+&nbsp;
+&nbsp;@SuppressWarnings(&quot;SpellCheckingInspection&quot;)
+&nbsp;@Priority(1)
+&nbsp;@Configuration
+&nbsp;@EnableWebSecurity
+&nbsp;@EnableGlobalMethodSecurity(prePostEnabled = true)
+<b class="nc">&nbsp;public class WebSecurityConfiguration extends WebSecurityConfigurerAdapter {</b>
+&nbsp;
+&nbsp;    @Value(&quot;${security.bcrypt.cost:13}&quot;)
+&nbsp;    private int cost;
+&nbsp;
+&nbsp;    @Value(&quot;${security.jwt.enabled:false}&quot;)
+&nbsp;    private boolean jwtEnabled;
+&nbsp;
+&nbsp;    @Value(&quot;${security.jwt.secret_key:s3cr3t}&quot;)
+&nbsp;    private String jwtSecretKey;
+&nbsp;
+&nbsp;
+&nbsp;    @Value(&quot;${spring.social.facebook.appSecret}&quot;)
+&nbsp;    String appSecret;
+&nbsp;
+&nbsp;    @Value(&quot;${spring.social.facebook.appId}&quot;)
+&nbsp;    String appId;
+&nbsp;
+&nbsp;    @Autowired
+&nbsp;    private FacebookConncetionSignup facebookConncetionSignup;
+&nbsp;
+&nbsp;
+&nbsp;    @Autowired
+&nbsp;    private Oauth2AccessTokenConverter accessTokenConverter;
+&nbsp;
+&nbsp;    @Bean
+&nbsp;    public PasswordEncoder passwordEncoder() {
+<b class="nc">&nbsp;        return new BCryptPasswordEncoder(cost);</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    @Bean
+&nbsp;    @Override
+&nbsp;    public AuthenticationManager authenticationManagerBean() throws Exception {
+<b class="nc">&nbsp;        return super.authenticationManagerBean();</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    @Bean
+&nbsp;    public TokenStore tokenStore() {
+<b class="nc">&nbsp;        if (jwtEnabled) {</b>
+<b class="nc">&nbsp;            return new JwtTokenStore((JwtAccessTokenConverter) accessTokenConverter());</b>
+&nbsp;        }
+<b class="nc">&nbsp;        return new InMemoryTokenStore();</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    private ConnectionFactoryLocator connectionFactoryLocator() {
+<b class="nc">&nbsp;        ConnectionFactoryRegistry registry = new ConnectionFactoryRegistry();</b>
+<b class="nc">&nbsp;        registry.addConnectionFactory(new FacebookConnectionFactory(appId, appSecret));</b>
+<b class="nc">&nbsp;        return registry;</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    private UsersConnectionRepository getUsersConnectionRepository(ConnectionFactoryLocator connectionFactoryLocator) {
+<b class="nc">&nbsp;        return new InMemoryUsersConnectionRepository(connectionFactoryLocator);</b>
+&nbsp;    }
+&nbsp;
+&nbsp;
+&nbsp;    @Bean
+&nbsp;    public AccessTokenConverter accessTokenConverter() {
+<b class="nc">&nbsp;        if (jwtEnabled) {</b>
+<b class="nc">&nbsp;            JwtAccessTokenConverter jwtConverter = new JwtAccessTokenConverter();</b>
+<b class="nc">&nbsp;            jwtConverter.setAccessTokenConverter(accessTokenConverter);</b>
+<b class="nc">&nbsp;            jwtConverter.setSigningKey(jwtSecretKey);</b>
+&nbsp;
+<b class="nc">&nbsp;            return jwtConverter;</b>
+&nbsp;        }
+&nbsp;
+<b class="nc">&nbsp;        return new DefaultAccessTokenConverter();</b>
+&nbsp;    }
+&nbsp;
+&nbsp;
+&nbsp;    @Bean
+&nbsp;    public ProviderSignInController providerSignInController() {
+<b class="nc">&nbsp;        ConnectionFactoryLocator connectionFactoryLocator = connectionFactoryLocator();</b>
+<b class="nc">&nbsp;        UsersConnectionRepository usersConnectionRepository = getUsersConnectionRepository(connectionFactoryLocator);</b>
+<b class="nc">&nbsp;        ((InMemoryUsersConnectionRepository) usersConnectionRepository).setConnectionSignUp(facebookConncetionSignup);</b>
+<b class="nc">&nbsp;        return new ProviderSignInController(connectionFactoryLocator, usersConnectionRepository, new FacebookSignInAdapter());</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    @Bean
+&nbsp;    @Primary
+&nbsp;    public DefaultTokenServices tokenServices() {
+<b class="nc">&nbsp;        DefaultTokenServices services = new DefaultTokenServices();</b>
+<b class="nc">&nbsp;        services.setTokenStore(tokenStore());</b>
+<b class="nc">&nbsp;        services.setSupportRefreshToken(true);</b>
+&nbsp;
+<b class="nc">&nbsp;        return services;</b>
+&nbsp;    }
+&nbsp;
+&nbsp;//    @Override
+&nbsp;//    protected void configure(HttpSecurity http) throws Exception{
+&nbsp;//        http
+&nbsp;//                .cors()
+&nbsp;//                .and()
+&nbsp;//                .csrf(c -&gt; c.csrfTokenRepository(CookieCsrfTokenRepository.withHttpOnlyFalse()))
+&nbsp;//                .exceptionHandling()
+&nbsp;//                .and()
+&nbsp;//                .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)
+&nbsp;//                .and()
+&nbsp;//                .authorizeRequests(uri -&gt; uri.antMatchers(&quot;/&quot;, &quot;/api/auth/**&quot;, &quot;/error&quot;,
+&nbsp;//                        &quot;/webjars/**&quot;, &quot;/user&quot;, &quot;/login-oauth2-google&quot;, &quot;/api/oauth2/authorization/google&quot;).permitAll())
+&nbsp;//                .logout(l -&gt; l.logoutSuccessUrl(&quot;/&quot;))
+&nbsp;//                .oauth2Login()
+&nbsp;//                .successHandler(new AuthenticationSuccessHandler() {
+&nbsp;//                    @Override
+&nbsp;//                    public void onAuthenticationSuccess(HttpServletRequest request, HttpServletResponse response, Authentication authentication) throws IOException, ServletException {
+&nbsp;//                        SecurityContextHolder.getContext().setAuthentication(authentication);
+&nbsp;//                    }
+&nbsp;//                });
+&nbsp;//
+&nbsp;//    }
+&nbsp;}
+</code>
+</pre>
+</div>
+
+<script type="text/javascript">
+(function() {
+    var msie = false, msie9 = false;
+    /*@cc_on
+      msie = true;
+      @if (@_jscript_version >= 9)
+        msie9 = true;
+      @end
+    @*/
+
+    if (!msie || msie && msie9) {
+      hljs.highlightAll()
+      hljs.initLineNumbersOnLoad();
+    }
+})();
+</script>
+
+<div class="footer">
+    
+    <div style="float:right;">generated on 2023-02-12 16:23</div>
+</div>
+</body>
+</html>

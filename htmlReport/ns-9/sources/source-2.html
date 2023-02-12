@@ -1,0 +1,165 @@
+
+
+
+<!DOCTYPE html>
+<html id="htmlId">
+<head>
+  <title>Coverage Report > Response</title>
+  <style type="text/css">
+    @import "../../css/coverage.css";
+    @import "../../css/idea.min.css";
+  </style>
+  <script type="text/javascript" src="../../js/highlight.min.js"></script>
+  <script type="text/javascript" src="../../js/highlightjs-line-numbers.min.js"></script>
+</head>
+
+<body>
+<div class="content">
+<div class="breadCrumbs">
+Current scope:     <a href="../../index.html">all classes</a>
+    <span class="separator">|</span>
+    <a href="../index.html">com.synrgy.security.util</a>
+</div>
+
+<h1>Coverage Summary for Class: Response (com.synrgy.security.util)</h1>
+
+<table class="coverageStats">
+<tr>
+  <th class="name">Class</th>
+<th class="coverageStat 
+">
+  Class, %
+</th>
+<th class="coverageStat 
+">
+  Method, %
+</th>
+<th class="coverageStat 
+">
+  Line, %
+</th>
+</tr>
+<tr>
+  <td class="name">Response</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/1)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/8)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/31)
+  </span>
+</td>
+</tr>
+
+</table>
+
+<br/>
+<br/>
+
+
+<pre>
+<code class="sourceCode" id="sourceCode">&nbsp;package com.synrgy.security.util;
+&nbsp;
+&nbsp;
+&nbsp;import org.springframework.stereotype.Component;
+&nbsp;
+&nbsp;import java.util.HashMap;
+&nbsp;import java.util.Map;
+&nbsp;
+&nbsp;@Component
+<b class="nc">&nbsp;public class Response {</b>
+&nbsp;
+&nbsp;    public Map sukses(Object obj){
+<b class="nc">&nbsp;        Map map = new HashMap();</b>
+<b class="nc">&nbsp;        map.put(&quot;data&quot;, obj);</b>
+<b class="nc">&nbsp;        map.put(&quot;code&quot;, 200);</b>
+<b class="nc">&nbsp;        map.put(&quot;status&quot;, &quot;sukses&quot;);</b>
+<b class="nc">&nbsp;        return map;</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    public Map error(Object obj, Object code){
+<b class="nc">&nbsp;        Map map = new HashMap();</b>
+<b class="nc">&nbsp;        map.put(&quot;code&quot;, code);</b>
+<b class="nc">&nbsp;        map.put(&quot;status&quot;, obj);</b>
+<b class="nc">&nbsp;        return map;</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    public Boolean isRequired(Object obj){
+<b class="nc">&nbsp;        if(obj == null){</b>
+<b class="nc">&nbsp;            return  true;</b>
+&nbsp;        }
+<b class="nc">&nbsp;        return false;</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    public Map templateSuksesGet(Object objek){
+<b class="nc">&nbsp;        Map map = new HashMap();</b>
+<b class="nc">&nbsp;        map.put(&quot;data&quot;, objek);</b>
+<b class="nc">&nbsp;        map.put(&quot;message&quot;, &quot;sukses&quot;);</b>
+<b class="nc">&nbsp;        map.put(&quot;status&quot;, &quot;200&quot;);</b>
+<b class="nc">&nbsp;        return map;</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    public Map templateSuksesPost(Object objek){
+<b class="nc">&nbsp;        Map map = new HashMap();</b>
+<b class="nc">&nbsp;        map.put(&quot;data&quot;, objek);</b>
+<b class="nc">&nbsp;        map.put(&quot;message&quot;, &quot;sukses&quot;);</b>
+<b class="nc">&nbsp;        map.put(&quot;status&quot;, &quot;201&quot;);</b>
+<b class="nc">&nbsp;        return map;</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    public Map templateError(Object objek){
+<b class="nc">&nbsp;        Map map = new HashMap();</b>
+<b class="nc">&nbsp;        map.put(&quot;message&quot;, objek);</b>
+<b class="nc">&nbsp;        map.put(&quot;status&quot;, &quot;400&quot;);</b>
+<b class="nc">&nbsp;        return map;</b>
+&nbsp;    }
+&nbsp;    public Map urlNotFound(Object objek){
+<b class="nc">&nbsp;        Map map = new HashMap();</b>
+<b class="nc">&nbsp;        map.put(&quot;message&quot;, objek);</b>
+<b class="nc">&nbsp;        map.put(&quot;status&quot;, &quot;404&quot;);</b>
+<b class="nc">&nbsp;        return map;</b>
+&nbsp;    }
+&nbsp;}
+</code>
+</pre>
+</div>
+
+<script type="text/javascript">
+(function() {
+    var msie = false, msie9 = false;
+    /*@cc_on
+      msie = true;
+      @if (@_jscript_version >= 9)
+        msie9 = true;
+      @end
+    @*/
+
+    if (!msie || msie && msie9) {
+      hljs.highlightAll()
+      hljs.initLineNumbersOnLoad();
+    }
+})();
+</script>
+
+<div class="footer">
+    
+    <div style="float:right;">generated on 2023-02-12 16:23</div>
+</div>
+</body>
+</html>

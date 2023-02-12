@@ -1,0 +1,231 @@
+
+
+
+<!DOCTYPE html>
+<html id="htmlId">
+<head>
+  <title>Coverage Report > LoginLogoutController</title>
+  <style type="text/css">
+    @import "../../css/coverage.css";
+    @import "../../css/idea.min.css";
+  </style>
+  <script type="text/javascript" src="../../js/highlight.min.js"></script>
+  <script type="text/javascript" src="../../js/highlightjs-line-numbers.min.js"></script>
+</head>
+
+<body>
+<div class="content">
+<div class="breadCrumbs">
+Current scope:     <a href="../../index.html">all classes</a>
+    <span class="separator">|</span>
+    <a href="../index.html">com.synrgy.security.controller</a>
+</div>
+
+<h1>Coverage Summary for Class: LoginLogoutController (com.synrgy.security.controller)</h1>
+
+<table class="coverageStats">
+<tr>
+  <th class="name">Class</th>
+<th class="coverageStat 
+">
+  Class, %
+</th>
+<th class="coverageStat 
+">
+  Method, %
+</th>
+<th class="coverageStat 
+">
+  Line, %
+</th>
+</tr>
+<tr>
+  <td class="name">LoginLogoutController</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/1)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/4)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/56)
+  </span>
+</td>
+</tr>
+
+</table>
+
+<br/>
+<br/>
+
+
+<pre>
+<code class="sourceCode" id="sourceCode">&nbsp;package com.synrgy.security.controller;
+&nbsp;
+&nbsp;import com.synrgy.security.configuration.Config;
+&nbsp;import com.synrgy.security.dto.LoginModel;
+&nbsp;import com.synrgy.security.entity.User;
+&nbsp;import com.synrgy.security.repository.UserRepository;
+&nbsp;import com.synrgy.security.service.UserAuthService;
+&nbsp;import com.synrgy.security.util.Response;
+&nbsp;import org.springframework.beans.factory.annotation.Autowired;
+&nbsp;import org.springframework.http.HttpStatus;
+&nbsp;import org.springframework.http.ResponseEntity;
+&nbsp;import org.springframework.web.bind.annotation.PostMapping;
+&nbsp;import org.springframework.web.bind.annotation.RequestBody;
+&nbsp;import org.springframework.web.bind.annotation.RestController;
+&nbsp;import org.springframework.security.crypto.password.PasswordEncoder;
+&nbsp;
+&nbsp;
+&nbsp;import javax.servlet.http.HttpServletRequest;
+&nbsp;import javax.servlet.http.HttpServletResponse;
+&nbsp;import javax.validation.Valid;
+&nbsp;import javax.validation.constraints.Email;
+&nbsp;import java.util.HashMap;
+&nbsp;import java.util.Map;
+&nbsp;
+&nbsp;@RestController
+<b class="nc">&nbsp;public class LoginLogoutController {</b>
+&nbsp;
+&nbsp;    @Autowired
+&nbsp;    private PasswordEncoder encoder;
+&nbsp;    @Autowired
+&nbsp;    private UserRepository userRepository;
+&nbsp;
+<b class="nc">&nbsp;    Config config = new Config();</b>
+&nbsp;
+&nbsp;    @Autowired
+&nbsp;    public UserAuthService userAuthService;
+&nbsp;
+&nbsp;    @Autowired
+&nbsp;    public Response response;
+&nbsp;
+&nbsp;    @PostMapping(&quot;/login-seeker&quot;)
+&nbsp;    public ResponseEntity&lt;Map&gt; loginSeeker(@Valid @RequestBody LoginModel loginModel) {
+<b class="nc">&nbsp;        Map map = new HashMap();</b>
+<b class="nc">&nbsp;        if (!(loginModel.getEmail().matches(&quot;^[A-Za-z0-9+_.-]+@(.+)$&quot;))) {</b>
+<b class="nc">&nbsp;            return new ResponseEntity&lt;Map&gt;(response.templateError(&quot;Wrong email format!&quot;), HttpStatus.BAD_REQUEST);</b>
+&nbsp;        }
+<b class="nc">&nbsp;        User checkUser = userRepository.checkExistingEmail(loginModel.getEmail());</b>
+<b class="nc">&nbsp;        if ((checkUser != null) &amp;&amp; (encoder.matches(loginModel.getPassword(), checkUser.getPassword()))) {</b>
+<b class="nc">&nbsp;            if (!checkUser.isEnabled()) {</b>
+<b class="nc">&nbsp;                map.put(&quot;is_enabled&quot;, checkUser.isEnabled());</b>
+<b class="nc">&nbsp;                return new ResponseEntity&lt;Map&gt;(response.templateError(map), HttpStatus.BAD_REQUEST);</b>
+&nbsp;            }
+&nbsp;        }
+<b class="nc">&nbsp;        if (checkUser == null) {</b>
+<b class="nc">&nbsp;            return new ResponseEntity&lt;Map&gt;(response.templateError(&quot;User not found&quot;), HttpStatus.BAD_REQUEST);</b>
+&nbsp;        }
+<b class="nc">&nbsp;        if (loginModel.getPassword().length() &lt; 8) {</b>
+<b class="nc">&nbsp;            return new ResponseEntity&lt;Map&gt;(response.templateError(&quot;Password must be greater or equals 8 character, please try again&quot;), HttpStatus.BAD_REQUEST);</b>
+&nbsp;        }
+<b class="nc">&nbsp;        if (!(encoder.matches(loginModel.getPassword(), checkUser.getPassword()))) {</b>
+<b class="nc">&nbsp;            return new ResponseEntity&lt;Map&gt;(response.templateError(&quot;Wrong password&quot;), HttpStatus.BAD_REQUEST);</b>
+&nbsp;        }
+<b class="nc">&nbsp;        map = userAuthService.loginSeeker(loginModel);</b>
+<b class="nc">&nbsp;        if (map.get(&quot;role&quot;) != null) {</b>
+<b class="nc">&nbsp;            return new ResponseEntity&lt;Map&gt;(map, HttpStatus.CREATED);</b>
+&nbsp;        } else {
+<b class="nc">&nbsp;            return new ResponseEntity&lt;Map&gt;(response.templateError(&quot;You are not seeker&quot;), HttpStatus.BAD_REQUEST);</b>
+&nbsp;        }    }
+&nbsp;
+&nbsp;    @PostMapping(&quot;/login-tennant&quot;)
+&nbsp;    public ResponseEntity&lt;Map&gt; loginTennant(@Valid @RequestBody LoginModel loginModel) {
+<b class="nc">&nbsp;        Map map = new HashMap();</b>
+<b class="nc">&nbsp;        if (!(loginModel.getEmail().matches(&quot;^[A-Za-z0-9+_.-]+@(.+)$&quot;))) {</b>
+<b class="nc">&nbsp;            return new ResponseEntity&lt;Map&gt;(response.templateError(&quot;Wrong email format!&quot;), HttpStatus.BAD_REQUEST);</b>
+&nbsp;        }
+<b class="nc">&nbsp;        User checkUser = userRepository.checkExistingEmail(loginModel.getEmail());</b>
+<b class="nc">&nbsp;        if ((checkUser != null) &amp;&amp; (encoder.matches(loginModel.getPassword(), checkUser.getPassword()))) {</b>
+<b class="nc">&nbsp;            if (!checkUser.isEnabled()) {</b>
+<b class="nc">&nbsp;                map.put(&quot;is_enabled&quot;, checkUser.isEnabled());</b>
+<b class="nc">&nbsp;                return new ResponseEntity&lt;Map&gt;(response.templateError(map), HttpStatus.BAD_REQUEST);</b>
+&nbsp;            }
+&nbsp;        }
+<b class="nc">&nbsp;        if (checkUser == null) {</b>
+<b class="nc">&nbsp;            return new ResponseEntity&lt;Map&gt;(response.templateError(&quot;User not found&quot;), HttpStatus.BAD_REQUEST);</b>
+&nbsp;        }
+<b class="nc">&nbsp;        if (loginModel.getPassword().length() &lt; 8) {</b>
+<b class="nc">&nbsp;            return new ResponseEntity&lt;Map&gt;(response.templateError(&quot;Password must be greater or equals 8 character, please try again&quot;), HttpStatus.BAD_REQUEST);</b>
+&nbsp;        }
+<b class="nc">&nbsp;        if (!(encoder.matches(loginModel.getPassword(), checkUser.getPassword()))) {</b>
+<b class="nc">&nbsp;            return new ResponseEntity&lt;Map&gt;(response.templateError(&quot;Wrong password&quot;), HttpStatus.BAD_REQUEST);</b>
+&nbsp;        }
+<b class="nc">&nbsp;        map = userAuthService.loginTennant(loginModel);</b>
+<b class="nc">&nbsp;        if (map.get(&quot;role&quot;) != null) {</b>
+<b class="nc">&nbsp;            return new ResponseEntity&lt;Map&gt;(map, HttpStatus.CREATED);</b>
+&nbsp;        } else {
+<b class="nc">&nbsp;            return new ResponseEntity&lt;Map&gt;(response.templateError(&quot;You are not tennant&quot;), HttpStatus.BAD_REQUEST);</b>
+&nbsp;        }    }
+&nbsp;
+&nbsp;    @PostMapping(&quot;/login-superadmin&quot;)
+&nbsp;    public ResponseEntity&lt;Map&gt; loginSuperAdmin(@Valid @RequestBody LoginModel loginModel) {
+<b class="nc">&nbsp;        Map map = new HashMap();</b>
+<b class="nc">&nbsp;        if (!(loginModel.getEmail().matches(&quot;^[A-Za-z0-9+_.-]+@(.+)$&quot;))) {</b>
+<b class="nc">&nbsp;            return new ResponseEntity&lt;Map&gt;(response.templateError(&quot;Wrong email format!&quot;), HttpStatus.BAD_REQUEST);</b>
+&nbsp;        }
+<b class="nc">&nbsp;        User checkUser = userRepository.checkExistingEmail(loginModel.getEmail());</b>
+<b class="nc">&nbsp;        if ((checkUser != null) &amp;&amp; (encoder.matches(loginModel.getPassword(), checkUser.getPassword()))) {</b>
+<b class="nc">&nbsp;            if (!checkUser.isEnabled()) {</b>
+<b class="nc">&nbsp;                map.put(&quot;is_enabled&quot;, checkUser.isEnabled());</b>
+<b class="nc">&nbsp;                return new ResponseEntity&lt;Map&gt;(response.templateError(map), HttpStatus.BAD_REQUEST);</b>
+&nbsp;            }
+&nbsp;        }
+<b class="nc">&nbsp;        if (checkUser == null) {</b>
+<b class="nc">&nbsp;            return new ResponseEntity&lt;Map&gt;(response.templateError(&quot;User not found&quot;), HttpStatus.BAD_REQUEST);</b>
+&nbsp;        }
+<b class="nc">&nbsp;        if (loginModel.getPassword().length() &lt; 8) {</b>
+<b class="nc">&nbsp;            return new ResponseEntity&lt;Map&gt;(response.templateError(&quot;Password must be greater or equals 8 character, please try again&quot;), HttpStatus.BAD_REQUEST);</b>
+&nbsp;        }
+<b class="nc">&nbsp;        if (!(encoder.matches(loginModel.getPassword(), checkUser.getPassword()))) {</b>
+<b class="nc">&nbsp;            return new ResponseEntity&lt;Map&gt;(response.templateError(&quot;Wrong password&quot;), HttpStatus.BAD_REQUEST);</b>
+&nbsp;        }
+<b class="nc">&nbsp;        map = userAuthService.loginSuperAdmin(loginModel);</b>
+<b class="nc">&nbsp;        if (map.get(&quot;role&quot;) != null) {</b>
+<b class="nc">&nbsp;            return new ResponseEntity&lt;Map&gt;(map, HttpStatus.CREATED);</b>
+&nbsp;        } else {
+<b class="nc">&nbsp;            return new ResponseEntity&lt;Map&gt;(response.templateError(&quot;You are not superadmin&quot;), HttpStatus.BAD_REQUEST);</b>
+&nbsp;        }
+&nbsp;    }
+&nbsp;}
+</code>
+</pre>
+</div>
+
+<script type="text/javascript">
+(function() {
+    var msie = false, msie9 = false;
+    /*@cc_on
+      msie = true;
+      @if (@_jscript_version >= 9)
+        msie9 = true;
+      @end
+    @*/
+
+    if (!msie || msie && msie9) {
+      hljs.highlightAll()
+      hljs.initLineNumbersOnLoad();
+    }
+})();
+</script>
+
+<div class="footer">
+    
+    <div style="float:right;">generated on 2023-02-12 16:23</div>
+</div>
+</body>
+</html>

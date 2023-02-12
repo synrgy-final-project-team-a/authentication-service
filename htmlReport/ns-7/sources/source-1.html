@@ -1,0 +1,212 @@
+
+
+
+<!DOCTYPE html>
+<html id="htmlId">
+<head>
+  <title>Coverage Report > EmailSender</title>
+  <style type="text/css">
+    @import "../../css/coverage.css";
+    @import "../../css/idea.min.css";
+  </style>
+  <script type="text/javascript" src="../../js/highlight.min.js"></script>
+  <script type="text/javascript" src="../../js/highlightjs-line-numbers.min.js"></script>
+</head>
+
+<body>
+<div class="content">
+<div class="breadCrumbs">
+Current scope:     <a href="../../index.html">all classes</a>
+    <span class="separator">|</span>
+    <a href="../index.html">com.synrgy.security.service.email</a>
+</div>
+
+<h1>Coverage Summary for Class: EmailSender (com.synrgy.security.service.email)</h1>
+
+<table class="coverageStats">
+
+<tr>
+  <th class="name">Class</th>
+<th class="coverageStat 
+">
+  Method, %
+</th>
+<th class="coverageStat 
+">
+  Line, %
+</th>
+</tr>
+<tr>
+  <td class="name">EmailSender</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/5)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/22)
+  </span>
+</td>
+</tr>
+  <tr>
+    <td class="name">EmailSender$1</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/2)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/2)
+  </span>
+</td>
+  </tr>
+<tr>
+  <td class="name"><strong>Total</strong></td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/7)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/24)
+  </span>
+</td>
+</tr>
+</table>
+
+<br/>
+<br/>
+
+
+<pre>
+<code class="sourceCode" id="sourceCode">&nbsp;package com.synrgy.security.service.email;
+&nbsp;
+&nbsp;
+&nbsp;import com.synrgy.security.dto.RegisterModel;
+&nbsp;import com.synrgy.security.entity.User;
+&nbsp;import com.synrgy.security.repository.UserRepository;
+&nbsp;import org.slf4j.Logger;
+&nbsp;import org.slf4j.LoggerFactory;
+&nbsp;import org.springframework.beans.factory.annotation.Autowired;
+&nbsp;import org.springframework.beans.factory.annotation.Qualifier;
+&nbsp;import org.springframework.beans.factory.annotation.Value;
+&nbsp;import org.springframework.core.task.TaskExecutor;
+&nbsp;import org.springframework.mail.javamail.JavaMailSenderImpl;
+&nbsp;import org.springframework.mail.javamail.MimeMessageHelper;
+&nbsp;import org.springframework.stereotype.Component;
+&nbsp;import org.springframework.util.StringUtils;
+&nbsp;
+&nbsp;import javax.mail.internet.MimeMessage;
+&nbsp;
+&nbsp;@SuppressWarnings({&quot;WeakerAccess&quot;, &quot;ConstantConditions&quot;})
+&nbsp;@Component(&quot;emailSender&quot;)
+<b class="nc">&nbsp;public class EmailSender {</b>
+<b class="nc">&nbsp;    private final static Logger logger = LoggerFactory.getLogger(EmailSender.class);</b>
+&nbsp;
+&nbsp;    @Autowired
+&nbsp;    private UserRepository userRepository;
+&nbsp;
+&nbsp;    @Autowired
+&nbsp;    private JavaMailSenderImpl mailSender;
+&nbsp;
+&nbsp;    @Value(&quot;${spring.mail.sender.name:}&quot;)
+&nbsp;    private String senderName;
+&nbsp;
+&nbsp;    @Value(&quot;${spring.mail.sender.mail:}&quot;)
+&nbsp;    private String senderEmail;
+&nbsp;
+&nbsp;    @Qualifier(&quot;taskExecutor&quot;)
+&nbsp;    @Autowired
+&nbsp;    private TaskExecutor taskExecutor;
+&nbsp;
+&nbsp;    public boolean send(String email, String subject, String message) {
+<b class="nc">&nbsp;        return send(null, email, subject, message);</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    public boolean send(String from, String email, String subject, String message) {
+&nbsp;
+<b class="nc">&nbsp;        MimeMessage mime = mailSender.createMimeMessage();</b>
+<b class="nc">&nbsp;        if (StringUtils.isEmpty(from)) {</b>
+<b class="nc">&nbsp;            from = senderEmail;</b>
+&nbsp;        }
+&nbsp;//        if (StringUtils.isEmpty(from)) {
+&nbsp;//            from = &quot;admin@mail.com&quot;;// default saja
+&nbsp;//        }
+<b class="nc">&nbsp;        boolean success = false;</b>
+&nbsp;        try {
+<b class="nc">&nbsp;            logger.info(&quot;Sending email to: &quot;+email);</b>
+<b class="nc">&nbsp;            logger.info(&quot;Sending email from: &quot;+from);</b>
+<b class="nc">&nbsp;            logger.info(&quot;Sending email with subject: &quot;+subject);</b>
+&nbsp;
+<b class="nc">&nbsp;            MimeMessageHelper helper = new MimeMessageHelper(mime, true);</b>
+<b class="nc">&nbsp;            helper.setFrom(from,senderName);</b>
+<b class="nc">&nbsp;            helper.setTo(email);</b>
+<b class="nc">&nbsp;            helper.setSubject(subject);</b>
+<b class="nc">&nbsp;            helper.setText(message, true);</b>
+<b class="nc">&nbsp;            mailSender.send(mime);</b>
+<b class="nc">&nbsp;            success = true;</b>
+<b class="nc">&nbsp;        } catch (Exception e) {</b>
+<b class="nc">&nbsp;            logger.error(&quot;error: &quot;+e.getMessage());</b>
+<b class="nc">&nbsp;        }</b>
+&nbsp;
+<b class="nc">&nbsp;        return success;</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    public void sendAsync(final String to, final String subject, final String message) {
+<b class="nc">&nbsp;        taskExecutor.execute(new Runnable() {</b>
+&nbsp;            @Override
+&nbsp;            public void run() {
+<b class="nc">&nbsp;                send(to, subject, message);</b>
+&nbsp;            }
+&nbsp;        });
+&nbsp;    }
+&nbsp;
+&nbsp;}
+</code>
+</pre>
+</div>
+
+<script type="text/javascript">
+(function() {
+    var msie = false, msie9 = false;
+    /*@cc_on
+      msie = true;
+      @if (@_jscript_version >= 9)
+        msie9 = true;
+      @end
+    @*/
+
+    if (!msie || msie && msie9) {
+      hljs.highlightAll()
+      hljs.initLineNumbersOnLoad();
+    }
+})();
+</script>
+
+<div class="footer">
+    
+    <div style="float:right;">generated on 2023-02-12 16:23</div>
+</div>
+</body>
+</html>
