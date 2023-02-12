@@ -1,0 +1,483 @@
+
+
+
+<!DOCTYPE html>
+<html id="htmlId">
+<head>
+  <title>Coverage Report > UserAuthServiceImpl</title>
+  <style type="text/css">
+    @import "../../css/coverage.css";
+    @import "../../css/idea.min.css";
+  </style>
+  <script type="text/javascript" src="../../js/highlight.min.js"></script>
+  <script type="text/javascript" src="../../js/highlightjs-line-numbers.min.js"></script>
+</head>
+
+<body>
+<div class="content">
+<div class="breadCrumbs">
+Current scope:     <a href="../../index.html">all classes</a>
+    <span class="separator">|</span>
+    <a href="../index.html">com.synrgy.security.service.impl</a>
+</div>
+
+<h1>Coverage Summary for Class: UserAuthServiceImpl (com.synrgy.security.service.impl)</h1>
+
+<table class="coverageStats">
+
+<tr>
+  <th class="name">Class</th>
+<th class="coverageStat 
+">
+  Method, %
+</th>
+<th class="coverageStat 
+">
+  Line, %
+</th>
+</tr>
+<tr>
+  <td class="name">UserAuthServiceImpl</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/8)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/146)
+  </span>
+</td>
+</tr>
+  <tr>
+    <td class="name">UserAuthServiceImpl$1</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/1)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/1)
+  </span>
+</td>
+  </tr>
+  <tr>
+    <td class="name">UserAuthServiceImpl$2</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/1)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/1)
+  </span>
+</td>
+  </tr>
+  <tr>
+    <td class="name">UserAuthServiceImpl$3</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/1)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/1)
+  </span>
+</td>
+  </tr>
+<tr>
+  <td class="name"><strong>Total</strong></td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/11)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/149)
+  </span>
+</td>
+</tr>
+</table>
+
+<br/>
+<br/>
+
+
+<pre>
+<code class="sourceCode" id="sourceCode">&nbsp;package com.synrgy.security.service.impl;
+&nbsp;
+&nbsp;import com.synrgy.security.dto.LoginModel;
+&nbsp;import com.synrgy.security.dto.RegisterModel;
+&nbsp;import com.synrgy.security.entity.Profile;
+&nbsp;import com.synrgy.security.entity.Role;
+&nbsp;import com.synrgy.security.entity.User;
+&nbsp;import com.synrgy.security.entity.enumeration.EnumRole;
+&nbsp;import com.synrgy.security.repository.ProfileRepository;
+&nbsp;import com.synrgy.security.repository.RoleRepository;
+&nbsp;import com.synrgy.security.repository.UserRepository;
+&nbsp;import com.synrgy.security.service.UserAuthService;
+&nbsp;import com.synrgy.security.util.Response;
+&nbsp;import org.apache.http.protocol.HTTP;
+&nbsp;import org.slf4j.Logger;
+&nbsp;import org.slf4j.LoggerFactory;
+&nbsp;import org.springframework.beans.factory.annotation.Autowired;
+&nbsp;import org.springframework.beans.factory.annotation.Value;
+&nbsp;import org.springframework.boot.web.client.RestTemplateBuilder;
+&nbsp;import org.springframework.core.ParameterizedTypeReference;
+&nbsp;import org.springframework.http.HttpMethod;
+&nbsp;import org.springframework.http.HttpStatus;
+&nbsp;import org.springframework.http.ResponseEntity;
+&nbsp;import org.springframework.security.core.context.SecurityContextHolder;
+&nbsp;import org.springframework.security.crypto.password.PasswordEncoder;
+&nbsp;import org.springframework.security.oauth2.provider.OAuth2Authentication;
+&nbsp;import org.springframework.security.oauth2.provider.authentication.OAuth2AuthenticationDetails;
+&nbsp;import org.springframework.security.web.authentication.logout.SecurityContextLogoutHandler;
+&nbsp;import org.springframework.stereotype.Service;
+&nbsp;import org.springframework.web.client.HttpStatusCodeException;
+&nbsp;
+&nbsp;import javax.servlet.http.HttpServletRequest;
+&nbsp;import javax.servlet.http.HttpServletResponse;
+&nbsp;import java.util.ArrayList;
+&nbsp;import java.util.HashMap;
+&nbsp;import java.util.List;
+&nbsp;import java.util.Map;
+&nbsp;
+&nbsp;@Service
+<b class="nc">&nbsp;public class UserAuthServiceImpl implements UserAuthService {</b>
+&nbsp;
+<b class="nc">&nbsp;    private static Logger logger = LoggerFactory.getLogger(UserAuthServiceImpl.class);</b>
+&nbsp;    @Value(&quot;${BASEURL}&quot;)
+&nbsp;    private String baseUrl;
+&nbsp;
+&nbsp;    @Autowired
+&nbsp;    private RestTemplateBuilder restTemplateBuilder;
+&nbsp;
+&nbsp;    @Autowired
+&nbsp;    private UserRepository userRepository;
+&nbsp;
+&nbsp;    @Autowired
+&nbsp;    private ProfileRepository profileRepository;
+&nbsp;    @Autowired
+&nbsp;    private RoleRepository roleRepository;
+&nbsp;    @Autowired
+&nbsp;    private PasswordEncoder encoder;
+&nbsp;
+&nbsp;    @Autowired
+&nbsp;    public Response templateResponse;
+&nbsp;    @Autowired
+&nbsp;    private Oauth2UserDetailsService userDetailsService;
+&nbsp;
+&nbsp;
+&nbsp;    @Autowired
+&nbsp;    Response response;
+&nbsp;
+&nbsp;    @Override
+&nbsp;    public Map registerSeeker(RegisterModel registerModel) {
+<b class="nc">&nbsp;        Map map = new HashMap();</b>
+&nbsp;        try {
+&nbsp;
+<b class="nc">&nbsp;            Profile profile = new Profile();</b>
+<b class="nc">&nbsp;            profile.setFirstName(registerModel.getFirstName());</b>
+<b class="nc">&nbsp;            profile.setLastName(registerModel.getLastName());</b>
+<b class="nc">&nbsp;            profile.setPhoneNumber(registerModel.getPhoneNumber());</b>
+<b class="nc">&nbsp;            profile.setAvatar(&quot;https://res.cloudinary.com/dqzsqzrkx/image/upload/v1675607582/samples/v3_0410370_0792279_0445814_a7a2hw.jpg&quot;);</b>
+&nbsp;
+<b class="nc">&nbsp;            Profile obj1 = profileRepository.save(profile);</b>
+&nbsp;
+<b class="nc">&nbsp;            User user = new User();</b>
+&nbsp;
+<b class="nc">&nbsp;            user.setUsername(registerModel.getEmail().toLowerCase());</b>
+&nbsp;            //step 1 :
+<b class="nc">&nbsp;            user.setEnabled(false); // matikan user</b>
+&nbsp;
+<b class="nc">&nbsp;            String password = encoder.encode(registerModel.getPassword().replaceAll(&quot;\\s+&quot;, &quot;&quot;));</b>
+<b class="nc">&nbsp;            user.setPassword(password);</b>
+&nbsp;
+<b class="nc">&nbsp;            String[] roleNames = {EnumRole.ROLE_SK.name(), EnumRole.ROLE_WRITE.name(), EnumRole.ROLE_READ.name()}; // user</b>
+<b class="nc">&nbsp;            List&lt;Role&gt; r = roleRepository.findByNameIn(roleNames);</b>
+<b class="nc">&nbsp;            user.setRoles(r);</b>
+&nbsp;
+<b class="nc">&nbsp;            user.setProfile(obj1);</b>
+<b class="nc">&nbsp;            User obj = userRepository.save(user);</b>
+<b class="nc">&nbsp;            return templateResponse.templateSuksesPost(obj);</b>
+&nbsp;
+<b class="nc">&nbsp;        } catch (Exception e) {</b>
+<b class="nc">&nbsp;            logger.error(&quot;Error registerManual=&quot;, e);</b>
+<b class="nc">&nbsp;            return templateResponse.templateError(&quot;error:&quot; + e);</b>
+&nbsp;        }
+&nbsp;    }
+&nbsp;
+&nbsp;    @Override
+&nbsp;    public Map registerTennant(RegisterModel registerModel) {
+<b class="nc">&nbsp;        Map map = new HashMap();</b>
+&nbsp;        try {
+<b class="nc">&nbsp;            Profile profile = new Profile();</b>
+<b class="nc">&nbsp;            profile.setFirstName(registerModel.getFirstName());</b>
+<b class="nc">&nbsp;            profile.setLastName(registerModel.getLastName());</b>
+<b class="nc">&nbsp;            profile.setPhoneNumber(registerModel.getPhoneNumber());</b>
+<b class="nc">&nbsp;            profile.setAvatar(&quot;https://res.cloudinary.com/dqzsqzrkx/image/upload/v1675607582/samples/v3_0026176_ya0ogc.jpg&quot;);</b>
+<b class="nc">&nbsp;            Profile obj1 = profileRepository.save(profile);</b>
+&nbsp;
+<b class="nc">&nbsp;            User user = new User();</b>
+&nbsp;
+<b class="nc">&nbsp;            user.setUsername(registerModel.getEmail().toLowerCase());</b>
+&nbsp;            //step 1 :
+<b class="nc">&nbsp;            user.setEnabled(false); // matikan user</b>
+&nbsp;
+<b class="nc">&nbsp;            String password = encoder.encode(registerModel.getPassword().replaceAll(&quot;\\s+&quot;, &quot;&quot;));</b>
+<b class="nc">&nbsp;            user.setPassword(password);</b>
+<b class="nc">&nbsp;            String[] roleNames = {EnumRole.ROLE_TN.name(), EnumRole.ROLE_WRITE.name(), EnumRole.ROLE_READ.name()}; // user</b>
+<b class="nc">&nbsp;            List&lt;Role&gt; r = roleRepository.findByNameIn(roleNames);</b>
+<b class="nc">&nbsp;            user.setRoles(r);</b>
+&nbsp;
+<b class="nc">&nbsp;            user.setProfile(obj1);</b>
+<b class="nc">&nbsp;            User obj = userRepository.save(user);</b>
+<b class="nc">&nbsp;            return templateResponse.templateSuksesPost(obj);</b>
+&nbsp;
+<b class="nc">&nbsp;        } catch (Exception e) {</b>
+<b class="nc">&nbsp;            logger.error(&quot;Error registerManual=&quot;, e);</b>
+<b class="nc">&nbsp;            return templateResponse.templateError(&quot;error:&quot; + e);</b>
+&nbsp;        }
+&nbsp;    }
+&nbsp;
+&nbsp;    @Override
+&nbsp;    public Map loginSeeker(LoginModel loginModel) {
+&nbsp;        try {
+<b class="nc">&nbsp;            Map&lt;String, Object&gt; map = new HashMap&lt;&gt;();</b>
+<b class="nc">&nbsp;            User user = userRepository.checkExistingEmail(loginModel.getEmail());</b>
+<b class="nc">&nbsp;            String url = baseUrl + &quot;/oauth/token?username=&quot; + loginModel.getEmail() +</b>
+<b class="nc">&nbsp;                    &quot;&amp;password=&quot; + loginModel.getPassword() +</b>
+&nbsp;                    &quot;&amp;grant_type=password&quot; +
+&nbsp;                    &quot;&amp;client_id=my-client-web&quot; +
+&nbsp;                    &quot;&amp;client_secret=password&quot;;
+<b class="nc">&nbsp;            System.out.println(&quot;url = &quot; + url);</b>
+<b class="nc">&nbsp;            ResponseEntity&lt;Map&gt; response = restTemplateBuilder.build().exchange(url, HttpMethod.POST, null, new</b>
+<b class="nc">&nbsp;                    ParameterizedTypeReference&lt;Map&gt;() {</b>
+&nbsp;                    });
+&nbsp;
+<b class="nc">&nbsp;            if (response.getStatusCode() == HttpStatus.OK) {</b>
+<b class="nc">&nbsp;                List&lt;String&gt; roles = new ArrayList&lt;&gt;();</b>
+&nbsp;
+<b class="nc">&nbsp;                for (Role role : user.getRoles()) {</b>
+<b class="nc">&nbsp;                    roles.add(role.getName());</b>
+<b class="nc">&nbsp;                }</b>
+&nbsp;//                make validation each role
+&nbsp;
+<b class="nc">&nbsp;                if (roles.contains(EnumRole.ROLE_SK.name())) {</b>
+<b class="nc">&nbsp;                    map.put(&quot;profile_id&quot;, user.getProfile().getId());</b>
+<b class="nc">&nbsp;                    map.put(&quot;user_id&quot;, user.getId());</b>
+<b class="nc">&nbsp;                    map.put(&quot;role&quot;, roles);</b>
+<b class="nc">&nbsp;                    map.put(&quot;access_token&quot;, response.getBody().get(&quot;access_token&quot;));</b>
+<b class="nc">&nbsp;                    map.put(&quot;token_type&quot;, response.getBody().get(&quot;token_type&quot;));</b>
+<b class="nc">&nbsp;                    map.put(&quot;refresh_token&quot;, response.getBody().get(&quot;refresh_token&quot;));</b>
+<b class="nc">&nbsp;                    map.put(&quot;expires_in&quot;, response.getBody().get(&quot;expires_in&quot;));</b>
+<b class="nc">&nbsp;                    map.put(&quot;scope&quot;, response.getBody().get(&quot;scope&quot;));</b>
+<b class="nc">&nbsp;                    map.put(&quot;jti&quot;, response.getBody().get(&quot;jti&quot;));</b>
+&nbsp;
+<b class="nc">&nbsp;                    return map;</b>
+&nbsp;                    } else {
+<b class="nc">&nbsp;                        return templateResponse.templateError(&quot;Wrong role!&quot;);</b>
+&nbsp;                    }
+&nbsp;
+&nbsp;            } else {
+<b class="nc">&nbsp;                return templateResponse.templateError(&quot;Error while login&quot;);</b>
+&nbsp;            }
+<b class="nc">&nbsp;        } catch (HttpStatusCodeException e) {</b>
+<b class="nc">&nbsp;            e.printStackTrace();</b>
+<b class="nc">&nbsp;            if (e.getStatusCode() == HttpStatus.BAD_REQUEST) {</b>
+<b class="nc">&nbsp;                return templateResponse.templateError(&quot;Invalid login&quot;);</b>
+&nbsp;            }
+<b class="nc">&nbsp;            return templateResponse.templateError(e);</b>
+<b class="nc">&nbsp;        } catch (Exception e) {</b>
+<b class="nc">&nbsp;            e.printStackTrace();</b>
+&nbsp;
+<b class="nc">&nbsp;            return templateResponse.templateError(e);</b>
+&nbsp;        }
+&nbsp;    }
+&nbsp;
+&nbsp;    @Override
+&nbsp;    public Map loginTennant(LoginModel loginModel) {
+&nbsp;        try {
+<b class="nc">&nbsp;            Map&lt;String, Object&gt; map = new HashMap&lt;&gt;();</b>
+<b class="nc">&nbsp;            User user = userRepository.checkExistingEmail(loginModel.getEmail());</b>
+<b class="nc">&nbsp;            String url = baseUrl + &quot;/oauth/token?username=&quot; + loginModel.getEmail() +</b>
+<b class="nc">&nbsp;                    &quot;&amp;password=&quot; + loginModel.getPassword() +</b>
+&nbsp;                    &quot;&amp;grant_type=password&quot; +
+&nbsp;                    &quot;&amp;client_id=my-client-web&quot; +
+&nbsp;                    &quot;&amp;client_secret=password&quot;;
+<b class="nc">&nbsp;            System.out.println(&quot;url = &quot; + url);</b>
+&nbsp;
+<b class="nc">&nbsp;            ResponseEntity&lt;Map&gt; response1 = restTemplateBuilder.build().exchange(url, HttpMethod.POST, null, new</b>
+<b class="nc">&nbsp;                    ParameterizedTypeReference&lt;Map&gt;() {</b>
+&nbsp;                    });
+&nbsp;
+<b class="nc">&nbsp;            if (response1.getStatusCode() == HttpStatus.OK) {</b>
+<b class="nc">&nbsp;                List&lt;String&gt; roles = new ArrayList&lt;&gt;();</b>
+&nbsp;
+<b class="nc">&nbsp;                for (Role role : user.getRoles()) {</b>
+<b class="nc">&nbsp;                    roles.add(role.getName());</b>
+<b class="nc">&nbsp;                }</b>
+&nbsp;//                make validation each role
+&nbsp;
+<b class="nc">&nbsp;                if (roles.contains(EnumRole.ROLE_TN.name())) {</b>
+<b class="nc">&nbsp;                    map.put(&quot;profile_id&quot;, user.getProfile().getId());</b>
+<b class="nc">&nbsp;                    map.put(&quot;user_id&quot;, user.getId());</b>
+<b class="nc">&nbsp;                    map.put(&quot;role&quot;, roles);</b>
+<b class="nc">&nbsp;                    map.put(&quot;access_token&quot;, response1.getBody().get(&quot;access_token&quot;));</b>
+<b class="nc">&nbsp;                    map.put(&quot;token_type&quot;, response1.getBody().get(&quot;token_type&quot;));</b>
+<b class="nc">&nbsp;                    map.put(&quot;refresh_token&quot;, response1.getBody().get(&quot;refresh_token&quot;));</b>
+<b class="nc">&nbsp;                    map.put(&quot;expires_in&quot;, response1.getBody().get(&quot;expires_in&quot;));</b>
+<b class="nc">&nbsp;                    map.put(&quot;scope&quot;, response1.getBody().get(&quot;scope&quot;));</b>
+<b class="nc">&nbsp;                    map.put(&quot;jti&quot;, response1.getBody().get(&quot;jti&quot;));</b>
+&nbsp;
+<b class="nc">&nbsp;                    return map;</b>
+&nbsp;                } else {
+<b class="nc">&nbsp;                    return templateResponse.templateError(&quot;Wrong role!&quot;);</b>
+&nbsp;                }
+&nbsp;
+&nbsp;            } else {
+<b class="nc">&nbsp;                return templateResponse.templateError(&quot;Error while login&quot;);</b>
+&nbsp;            }
+<b class="nc">&nbsp;        } catch (HttpStatusCodeException e) {</b>
+<b class="nc">&nbsp;            e.printStackTrace();</b>
+<b class="nc">&nbsp;            if (e.getStatusCode() == HttpStatus.BAD_REQUEST) {</b>
+<b class="nc">&nbsp;                return templateResponse.templateError(&quot;Invalid login&quot;);</b>
+&nbsp;            }
+<b class="nc">&nbsp;            return templateResponse.templateError(e);</b>
+<b class="nc">&nbsp;        } catch (Exception e) {</b>
+<b class="nc">&nbsp;            e.printStackTrace();</b>
+&nbsp;
+<b class="nc">&nbsp;            return templateResponse.templateError(e);</b>
+&nbsp;        }
+&nbsp;    }
+&nbsp;
+&nbsp;
+&nbsp;    @Override
+&nbsp;    public Map loginSuperAdmin(LoginModel loginModel) {
+&nbsp;        try {
+<b class="nc">&nbsp;            Map&lt;String, Object&gt; map = new HashMap&lt;&gt;();</b>
+<b class="nc">&nbsp;            User user = userRepository.checkExistingEmail(loginModel.getEmail());</b>
+<b class="nc">&nbsp;            String url = baseUrl + &quot;/oauth/token?username=&quot; + loginModel.getEmail() +</b>
+<b class="nc">&nbsp;                    &quot;&amp;password=&quot; + loginModel.getPassword() +</b>
+&nbsp;                    &quot;&amp;grant_type=password&quot; +
+&nbsp;                    &quot;&amp;client_id=my-client-web&quot; +
+&nbsp;                    &quot;&amp;client_secret=password&quot;;
+<b class="nc">&nbsp;            ResponseEntity&lt;Map&gt; response = restTemplateBuilder.build().exchange(url, HttpMethod.POST, null, new</b>
+<b class="nc">&nbsp;                    ParameterizedTypeReference&lt;Map&gt;() {</b>
+&nbsp;                    });
+&nbsp;
+<b class="nc">&nbsp;            if (response.getStatusCode() == HttpStatus.OK) {</b>
+<b class="nc">&nbsp;                List&lt;String&gt; roles = new ArrayList&lt;&gt;();</b>
+&nbsp;
+<b class="nc">&nbsp;                for (Role role : user.getRoles()) {</b>
+<b class="nc">&nbsp;                    roles.add(role.getName());</b>
+<b class="nc">&nbsp;                }</b>
+&nbsp;//                make validation each role
+&nbsp;
+<b class="nc">&nbsp;                if (roles.contains(EnumRole.ROLE_SUPERUSER.name())) {</b>
+<b class="nc">&nbsp;                    map.put(&quot;profile_id&quot;, user.getProfile().getId());</b>
+<b class="nc">&nbsp;                    map.put(&quot;user_id&quot;, user.getId());</b>
+<b class="nc">&nbsp;                    map.put(&quot;role&quot;, roles);</b>
+<b class="nc">&nbsp;                    map.put(&quot;access_token&quot;, response.getBody().get(&quot;access_token&quot;));</b>
+<b class="nc">&nbsp;                    map.put(&quot;token_type&quot;, response.getBody().get(&quot;token_type&quot;));</b>
+<b class="nc">&nbsp;                    map.put(&quot;refresh_token&quot;, response.getBody().get(&quot;refresh_token&quot;));</b>
+<b class="nc">&nbsp;                    map.put(&quot;expires_in&quot;, response.getBody().get(&quot;expires_in&quot;));</b>
+<b class="nc">&nbsp;                    map.put(&quot;scope&quot;, response.getBody().get(&quot;scope&quot;));</b>
+<b class="nc">&nbsp;                    map.put(&quot;jti&quot;, response.getBody().get(&quot;jti&quot;));</b>
+&nbsp;
+<b class="nc">&nbsp;                    return map;</b>
+&nbsp;                } else {
+<b class="nc">&nbsp;                    return templateResponse.templateError(&quot;Wrong role!&quot;);</b>
+&nbsp;                }
+&nbsp;
+&nbsp;            } else {
+<b class="nc">&nbsp;                return templateResponse.templateError(&quot;Error while login&quot;);</b>
+&nbsp;            }
+<b class="nc">&nbsp;        } catch (HttpStatusCodeException e) {</b>
+<b class="nc">&nbsp;            e.printStackTrace();</b>
+<b class="nc">&nbsp;            if (e.getStatusCode() == HttpStatus.BAD_REQUEST) {</b>
+<b class="nc">&nbsp;                return templateResponse.templateError(&quot;Invalid login&quot;);</b>
+&nbsp;            }
+<b class="nc">&nbsp;            return templateResponse.templateError(e);</b>
+<b class="nc">&nbsp;        } catch (Exception e) {</b>
+<b class="nc">&nbsp;            e.printStackTrace();</b>
+&nbsp;
+<b class="nc">&nbsp;            return templateResponse.templateError(e);</b>
+&nbsp;        }    }
+&nbsp;
+&nbsp;    @Override
+&nbsp;    public void logout(HttpServletRequest request, HttpServletResponse response) {
+<b class="nc">&nbsp;        SecurityContextLogoutHandler logoutHandler = new SecurityContextLogoutHandler();</b>
+<b class="nc">&nbsp;        logoutHandler.logout(request, response, SecurityContextHolder.getContext().getAuthentication());</b>
+&nbsp;
+&nbsp;
+<b class="nc">&nbsp;        OAuth2Authentication auth = (OAuth2Authentication) SecurityContextHolder.getContext().getAuthentication();</b>
+<b class="nc">&nbsp;        OAuth2AuthenticationDetails details = (OAuth2AuthenticationDetails) auth.getDetails();</b>
+&nbsp;        // Revoke the access token
+<b class="nc">&nbsp;        String accessToken = details.getTokenValue(); // Get the access token from the request or security context</b>
+<b class="nc">&nbsp;        String url = baseUrl + &quot;/oauth/revoke-token?token=&quot; + accessToken;</b>
+&nbsp;
+<b class="nc">&nbsp;        ResponseEntity&lt;Void&gt; responses = restTemplateBuilder.build().exchange(url, HttpMethod.POST, null, Void.class);</b>
+&nbsp;    }
+&nbsp;}
+</code>
+</pre>
+</div>
+
+<script type="text/javascript">
+(function() {
+    var msie = false, msie9 = false;
+    /*@cc_on
+      msie = true;
+      @if (@_jscript_version >= 9)
+        msie9 = true;
+      @end
+    @*/
+
+    if (!msie || msie && msie9) {
+      hljs.highlightAll()
+      hljs.initLineNumbersOnLoad();
+    }
+})();
+</script>
+
+<div class="footer">
+    
+    <div style="float:right;">generated on 2023-02-12 16:23</div>
+</div>
+</body>
+</html>

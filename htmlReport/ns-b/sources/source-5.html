@@ -1,0 +1,86 @@
+
+
+
+<!DOCTYPE html>
+<html id="htmlId">
+<head>
+  <title>Coverage Report > RolePathRepository</title>
+  <style type="text/css">
+    @import "../../css/coverage.css";
+    @import "../../css/idea.min.css";
+  </style>
+  <script type="text/javascript" src="../../js/highlight.min.js"></script>
+  <script type="text/javascript" src="../../js/highlightjs-line-numbers.min.js"></script>
+</head>
+
+<body>
+<div class="content">
+<div class="breadCrumbs">
+Current scope:     <a href="../../index.html">all classes</a>
+    <span class="separator">|</span>
+    <a href="../index.html">com.synrgy.security.repository</a>
+</div>
+
+<h1>Coverage Summary for Class: RolePathRepository (com.synrgy.security.repository)</h1>
+
+<table class="coverageStats">
+<tr>
+  <th class="name">Class</th>
+</tr>
+<tr>
+  <td class="name">RolePathRepository</td>
+</tr>
+
+</table>
+
+<br/>
+<br/>
+
+
+<pre>
+<code class="sourceCode" id="sourceCode">&nbsp;package com.synrgy.security.repository;
+&nbsp;
+&nbsp;import com.synrgy.security.entity.RolePath;
+&nbsp;import org.springframework.data.jpa.repository.Query;
+&nbsp;import org.springframework.data.repository.PagingAndSortingRepository;
+&nbsp;import org.springframework.security.core.userdetails.UserDetails;
+&nbsp;import org.springframework.stereotype.Repository;
+&nbsp;
+&nbsp;import java.util.List;
+&nbsp;@Repository
+&nbsp;public interface RolePathRepository extends PagingAndSortingRepository&lt;RolePath, Long&gt; {
+&nbsp;    RolePath findOneByName(String rolePathName);
+&nbsp;
+&nbsp;    @Query(value = &quot;SELECT p.* FROM oauth_role_path p &quot; +
+&nbsp;            &quot;JOIN oauth_role r ON r.id = p.role_id &quot; +
+&nbsp;            &quot;JOIN oauth_user_role ur ON ur.role_id = r.id &quot; +
+&nbsp;            &quot;WHERE ur.user_id = ?1&quot;, nativeQuery = true)
+&nbsp;    &lt;T extends UserDetails&gt; List&lt;RolePath&gt; findByUser(T user);
+&nbsp;}
+</code>
+</pre>
+</div>
+
+<script type="text/javascript">
+(function() {
+    var msie = false, msie9 = false;
+    /*@cc_on
+      msie = true;
+      @if (@_jscript_version >= 9)
+        msie9 = true;
+      @end
+    @*/
+
+    if (!msie || msie && msie9) {
+      hljs.highlightAll()
+      hljs.initLineNumbersOnLoad();
+    }
+})();
+</script>
+
+<div class="footer">
+    
+    <div style="float:right;">generated on 2023-02-12 16:23</div>
+</div>
+</body>
+</html>

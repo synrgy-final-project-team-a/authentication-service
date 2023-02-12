@@ -1,0 +1,263 @@
+
+
+
+<!DOCTYPE html>
+<html id="htmlId">
+<head>
+  <title>Coverage Report > DatabaseSeeder</title>
+  <style type="text/css">
+    @import "../../css/coverage.css";
+    @import "../../css/idea.min.css";
+  </style>
+  <script type="text/javascript" src="../../js/highlight.min.js"></script>
+  <script type="text/javascript" src="../../js/highlightjs-line-numbers.min.js"></script>
+</head>
+
+<body>
+<div class="content">
+<div class="breadCrumbs">
+Current scope:     <a href="../../index.html">all classes</a>
+    <span class="separator">|</span>
+    <a href="../index.html">com.synrgy.security.service.impl</a>
+</div>
+
+<h1>Coverage Summary for Class: DatabaseSeeder (com.synrgy.security.service.impl)</h1>
+
+<table class="coverageStats">
+<tr>
+  <th class="name">Class</th>
+<th class="coverageStat 
+">
+  Class, %
+</th>
+<th class="coverageStat 
+">
+  Method, %
+</th>
+<th class="coverageStat 
+">
+  Line, %
+</th>
+</tr>
+<tr>
+  <td class="name">DatabaseSeeder</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/1)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/5)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/65)
+  </span>
+</td>
+</tr>
+
+</table>
+
+<br/>
+<br/>
+
+
+<pre>
+<code class="sourceCode" id="sourceCode">&nbsp;package com.synrgy.security.service.impl;
+&nbsp;
+&nbsp;import com.synrgy.security.entity.*;
+&nbsp;import com.synrgy.security.repository.*;
+&nbsp;import org.slf4j.Logger;
+&nbsp;import org.slf4j.LoggerFactory;
+&nbsp;import org.springframework.beans.factory.annotation.Autowired;
+&nbsp;import org.springframework.boot.ApplicationArguments;
+&nbsp;import org.springframework.boot.ApplicationRunner;
+&nbsp;import org.springframework.security.crypto.password.PasswordEncoder;
+&nbsp;import org.springframework.stereotype.Component;
+&nbsp;import org.springframework.stereotype.Service;
+&nbsp;
+&nbsp;import javax.transaction.Transactional;
+&nbsp;import java.util.ArrayList;
+&nbsp;import java.util.Arrays;
+&nbsp;import java.util.List;
+&nbsp;
+&nbsp;@Component
+&nbsp;@Service
+<b class="nc">&nbsp;public class DatabaseSeeder implements ApplicationRunner {</b>
+&nbsp;
+&nbsp;    private static final String TAG = &quot;DatabaseSeeder {}&quot;;
+&nbsp;
+<b class="nc">&nbsp;    private Logger logger = LoggerFactory.getLogger(DatabaseSeeder.class);</b>
+&nbsp;
+&nbsp;    @Autowired
+&nbsp;    private PasswordEncoder encoder;
+&nbsp;
+&nbsp;    @Autowired
+&nbsp;    private RoleRepository roleRepository;
+&nbsp;
+&nbsp;    @Autowired
+&nbsp;    private ClientRepository clientRepository;
+&nbsp;
+&nbsp;    @Autowired
+&nbsp;    private UserRepository userRepository;
+&nbsp;
+&nbsp;    @Autowired
+&nbsp;    private ProfileRepository profileRepository;
+&nbsp;
+&nbsp;    @Autowired
+&nbsp;    private RolePathRepository rolePathRepository;
+&nbsp;
+<b class="nc">&nbsp;    private String defaultPassword = &quot;password&quot;;</b>
+&nbsp;
+<b class="nc">&nbsp;    private String[] users = new String[]{</b>
+&nbsp;            &quot;superadmin@mail.com:ROLE_SK ROLE_TN ROLE_SUPERUSER&quot;,
+&nbsp;            &quot;tennant@mail.com:ROLE_TN&quot;,
+&nbsp;            &quot;seeker@mail.com:ROLE_SK&quot;
+&nbsp;    };
+&nbsp;
+<b class="nc">&nbsp;    private String[] clients = new String[]{</b>
+&nbsp;            &quot;my-client-apps:ROLE_READ ROLE_WRITE&quot;, // mobile
+&nbsp;            &quot;my-client-web:ROLE_READ ROLE_WRITE&quot; // web
+&nbsp;    };
+&nbsp;
+<b class="nc">&nbsp;    private String[] roles = new String[]{</b>
+&nbsp;            &quot;ROLE_SUPERUSER:user_role:^/.*:GET|PUT|POST|PATCH|DELETE|OPTIONS&quot;,
+&nbsp;            &quot;ROLE_SK:user_role:^/.*:GET|PUT|POST|PATCH|DELETE|OPTIONS&quot;,
+&nbsp;            &quot;ROLE_TN:user_role:^/.*:GET|PUT|POST|PATCH|DELETE|OPTIONS&quot;,
+&nbsp;            &quot;ROLE_READ:oauth_role:^/.*:GET|PUT|POST|PATCH|DELETE|OPTIONS&quot;,
+&nbsp;            &quot;ROLE_WRITE:oauth_role:^/.*:GET|PUT|POST|PATCH|DELETE|OPTIONS&quot;
+&nbsp;    };
+&nbsp;
+&nbsp;
+&nbsp;    @Override
+&nbsp;    @Transactional
+&nbsp;    public void run(ApplicationArguments applicationArguments) {
+<b class="nc">&nbsp;        String password = encoder.encode(defaultPassword);</b>
+&nbsp;
+<b class="nc">&nbsp;        this.insertRoles();</b>
+<b class="nc">&nbsp;        this.insertClients(password);</b>
+<b class="nc">&nbsp;        this.insertUser(password);</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    @Transactional
+&nbsp;    public void insertRoles() {
+<b class="nc">&nbsp;        for (String role : roles) {</b>
+<b class="nc">&nbsp;            String[] str = role.split(&quot;:&quot;);</b>
+<b class="nc">&nbsp;            String name = str[0];</b>
+<b class="nc">&nbsp;            String type = str[1];</b>
+<b class="nc">&nbsp;            String pattern = str[2];</b>
+<b class="nc">&nbsp;            String[] methods = str[3].split(&quot;\\|&quot;);</b>
+<b class="nc">&nbsp;            Role oldRole = roleRepository.findOneByName(name);</b>
+<b class="nc">&nbsp;            if (null == oldRole) {</b>
+<b class="nc">&nbsp;                oldRole = new Role();</b>
+<b class="nc">&nbsp;                oldRole.setName(name);</b>
+<b class="nc">&nbsp;                oldRole.setType(type);</b>
+<b class="nc">&nbsp;                oldRole.setRolePaths(new ArrayList&lt;&gt;());</b>
+<b class="nc">&nbsp;                for (String m : methods) {</b>
+<b class="nc">&nbsp;                    String rolePathName = name.toLowerCase() + &quot;_&quot; + m.toLowerCase();</b>
+<b class="nc">&nbsp;                    RolePath rolePath = rolePathRepository.findOneByName(rolePathName);</b>
+<b class="nc">&nbsp;                    if (null == rolePath) {</b>
+<b class="nc">&nbsp;                        rolePath = new RolePath();</b>
+<b class="nc">&nbsp;                        rolePath.setName(rolePathName);</b>
+<b class="nc">&nbsp;                        rolePath.setMethod(m.toUpperCase());</b>
+<b class="nc">&nbsp;                        rolePath.setPattern(pattern);</b>
+<b class="nc">&nbsp;                        rolePath.setRole(oldRole);</b>
+<b class="nc">&nbsp;                        rolePathRepository.save(rolePath);</b>
+<b class="nc">&nbsp;                        oldRole.getRolePaths().add(rolePath);</b>
+&nbsp;                    }
+&nbsp;                }
+&nbsp;            }
+&nbsp;
+<b class="nc">&nbsp;            roleRepository.save(oldRole);</b>
+&nbsp;        }
+&nbsp;    }
+&nbsp;
+&nbsp;    @Transactional
+&nbsp;    public void insertClients(String password) {
+<b class="nc">&nbsp;        for (String c : clients) {</b>
+<b class="nc">&nbsp;            String[] s = c.split(&quot;:&quot;);</b>
+<b class="nc">&nbsp;            String clientName = s[0];</b>
+<b class="nc">&nbsp;            String[] clientRoles = s[1].split(&quot;\\s&quot;);</b>
+<b class="nc">&nbsp;            Client oldClient = clientRepository.findOneByClientId(clientName);</b>
+<b class="nc">&nbsp;            if (null == oldClient) {</b>
+<b class="nc">&nbsp;                oldClient = new Client();</b>
+<b class="nc">&nbsp;                oldClient.setClientId(clientName);</b>
+<b class="nc">&nbsp;                oldClient.setAccessTokenValiditySeconds(28800);//1 jam 3600 :token valid : seharian kerja : normal 1 jam</b>
+<b class="nc">&nbsp;                oldClient.setRefreshTokenValiditySeconds(7257600);// refresh</b>
+<b class="nc">&nbsp;                oldClient.setGrantTypes(&quot;password refresh_token authorization_code&quot;);</b>
+<b class="nc">&nbsp;                oldClient.setClientSecret(password);</b>
+<b class="nc">&nbsp;                oldClient.setApproved(true);</b>
+<b class="nc">&nbsp;                oldClient.setRedirectUris(&quot;&quot;);</b>
+<b class="nc">&nbsp;                oldClient.setScopes(&quot;read write&quot;);</b>
+<b class="nc">&nbsp;                List&lt;Role&gt; rls = roleRepository.findByNameIn(clientRoles);</b>
+&nbsp;
+<b class="nc">&nbsp;                if (rls.size() &gt; 0) {</b>
+<b class="nc">&nbsp;                    oldClient.getAuthorities().addAll(rls);</b>
+&nbsp;                }
+&nbsp;            }
+<b class="nc">&nbsp;            clientRepository.save(oldClient);</b>
+&nbsp;        }
+&nbsp;    }
+&nbsp;
+&nbsp;    @Transactional
+&nbsp;    public void insertUser(String password) {
+<b class="nc">&nbsp;        for (String userNames : users) {</b>
+<b class="nc">&nbsp;            String[] str = userNames.split(&quot;:&quot;);</b>
+<b class="nc">&nbsp;            String email = str[0];</b>
+<b class="nc">&nbsp;            String[] roleNames = str[1].split(&quot;\\s&quot;);</b>
+<b class="nc">&nbsp;            User oldUser = userRepository.findOneByUsername(email);</b>
+<b class="nc">&nbsp;            if (null == oldUser) {</b>
+<b class="nc">&nbsp;                oldUser = new User();</b>
+<b class="nc">&nbsp;                oldUser.setUsername(email);</b>
+<b class="nc">&nbsp;                oldUser.setPassword(password);</b>
+<b class="nc">&nbsp;                List&lt;Role&gt; r = roleRepository.findByNameIn(roleNames);</b>
+<b class="nc">&nbsp;                oldUser.setRoles(r);</b>
+&nbsp;            }
+&nbsp;
+<b class="nc">&nbsp;            userRepository.save(oldUser);</b>
+&nbsp;        }
+&nbsp;    }
+&nbsp;
+&nbsp;
+&nbsp;
+&nbsp;
+&nbsp;}
+&nbsp;
+</code>
+</pre>
+</div>
+
+<script type="text/javascript">
+(function() {
+    var msie = false, msie9 = false;
+    /*@cc_on
+      msie = true;
+      @if (@_jscript_version >= 9)
+        msie9 = true;
+      @end
+    @*/
+
+    if (!msie || msie && msie9) {
+      hljs.highlightAll()
+      hljs.initLineNumbersOnLoad();
+    }
+})();
+</script>
+
+<div class="footer">
+    
+    <div style="float:right;">generated on 2023-02-12 16:23</div>
+</div>
+</body>
+</html>

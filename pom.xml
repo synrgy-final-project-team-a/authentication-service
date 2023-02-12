@@ -45,6 +45,13 @@
             <version>1.1.1.RELEASE</version>
         </dependency>
 
+        <!--        		For h2 Database-->
+        <dependency>
+            <groupId>com.h2database</groupId>
+            <artifactId>h2</artifactId>
+            <scope>runtime</scope>
+        </dependency>
+
         <!--		Dependencies for thymeleaf-->
         <dependency>
             <groupId>org.springframework.boot</groupId>

@@ -5,21 +5,35 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="a68da48f-733e-4c74-a794-2085c7b86a72" name="Changes" comment="">
+      <change afterPath="$PROJECT_DIR$/src/main/resources/application-test.properties" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/test/java/com/synrgy/security/conguration/ConfigTest.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/test/java/com/synrgy/security/conguration/CorsOriginConfigurationTest.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/test/java/com/synrgy/security/entity/ClientTest.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/test/java/com/synrgy/security/entity/ProfileTest.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/test/java/com/synrgy/security/entity/RolePathTest.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/test/java/com/synrgy/security/entity/RoleTest.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/test/java/com/synrgy/security/entity/UserTest.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/test/java/com/synrgy/security/entity/enumeration/EnumRoleTest.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/backend-java.iml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/backend-java.iml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/synrgy/security/configuration/Oauth2ResourceServerConfiguration.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/synrgy/security/configuration/Oauth2ResourceServerConfiguration.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/resources/application-dev.properties" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/application-dev.properties" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/resources/application-prod.properties" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/application-prod.properties" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/resources/application.properties" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/application.properties" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/pom.xml" beforeDir="false" afterPath="$PROJECT_DIR$/pom.xml" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
     <option name="LAST_RESOLUTION" value="IGNORE" />
   </component>
+  <component name="CoverageOptionsProvider">
+    <option name="myAddOrReplace" value="0" />
+  </component>
+  <component name="ExportToHTMLSettings">
+    <option name="OUTPUT_DIRECTORY" value="C:\Users\junke\Documents\GitHub\backend-java\htmlReport" />
+  </component>
   <component name="FileTemplateManagerImpl">
     <option name="RECENT_TEMPLATES">
       <list>
         <option value="Interface" />
+        <option value="Class" />
       </list>
     </option>
   </component>
@@ -65,12 +79,87 @@
     &quot;node.js.detected.package.tslint&quot;: &quot;true&quot;,
     &quot;node.js.selected.package.eslint&quot;: &quot;(autodetect)&quot;,
     &quot;node.js.selected.package.tslint&quot;: &quot;(autodetect)&quot;,
-    &quot;settings.editor.selected.configurable&quot;: &quot;preferences.lookFeel&quot;,
+    &quot;settings.editor.selected.configurable&quot;: &quot;preferences.pluginManager&quot;,
     &quot;spring.configuration.checksum&quot;: &quot;d4d7e3e7c18c025601ce2be4f1fd44d2&quot;,
     &quot;vue.rearranger.settings.migration&quot;: &quot;true&quot;
   }
 }</component>
-  <component name="RunManager">
+  <component name="RunManager" selected="Spring Boot.SecurityApplication">
+    <configuration name="EmailSenderTest" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
+      <module name="backend-java" />
+      <extension name="coverage">
+        <pattern>
+          <option name="PATTERN" value="com.synrgy.security.service.email.*" />
+          <option name="ENABLED" value="true" />
+        </pattern>
+      </extension>
+      <option name="PACKAGE_NAME" value="com.synrgy.security.service.email" />
+      <option name="MAIN_CLASS_NAME" value="com.synrgy.security.service.email.EmailSenderTest" />
+      <option name="TEST_OBJECT" value="class" />
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+    <configuration name="ProfileTest" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
+      <module name="backend-java" />
+      <extension name="coverage">
+        <pattern>
+          <option name="PATTERN" value="com.synrgy.security.entity.*" />
+          <option name="ENABLED" value="true" />
+        </pattern>
+      </extension>
+      <option name="PACKAGE_NAME" value="com.synrgy.security.entity" />
+      <option name="MAIN_CLASS_NAME" value="com.synrgy.security.entity.ProfileTest" />
+      <option name="TEST_OBJECT" value="class" />
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+    <configuration name="RolePathTest" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
+      <module name="backend-java" />
+      <extension name="coverage">
+        <pattern>
+          <option name="PATTERN" value="com.synrgy.security.entity.*" />
+          <option name="ENABLED" value="true" />
+        </pattern>
+      </extension>
+      <option name="PACKAGE_NAME" value="com.synrgy.security.entity" />
+      <option name="MAIN_CLASS_NAME" value="com.synrgy.security.entity.RolePathTest" />
+      <option name="TEST_OBJECT" value="class" />
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+    <configuration name="RoleTest" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
+      <module name="backend-java" />
+      <extension name="coverage">
+        <pattern>
+          <option name="PATTERN" value="com.synrgy.security.entity.*" />
+          <option name="ENABLED" value="true" />
+        </pattern>
+      </extension>
+      <option name="PACKAGE_NAME" value="com.synrgy.security.entity" />
+      <option name="MAIN_CLASS_NAME" value="com.synrgy.security.entity.RoleTest" />
+      <option name="TEST_OBJECT" value="class" />
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+    <configuration name="UserTest" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
+      <module name="backend-java" />
+      <extension name="coverage">
+        <pattern>
+          <option name="PATTERN" value="com.synrgy.security.entity.*" />
+          <option name="ENABLED" value="true" />
+        </pattern>
+      </extension>
+      <option name="PACKAGE_NAME" value="com.synrgy.security.entity" />
+      <option name="MAIN_CLASS_NAME" value="com.synrgy.security.entity.UserTest" />
+      <option name="TEST_OBJECT" value="class" />
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
     <configuration name="SecurityApplication" type="SpringBootApplicationConfigurationType" factoryName="Spring Boot" nameIsGenerated="true">
       <module name="backend-java" />
       <option name="SPRING_BOOT_MAIN_CLASS" value="com.synrgy.security.SecurityApplication" />
@@ -78,6 +167,15 @@
         <option name="Make" enabled="true" />
       </method>
     </configuration>
+    <recent_temporary>
+      <list>
+        <item itemvalue="JUnit.EmailSenderTest" />
+        <item itemvalue="JUnit.UserTest" />
+        <item itemvalue="JUnit.RolePathTest" />
+        <item itemvalue="JUnit.RoleTest" />
+        <item itemvalue="JUnit.ProfileTest" />
+      </list>
+    </recent_temporary>
   </component>
   <component name="SpellCheckerSettings" RuntimeDictionaries="0" Folders="0" CustomDictionaries="0" DefaultDictionary="application-level" UseSingleDictionary="true" transferred="true" />
   <component name="TaskManager">
@@ -109,7 +207,9 @@
       <workItem from="1675741057160" duration="1508000" />
       <workItem from="1675770628741" duration="940000" />
       <workItem from="1675874930642" duration="1345000" />
-      <workItem from="1676030896174" duration="597000" />
+      <workItem from="1676030896174" duration="2487000" />
+      <workItem from="1676193159358" duration="192000" />
+      <workItem from="1676193498873" duration="8570000" />
     </task>
     <servers />
   </component>
@@ -126,5 +226,41 @@
         </entry>
       </map>
     </option>
+  </component>
+  <component name="com.intellij.coverage.CoverageDataManagerImpl">
+    <SUITE FILE_PATH="coverage/backend_java$ConfigTest.ic" NAME="ConfigTest Coverage Results" MODIFIED="1676193762162" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="idea" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" />
+    <SUITE FILE_PATH="coverage/backend_java$WebSecurityConfigurationTest.ic" NAME="WebSecurityConfigurationTest Coverage Results" MODIFIED="1676195205146" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="idea" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false">
+      <FILTER>com.synrgy.security.conguration.*</FILTER>
+    </SUITE>
+    <SUITE FILE_PATH="coverage/backend_java$RolePathTest.ic" NAME="RolePathTest Coverage Results" MODIFIED="1676224108657" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="idea" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false">
+      <FILTER>com.synrgy.security.entity.*</FILTER>
+    </SUITE>
+    <SUITE FILE_PATH="coverage/backend_java$ProfileTest.ic" NAME="ProfileTest Coverage Results" MODIFIED="1676223792385" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="idea" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false">
+      <FILTER>com.synrgy.security.entity.*</FILTER>
+    </SUITE>
+    <SUITE FILE_PATH="coverage/backend_java$EmailSenderTest.ic" NAME="EmailSenderTest Coverage Results" MODIFIED="1676224911703" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="idea" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false">
+      <FILTER>com.synrgy.security.service.email.*</FILTER>
+    </SUITE>
+    <SUITE FILE_PATH="coverage/backend_java$CorsOriginConfigurationTest_doFilter_ShouldAddCorsHeadersToResponse.ic" NAME="CorsOriginConfigurationTest.doFilter_ShouldAddCorsHeadersToResponse Coverage Results" MODIFIED="1676194260028" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="idea" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false">
+      <FILTER>com.synrgy.security.conguration.*</FILTER>
+    </SUITE>
+    <SUITE FILE_PATH="coverage/backend_java$EnumRoleTest.ic" NAME="EnumRoleTest Coverage Results" MODIFIED="1676222399585" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="idea" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false">
+      <FILTER>com.synrgy.security.entity.enumeration.*</FILTER>
+    </SUITE>
+    <SUITE FILE_PATH="coverage/backend_java$CorsOriginConfigurationTest.ic" NAME="CorsOriginConfigurationTest Coverage Results" MODIFIED="1676194036742" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="idea" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false">
+      <FILTER>com.synrgy.security.configuration.*</FILTER>
+    </SUITE>
+    <SUITE FILE_PATH="coverage/backend_java$CorsOriginConfigurationTest__1_.ic" NAME="CorsOriginConfigurationTest (1) Coverage Results" MODIFIED="1676194215072" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="idea" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false">
+      <FILTER>com.synrgy.security.conguration.*</FILTER>
+    </SUITE>
+    <SUITE FILE_PATH="coverage/backend_java$ClientTest.ic" NAME="ClientTest Coverage Results" MODIFIED="1676222751967" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="idea" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false">
+      <FILTER>com.synrgy.security.entity.*</FILTER>
+    </SUITE>
+    <SUITE FILE_PATH="coverage/backend_java$UserTest.ic" NAME="UserTest Coverage Results" MODIFIED="1676224419960" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="idea" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false">
+      <FILTER>com.synrgy.security.entity.*</FILTER>
+    </SUITE>
+    <SUITE FILE_PATH="coverage/backend_java$RoleTest.ic" NAME="RoleTest Coverage Results" MODIFIED="1676223938780" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="idea" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false">
+      <FILTER>com.synrgy.security.entity.*</FILTER>
+    </SUITE>
   </component>
 </project>

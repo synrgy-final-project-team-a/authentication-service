@@ -1,0 +1,176 @@
+
+
+
+<!DOCTYPE html>
+<html id="htmlId">
+<head>
+  <title>Coverage Report > Oauth2ResourceServerConfiguration</title>
+  <style type="text/css">
+    @import "../../css/coverage.css";
+    @import "../../css/idea.min.css";
+  </style>
+  <script type="text/javascript" src="../../js/highlight.min.js"></script>
+  <script type="text/javascript" src="../../js/highlightjs-line-numbers.min.js"></script>
+</head>
+
+<body>
+<div class="content">
+<div class="breadCrumbs">
+Current scope:     <a href="../../index.html">all classes</a>
+    <span class="separator">|</span>
+    <a href="../index.html">com.synrgy.security.configuration</a>
+</div>
+
+<h1>Coverage Summary for Class: Oauth2ResourceServerConfiguration (com.synrgy.security.configuration)</h1>
+
+<table class="coverageStats">
+<tr>
+  <th class="name">Class</th>
+<th class="coverageStat 
+">
+  Class, %
+</th>
+<th class="coverageStat 
+">
+  Method, %
+</th>
+<th class="coverageStat 
+">
+  Line, %
+</th>
+</tr>
+<tr>
+  <td class="name">Oauth2ResourceServerConfiguration</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/1)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/3)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/27)
+  </span>
+</td>
+</tr>
+
+</table>
+
+<br/>
+<br/>
+
+
+<pre>
+<code class="sourceCode" id="sourceCode">&nbsp;package com.synrgy.security.configuration;
+&nbsp;
+&nbsp;import com.synrgy.security.entity.enumeration.EnumRole;
+&nbsp;import org.springframework.context.annotation.Configuration;
+&nbsp;import org.springframework.http.HttpStatus;
+&nbsp;import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
+&nbsp;import org.springframework.security.config.annotation.web.builders.HttpSecurity;
+&nbsp;import org.springframework.security.config.http.SessionCreationPolicy;
+&nbsp;import org.springframework.security.core.Authentication;
+&nbsp;import org.springframework.security.core.context.SecurityContextHolder;
+&nbsp;import org.springframework.security.oauth2.config.annotation.web.configuration.EnableResourceServer;
+&nbsp;import org.springframework.security.oauth2.config.annotation.web.configuration.ResourceServerConfigurerAdapter;
+&nbsp;import org.springframework.security.oauth2.config.annotation.web.configurers.ResourceServerSecurityConfigurer;
+&nbsp;import org.springframework.security.web.authentication.AuthenticationSuccessHandler;
+&nbsp;import org.springframework.security.web.authentication.logout.HttpStatusReturningLogoutSuccessHandler;
+&nbsp;import org.springframework.security.web.csrf.CookieCsrfTokenRepository;
+&nbsp;
+&nbsp;import javax.servlet.ServletException;
+&nbsp;import javax.servlet.http.HttpServletRequest;
+&nbsp;import javax.servlet.http.HttpServletResponse;
+&nbsp;import java.io.IOException;
+&nbsp;
+&nbsp;@Configuration
+&nbsp;@EnableResourceServer
+&nbsp;@EnableGlobalMethodSecurity(securedEnabled = true) //secure definition
+<b class="nc">&nbsp;public class Oauth2ResourceServerConfiguration extends ResourceServerConfigurerAdapter {</b>
+&nbsp;
+&nbsp;    /**
+&nbsp;     * Manage resource server.
+&nbsp;     */
+&nbsp;    @Override
+&nbsp;    public void configure(ResourceServerSecurityConfigurer resources) throws Exception {
+<b class="nc">&nbsp;        super.configure(resources);</b>
+&nbsp;    }
+&nbsp;//    private static final String SECURED_PATTERN = &quot;/api/**&quot;;
+&nbsp;
+&nbsp;    /**
+&nbsp;     * Manage endpoints.
+&nbsp;     */
+&nbsp;    @Override
+&nbsp;    public void configure(HttpSecurity http) throws Exception {
+<b class="nc">&nbsp;        http.cors()</b>
+<b class="nc">&nbsp;                .and()</b>
+<b class="nc">&nbsp;                .csrf().csrfTokenRepository(CookieCsrfTokenRepository.withHttpOnlyFalse())</b>
+<b class="nc">&nbsp;                .disable()</b>
+<b class="nc">&nbsp;                .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)</b>
+<b class="nc">&nbsp;                .and()</b>
+<b class="nc">&nbsp;                .antMatcher(&quot;/**&quot;)</b>
+<b class="nc">&nbsp;                .authorizeRequests()</b>
+<b class="nc">&nbsp;                .antMatchers(&quot;/&quot;, &quot;&quot; +</b>
+&nbsp;                                &quot;/showFile/**&quot;, &quot;/v1/showFile/**&quot;, &quot;/v1/upload&quot;, &quot;/register-opt/**&quot;, &quot;/register/**&quot;, &quot;/swagger-ui/**&quot;, &quot;/api/swagger-ui.html&quot;, &quot;/api/oauth/token**&quot;, &quot;/api/oauth/token&quot;, &quot;/v3/api-docs/**&quot;,
+&nbsp;                        &quot;/forget-password/**&quot;, &quot;/oauth2/**&quot;, &quot;/oauth/token&quot;, &quot;/oauth/token**&quot;, &quot;/login-user&quot;, &quot;/logout**&quot;, &quot;/error**&quot;, &quot;/auth/**&quot;, &quot;/error&quot;, &quot;/api/webjars/*&quot;, &quot;/api/user&quot;, &quot;/api/login-oauth2-google&quot;, &quot;/api/index.html&quot;)
+<b class="nc">&nbsp;                .permitAll()</b>
+<b class="nc">&nbsp;                .and()</b>
+<b class="nc">&nbsp;                .oauth2Login()</b>
+<b class="nc">&nbsp;                .and()</b>
+&nbsp;//                implement logout
+<b class="nc">&nbsp;                .logout()</b>
+<b class="nc">&nbsp;                .logoutUrl(&quot;/logout&quot;)</b>
+<b class="nc">&nbsp;                .logoutSuccessHandler(new HttpStatusReturningLogoutSuccessHandler(HttpStatus.OK))</b>
+<b class="nc">&nbsp;                .invalidateHttpSession(true)</b>
+<b class="nc">&nbsp;                .deleteCookies(&quot;JSESSIONID&quot;)</b>
+<b class="nc">&nbsp;                .clearAuthentication(true)</b>
+<b class="nc">&nbsp;                .and()</b>
+<b class="nc">&nbsp;                .authorizeRequests()</b>
+<b class="nc">&nbsp;                .antMatchers(&quot;/api/seeker&quot;).hasAnyAuthority(com.synrgy.security.entity.enumeration.EnumRole.ROLE_SK.toString())</b>
+<b class="nc">&nbsp;                .antMatchers(&quot;/api/tennant&quot;).hasAnyAuthority(com.synrgy.security.entity.enumeration.EnumRole.ROLE_TN.toString())</b>
+<b class="nc">&nbsp;                .antMatchers(&quot;/api/superadmin&quot;).hasAnyAuthority(com.synrgy.security.entity.enumeration.EnumRole.ROLE_SUPERUSER.toString())</b>
+<b class="nc">&nbsp;                .anyRequest().permitAll();</b>
+&nbsp;    }
+&nbsp;}
+&nbsp;
+&nbsp;
+</code>
+</pre>
+</div>
+
+<script type="text/javascript">
+(function() {
+    var msie = false, msie9 = false;
+    /*@cc_on
+      msie = true;
+      @if (@_jscript_version >= 9)
+        msie9 = true;
+      @end
+    @*/
+
+    if (!msie || msie && msie9) {
+      hljs.highlightAll()
+      hljs.initLineNumbersOnLoad();
+    }
+})();
+</script>
+
+<div class="footer">
+    
+    <div style="float:right;">generated on 2023-02-12 16:23</div>
+</div>
+</body>
+</html>

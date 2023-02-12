@@ -1,0 +1,92 @@
+
+
+
+<!DOCTYPE html>
+<html id="htmlId">
+<head>
+  <title>Coverage Report > UserRepository</title>
+  <style type="text/css">
+    @import "../../css/coverage.css";
+    @import "../../css/idea.min.css";
+  </style>
+  <script type="text/javascript" src="../../js/highlight.min.js"></script>
+  <script type="text/javascript" src="../../js/highlightjs-line-numbers.min.js"></script>
+</head>
+
+<body>
+<div class="content">
+<div class="breadCrumbs">
+Current scope:     <a href="../../index.html">all classes</a>
+    <span class="separator">|</span>
+    <a href="../index.html">com.synrgy.security.repository</a>
+</div>
+
+<h1>Coverage Summary for Class: UserRepository (com.synrgy.security.repository)</h1>
+
+<table class="coverageStats">
+<tr>
+  <th class="name">Class</th>
+</tr>
+<tr>
+  <td class="name">UserRepository</td>
+</tr>
+
+</table>
+
+<br/>
+<br/>
+
+
+<pre>
+<code class="sourceCode" id="sourceCode">&nbsp;package com.synrgy.security.repository;
+&nbsp;
+&nbsp;import com.synrgy.security.entity.User;
+&nbsp;import org.springframework.data.jpa.repository.JpaRepository;
+&nbsp;import org.springframework.data.jpa.repository.Query;
+&nbsp;import org.springframework.data.repository.PagingAndSortingRepository;
+&nbsp;import org.springframework.data.repository.query.Param;
+&nbsp;import org.springframework.stereotype.Repository;
+&nbsp;
+&nbsp;@Repository
+&nbsp;public interface UserRepository extends PagingAndSortingRepository&lt;User, Long&gt; {
+&nbsp;    @Query(value = &quot;SELECT * FROM oauth_user AS usr JOIN profile AS prf ON usr.profile_id = prf.id WHERE LOWER(usr.email) = LOWER(:username) AND usr.deleted_at IS NULL&quot;, nativeQuery = true)
+&nbsp;    User checkExistingEmail(@Param(&quot;username&quot;) String username);
+&nbsp;    @Query(&quot;FROM User u WHERE LOWER(u.username) = LOWER(?1)&quot;)
+&nbsp;    User findOneByUsername(String username);
+&nbsp;
+&nbsp;    @Query(&quot;FROM User u WHERE u.otp = ?1&quot;)
+&nbsp;    User findOneByOTP(@Param(&quot;otp&quot;) String otp);
+&nbsp;
+&nbsp;//    @Query(&quot;FROM User u WHERE LOWER(u.username) = LOWER(:username)&quot;)
+&nbsp;//    User checkExistingEmail(@Param(&quot;username&quot;) String username);
+&nbsp;    
+&nbsp;//    @Query(&quot;FROM User u WHERE u.is_admin = ?1&quot;)
+&nbsp;//    User findOneByIsAdmin(Boolean isAdmin);
+&nbsp;}
+</code>
+</pre>
+</div>
+
+<script type="text/javascript">
+(function() {
+    var msie = false, msie9 = false;
+    /*@cc_on
+      msie = true;
+      @if (@_jscript_version >= 9)
+        msie9 = true;
+      @end
+    @*/
+
+    if (!msie || msie && msie9) {
+      hljs.highlightAll()
+      hljs.initLineNumbersOnLoad();
+    }
+})();
+</script>
+
+<div class="footer">
+    
+    <div style="float:right;">generated on 2023-02-12 16:23</div>
+</div>
+</body>
+</html>

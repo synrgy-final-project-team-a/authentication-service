@@ -1,0 +1,294 @@
+
+
+
+<!DOCTYPE html>
+<html id="htmlId">
+<head>
+  <title>Coverage Report > ForgetPasswordController</title>
+  <style type="text/css">
+    @import "../../css/coverage.css";
+    @import "../../css/idea.min.css";
+  </style>
+  <script type="text/javascript" src="../../js/highlight.min.js"></script>
+  <script type="text/javascript" src="../../js/highlightjs-line-numbers.min.js"></script>
+</head>
+
+<body>
+<div class="content">
+<div class="breadCrumbs">
+Current scope:     <a href="../../index.html">all classes</a>
+    <span class="separator">|</span>
+    <a href="../index.html">com.synrgy.security.controller</a>
+</div>
+
+<h1>Coverage Summary for Class: ForgetPasswordController (com.synrgy.security.controller)</h1>
+
+<table class="coverageStats">
+<tr>
+  <th class="name">Class</th>
+<th class="coverageStat 
+">
+  Class, %
+</th>
+<th class="coverageStat 
+">
+  Method, %
+</th>
+<th class="coverageStat 
+">
+  Line, %
+</th>
+</tr>
+<tr>
+  <td class="name">ForgetPasswordController</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/1)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/4)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/73)
+  </span>
+</td>
+</tr>
+
+</table>
+
+<br/>
+<br/>
+
+
+<pre>
+<code class="sourceCode" id="sourceCode">&nbsp;package com.synrgy.security.controller;
+&nbsp;
+&nbsp;import com.synrgy.security.configuration.Config;
+&nbsp;import com.synrgy.security.dto.ResetPasswordModel;
+&nbsp;import com.synrgy.security.entity.User;
+&nbsp;import com.synrgy.security.repository.UserRepository;
+&nbsp;import com.synrgy.security.service.UserAuthService;
+&nbsp;import com.synrgy.security.service.email.EmailSender;
+&nbsp;import com.synrgy.security.util.EmailTemplate;
+&nbsp;import com.synrgy.security.util.Response;
+&nbsp;import com.synrgy.security.util.SimpleStringUtils;
+&nbsp;import org.springframework.beans.factory.annotation.Autowired;
+&nbsp;import org.springframework.beans.factory.annotation.Value;
+&nbsp;import org.springframework.boot.web.client.RestTemplateBuilder;
+&nbsp;import org.springframework.http.HttpHeaders;
+&nbsp;import org.springframework.http.HttpMethod;
+&nbsp;import org.springframework.http.HttpStatus;
+&nbsp;import org.springframework.http.ResponseEntity;
+&nbsp;import org.springframework.security.crypto.password.PasswordEncoder;
+&nbsp;import org.springframework.ui.Model;
+&nbsp;import org.springframework.util.StringUtils;
+&nbsp;import org.springframework.web.bind.annotation.*;
+&nbsp;
+&nbsp;import javax.validation.Valid;
+&nbsp;import java.net.URI;
+&nbsp;import java.util.Calendar;
+&nbsp;import java.util.Date;
+&nbsp;import java.util.HashMap;
+&nbsp;import java.util.Map;
+&nbsp;
+&nbsp;@RestController
+&nbsp;@RequestMapping(&quot;/forget-password/&quot;)
+<b class="nc">&nbsp;public class ForgetPasswordController {</b>
+&nbsp;
+&nbsp;    @Autowired
+&nbsp;    private RestTemplateBuilder restTemplateBuilder;
+&nbsp;
+&nbsp;    @Autowired
+&nbsp;    private UserRepository userRepository;
+&nbsp;
+<b class="nc">&nbsp;    Config config = new Config();</b>
+&nbsp;
+&nbsp;    @Autowired
+&nbsp;    public UserAuthService userAuthService;
+&nbsp;
+&nbsp;    @Value(&quot;${expired.token.password.hour:}&quot;)//FILE_SHOW_RUL
+&nbsp;    private int expiredToken;
+&nbsp;
+&nbsp;    @Autowired
+&nbsp;    public Response response;
+&nbsp;
+&nbsp;    @Autowired
+&nbsp;    public EmailTemplate emailTemplate;
+&nbsp;
+&nbsp;    @Autowired
+&nbsp;    public EmailSender emailSender;
+&nbsp;
+&nbsp;    @Autowired
+&nbsp;    private PasswordEncoder passwordEncoder;
+&nbsp;
+&nbsp;    @Value(&quot;${BASEURL:}&quot;)//FILE_SHOW_RUL
+&nbsp;    private String BASEURL;
+&nbsp;
+&nbsp;    // Step 1 : Send OTP
+&nbsp;    @PostMapping(&quot;/send&quot;)//send OTP
+&nbsp;    public ResponseEntity&lt;Map&gt; sendEmailPassword(@Valid @RequestBody ResetPasswordModel user) {
+&nbsp;
+&nbsp;
+<b class="nc">&nbsp;        if (!(user.getEmail().matches(&quot;^[A-Za-z0-9+_.-]+@(.+)$&quot;)))  {</b>
+<b class="nc">&nbsp;            return new ResponseEntity&lt;Map&gt;(response.templateError(&quot;Wrong email format!&quot;), HttpStatus.BAD_REQUEST);</b>
+&nbsp;
+&nbsp;        }
+<b class="nc">&nbsp;        if (StringUtils.isEmpty(user.getEmail())) return new ResponseEntity&lt;Map&gt;(response.templateError(&quot;No email provided&quot;), HttpStatus.BAD_REQUEST);</b>
+<b class="nc">&nbsp;        User found = userRepository.checkExistingEmail(user.getEmail());</b>
+<b class="nc">&nbsp;        if (found == null) return new ResponseEntity&lt;Map&gt;(response.templateError(&quot;Email not found&quot;), HttpStatus.BAD_REQUEST);; //throw new BadRequest(&quot;Email not found&quot;);</b>
+&nbsp;
+&nbsp;
+<b class="nc">&nbsp;        String template = emailTemplate.getResetPassword();</b>
+<b class="nc">&nbsp;        if (StringUtils.isEmpty(found.getOtp())) {</b>
+&nbsp;            User search;
+&nbsp;            String otp;
+&nbsp;            do {
+<b class="nc">&nbsp;                otp = SimpleStringUtils.randomString(6, true);</b>
+<b class="nc">&nbsp;                search = userRepository.findOneByOTP(otp);</b>
+<b class="nc">&nbsp;            } while (search != null);</b>
+<b class="nc">&nbsp;            Date dateNow = new Date();</b>
+<b class="nc">&nbsp;            Calendar calendar = Calendar.getInstance();</b>
+<b class="nc">&nbsp;            calendar.setTime(dateNow);</b>
+<b class="nc">&nbsp;            calendar.add(Calendar.MINUTE, expiredToken);</b>
+<b class="nc">&nbsp;            Date expirationDate = calendar.getTime();</b>
+&nbsp;
+<b class="nc">&nbsp;            found.setOtp(otp);</b>
+<b class="nc">&nbsp;            found.setOtpExpiredDate(expirationDate);</b>
+<b class="nc">&nbsp;            found.setEnabled(false); // matikan user</b>
+<b class="nc">&nbsp;            template = template.replaceAll(&quot;\\{\\{USERNAME}}&quot;, (found.getUsername() == null ? user.getEmail() : found.getUsername()));</b>
+<b class="nc">&nbsp;            template = template.replaceAll(&quot;\\{\\{PASS_TOKEN}}&quot;, BASEURL + &quot;/forget-password/index/&quot; + otp);</b>
+<b class="nc">&nbsp;            userRepository.save(found);</b>
+&nbsp;
+<b class="nc">&nbsp;        } else {</b>
+<b class="nc">&nbsp;            template = template.replaceAll(&quot;\\{\\{USERNAME}}&quot;, (found.getUsername() == null ? user.getEmail() : found.getUsername()));</b>
+<b class="nc">&nbsp;            template = template.replaceAll(&quot;\\{\\{PASS_TOKEN}}&quot;, BASEURL + &quot;/forget-password/index/&quot; + found.getOtp());</b>
+&nbsp;        }
+<b class="nc">&nbsp;        emailSender.sendAsync(user.getEmail(), &quot;Kosanku - Lupa Passwordmu?&quot;, template);</b>
+&nbsp;
+&nbsp;
+<b class="nc">&nbsp;        return new ResponseEntity&lt;Map&gt;(response.templateSuksesPost(found), HttpStatus.CREATED);</b>
+&nbsp;
+&nbsp;    }
+&nbsp;
+&nbsp;    //Step 2 : Email token OTP
+&nbsp;    @GetMapping(value = {&quot;/index/{tokenotp}&quot;})
+&nbsp;    public ResponseEntity&lt;Map&gt; index(Model model, @PathVariable String tokenotp) {
+&nbsp;
+<b class="nc">&nbsp;        if (tokenotp.isEmpty()) {</b>
+<b class="nc">&nbsp;            return new ResponseEntity&lt;Map&gt;(response.urlNotFound(&quot;OTP not found in url!&quot;), HttpStatus.NOT_FOUND);</b>
+&nbsp;        }
+&nbsp;
+<b class="nc">&nbsp;        if (tokenotp.length()!=6) {</b>
+<b class="nc">&nbsp;            return new ResponseEntity&lt;Map&gt;(response.urlNotFound(&quot;Wrong format OTP!&quot;), HttpStatus.NOT_FOUND);</b>
+&nbsp;        }
+&nbsp;
+<b class="nc">&nbsp;        User user = userRepository.findOneByOTP(tokenotp);</b>
+<b class="nc">&nbsp;        if (null == user) {</b>
+<b class="nc">&nbsp;            System.out.println(&quot;User null: not found&quot;);</b>
+<b class="nc">&nbsp;            model.addAttribute(&quot;erordesc&quot;, &quot;User not found for code &quot; + tokenotp);</b>
+<b class="nc">&nbsp;            model.addAttribute(&quot;title&quot;, &quot;&quot;);</b>
+<b class="nc">&nbsp;            return new ResponseEntity&lt;Map&gt;(response.urlNotFound(&quot;User not found&quot;), HttpStatus.NOT_FOUND);</b>
+&nbsp;        }
+&nbsp;
+<b class="nc">&nbsp;        if (user.isEnabled()) {</b>
+<b class="nc">&nbsp;            model.addAttribute(&quot;erordesc&quot;, &quot;Your account is already active, please do login&quot;);</b>
+<b class="nc">&nbsp;            model.addAttribute(&quot;title&quot;, &quot;&quot;);</b>
+<b class="nc">&nbsp;            return new ResponseEntity&lt;Map&gt;(response.urlNotFound(&quot;Your account is already active, please do login&quot;), HttpStatus.NOT_FOUND);</b>
+&nbsp;        }
+<b class="nc">&nbsp;        String today = config.convertDateToString(new Date());</b>
+&nbsp;
+<b class="nc">&nbsp;        String dateToken = config.convertDateToString(user.getOtpExpiredDate());</b>
+<b class="nc">&nbsp;        if (Long.parseLong(today) &gt; Long.parseLong(dateToken)) {</b>
+<b class="nc">&nbsp;            model.addAttribute(&quot;erordesc&quot;, &quot;Your token is expired. Please get token again.&quot;);</b>
+<b class="nc">&nbsp;            model.addAttribute(&quot;title&quot;, &quot;&quot;);</b>
+<b class="nc">&nbsp;            return new ResponseEntity&lt;Map&gt;(response.urlNotFound(&quot;Your token is expired. Please get token again. &quot;), HttpStatus.NOT_FOUND);</b>
+&nbsp;        }
+<b class="nc">&nbsp;        user.setEnabled(true);</b>
+<b class="nc">&nbsp;        userRepository.save(user);</b>
+<b class="nc">&nbsp;        model.addAttribute(&quot;title&quot;, &quot;Congratulations, &quot; + user.getUsername() + &quot;, you have successfully registered!&quot;);</b>
+<b class="nc">&nbsp;        model.addAttribute(&quot;erordesc&quot;, &quot;&quot;);</b>
+&nbsp;
+<b class="nc">&nbsp;        String otp = tokenotp;</b>
+<b class="nc">&nbsp;        String url = &quot;https://frontend-fsw-testing.vercel.app/login/forgot-password-success/&quot; + otp;</b>
+&nbsp;
+&nbsp;//        make it redirect to url
+<b class="nc">&nbsp;        HttpHeaders headers = new HttpHeaders();</b>
+<b class="nc">&nbsp;        headers.setLocation(URI.create(url));</b>
+<b class="nc">&nbsp;        return new ResponseEntity&lt;&gt;(headers, HttpStatus.SEE_OTHER);</b>
+&nbsp;
+&nbsp;    }
+&nbsp;
+&nbsp;//        ResponseEntity&lt;Void&gt; responses = restTemplateBuilder.build().exchange(url, HttpMethod.GET, null, Void.class);
+&nbsp;//        if (responses.getStatusCode() == HttpStatus.OK) {
+&nbsp;//            return new ResponseEntity&lt;Map&gt;(response.templateSuksesGet(user), HttpStatus.OK);
+&nbsp;//        } else {
+&nbsp;//            return new ResponseEntity&lt;Map&gt;(response.templateError(&quot;Failed redirect to frontend&quot;), HttpStatus.BAD_REQUEST);
+&nbsp;//        }
+&nbsp;//    }
+&nbsp;
+&nbsp;
+&nbsp;    // Step 3 : lakukan reset password baru
+&nbsp;    @PostMapping(&quot;/change-password&quot;)
+&nbsp;    public ResponseEntity&lt;Map&gt; resetPassword(@RequestBody ResetPasswordModel model) {
+<b class="nc">&nbsp;        if (model.getOtp() == null)</b>
+<b class="nc">&nbsp;            return new ResponseEntity&lt;Map&gt;(response.templateError(&quot;Token is required&quot;), HttpStatus.BAD_REQUEST);</b>
+<b class="nc">&nbsp;        if (model.getNewPassword() == null)</b>
+<b class="nc">&nbsp;            return new ResponseEntity&lt;Map&gt;(response.templateError(&quot;New Password is required&quot;), HttpStatus.BAD_REQUEST);</b>
+<b class="nc">&nbsp;        User user = userRepository.findOneByOTP(model.getOtp());</b>
+&nbsp;        String success;
+<b class="nc">&nbsp;        if (user == null)</b>
+<b class="nc">&nbsp;            return new ResponseEntity&lt;Map&gt;(response.templateError(&quot;Token not valid&quot;), HttpStatus.BAD_REQUEST);</b>
+&nbsp;
+<b class="nc">&nbsp;        user.setPassword(passwordEncoder.encode(model.getNewPassword().replaceAll(&quot;\\s+&quot;, &quot;&quot;)));</b>
+<b class="nc">&nbsp;        user.setOtpExpiredDate(null);</b>
+<b class="nc">&nbsp;        user.setOtp(null);</b>
+&nbsp;
+&nbsp;        try {
+<b class="nc">&nbsp;            userRepository.save(user);</b>
+<b class="nc">&nbsp;            success = &quot;Password changed successfully!&quot;;</b>
+<b class="nc">&nbsp;        } catch (Exception e) {</b>
+<b class="nc">&nbsp;            return new ResponseEntity&lt;Map&gt;(response.templateError(&quot;Failed save user, please try again.&quot;), HttpStatus.BAD_REQUEST);</b>
+<b class="nc">&nbsp;        }</b>
+<b class="nc">&nbsp;        return new ResponseEntity&lt;Map&gt;(response.templateSuksesPost(success), HttpStatus.OK);</b>
+&nbsp;    }
+&nbsp;}
+</code>
+</pre>
+</div>
+
+<script type="text/javascript">
+(function() {
+    var msie = false, msie9 = false;
+    /*@cc_on
+      msie = true;
+      @if (@_jscript_version >= 9)
+        msie9 = true;
+      @end
+    @*/
+
+    if (!msie || msie && msie9) {
+      hljs.highlightAll()
+      hljs.initLineNumbersOnLoad();
+    }
+})();
+</script>
+
+<div class="footer">
+    
+    <div style="float:right;">generated on 2023-02-12 16:23</div>
+</div>
+</body>
+</html>
