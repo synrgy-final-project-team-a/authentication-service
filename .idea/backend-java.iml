@@ -96,7 +96,6 @@
     <orderEntry type="library" name="Maven: org.springdoc:springdoc-openapi-webmvc-core:1.6.6" level="project" />
     <orderEntry type="library" name="Maven: org.springdoc:springdoc-openapi-common:1.6.6" level="project" />
     <orderEntry type="library" name="Maven: io.swagger.core.v3:swagger-core:2.1.12" level="project" />
-    <orderEntry type="library" name="Maven: org.apache.commons:commons-lang3:3.12.0" level="project" />
     <orderEntry type="library" name="Maven: com.fasterxml.jackson.dataformat:jackson-dataformat-yaml:2.13.4" level="project" />
     <orderEntry type="library" name="Maven: io.swagger.core.v3:swagger-annotations:2.1.12" level="project" />
     <orderEntry type="library" name="Maven: io.swagger.core.v3:swagger-models:2.1.12" level="project" />
@@ -163,6 +162,13 @@
     <orderEntry type="library" scope="RUNTIME" name="Maven: org.springframework.boot:spring-boot-devtools:2.7.5" level="project" />
     <orderEntry type="library" name="Maven: org.springframework.boot:spring-boot:2.7.5" level="project" />
     <orderEntry type="library" name="Maven: org.springframework.boot:spring-boot-autoconfigure:2.7.5" level="project" />
+    <orderEntry type="library" name="Maven: com.cloudinary:cloudinary-http44:1.31.0" level="project" />
+    <orderEntry type="library" name="Maven: com.cloudinary:cloudinary-core:1.31.0" level="project" />
+    <orderEntry type="library" name="Maven: org.apache.commons:commons-lang3:3.12.0" level="project" />
+    <orderEntry type="library" name="Maven: org.apache.httpcomponents:httpclient:4.5.13" level="project" />
+    <orderEntry type="library" name="Maven: org.apache.httpcomponents:httpcore:4.4.15" level="project" />
+    <orderEntry type="library" name="Maven: org.apache.httpcomponents:httpmime:4.5.13" level="project" />
+    <orderEntry type="library" name="Maven: io.hypersistence:hypersistence-utils-hibernate-55:3.0.1" level="project" />
     <orderEntry type="library" name="Maven: org.webjars:jquery:3.4.1" level="project" />
     <orderEntry type="library" name="Maven: org.webjars:bootstrap:4.3.1" level="project" />
     <orderEntry type="library" name="Maven: org.webjars:popper.js:1.14.3" level="project" />
@@ -175,8 +181,6 @@
     <orderEntry type="library" name="Maven: com.google.api-client:google-api-client-jackson2:1.20.0" level="project" />
     <orderEntry type="library" name="Maven: com.google.http-client:google-http-client-jackson2:1.42.2" level="project" />
     <orderEntry type="library" name="Maven: com.google.http-client:google-http-client:1.42.2" level="project" />
-    <orderEntry type="library" name="Maven: org.apache.httpcomponents:httpclient:4.5.13" level="project" />
-    <orderEntry type="library" name="Maven: org.apache.httpcomponents:httpcore:4.4.15" level="project" />
     <orderEntry type="library" name="Maven: com.google.code.findbugs:jsr305:3.0.2" level="project" />
     <orderEntry type="library" name="Maven: com.google.guava:guava:30.1.1-android" level="project" />
     <orderEntry type="library" name="Maven: com.google.guava:failureaccess:1.0.1" level="project" />
