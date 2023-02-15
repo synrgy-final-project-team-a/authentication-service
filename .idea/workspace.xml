@@ -5,20 +5,7 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="a68da48f-733e-4c74-a794-2085c7b86a72" name="Changes" comment="">
-      <change afterPath="$PROJECT_DIR$/src/main/java/com/synrgy/security/controller/KostAdminController.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/com/synrgy/security/dto/BannerModel.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/com/synrgy/security/entity/Banner.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/com/synrgy/security/repository/BannerRepository.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/com/synrgy/security/service/KostService.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/com/synrgy/security/service/impl/KostServiceImpl.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/com/synrgy/security/util/CloudinaryConfiguration.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/backend-java.iml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/backend-java.iml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/pom.xml" beforeDir="false" afterPath="$PROJECT_DIR$/pom.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/synrgy/security/util/Response.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/synrgy/security/util/Response.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/resources/application-dev.properties" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/application-dev.properties" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/resources/application-prod.properties" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/application-prod.properties" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/resources/application-test.properties" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/application-test.properties" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -213,7 +200,7 @@
       <workItem from="1676193159358" duration="192000" />
       <workItem from="1676193498873" duration="9161000" />
       <workItem from="1676308203927" duration="709000" />
-      <workItem from="1676344031071" duration="1232000" />
+      <workItem from="1676344031071" duration="1939000" />
     </task>
     <servers />
   </component>
