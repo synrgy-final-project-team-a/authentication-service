@@ -21,7 +21,11 @@ jobs:
       run: mvn --batch-mode --update-snapshots package
     - name: Install Railway
       run: npm i -g @railway/cli
-    - name: Deploy
+    - name: Staging
       run: railway up
+      env:
+        RAILWAY_TOKEN: a9b075af-773f-4487-9219-449560f8a367
+    - name: Testing
+    - run: railway up
       env:
         RAILWAY_TOKEN: a9b075af-773f-4487-9219-449560f8a367
